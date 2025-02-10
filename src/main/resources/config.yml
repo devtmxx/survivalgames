@@ -1,0 +1,20 @@
+# DO NOT TOUCH
+version: 1
+
+# If the server is currently in setup mode
+setup: true
+
+##########################
+# Locale Configuration
+##########################
+
+locales:
+  # The default locale. This is used to search for translations if there is no suitable translation in the players
+  # preferred locale.
+  default: en_US
+
+  # Lists the supported locales. If a players locale is not listed here, the translations will default to the
+  # specified default locale.
+  supported:
+    - en_US
+    - de_DE
