@@ -1,0 +1,166 @@
+package de.tmxx.survivalgames.database;
+
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import org.apache.commons.dbcp2.BasicDataSource;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.jetbrains.annotations.NotNull;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
+
+/**
+ * Project: survivalgames
+ * 10.02.2025
+ *
+ * @author timmauersberger
+ * @version 1.0
+ */
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+public class MariaDB implements Database, ConfigurationSerializable {
+    private static final String DRIVER_CLASS = "org.mariadb.jdbc.Driver";
+    private static final String CONNECTION_URL = "jdbc:mariadb://%s:%d/%s";
+
+    private BasicDataSource dataSource;
+    private final Set<Connection> connections = new CopyOnWriteArraySet<>();
+
+    private final String host;
+    private final int port;
+    private final String database;
+    private final String user;
+    private final String password;
+
+    @Override
+    public void connect() {
+        dataSource = new BasicDataSource();
+        dataSource.setDriverClassName(DRIVER_CLASS);
+        dataSource.setUrl(CONNECTION_URL.formatted(host, port, database));
+        dataSource.setUsername(user);
+        dataSource.setPassword(password);
+    }
+
+    @Override
+    public void disconnect() {
+        if (connections.isEmpty()) return;
+
+        connections.forEach(connection -> {
+            try {
+                connection.close();
+            } catch (SQLException ignored) {}
+        });
+        connections.clear();
+    }
+
+    @Override
+    public Connection getConnection() {
+        try {
+            Connection connection = dataSource.getConnection();
+            connections.add(connection);
+            return connection;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void close(Connection connection) {
+        if (connection == null) return;
+
+        try {
+            connection.close();
+            connections.remove(connection);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public long update(Connection connection, String sql, Object... args) {
+        long generatedKey = DEFAULT_UPDATE_LONG;
+
+        try (PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+            for (int i = 0; i < args.length; i++) {
+                statement.setObject(i + 1, args[i]);
+            }
+            statement.executeUpdate();
+
+            ResultSet generatedKeys = statement.getGeneratedKeys();
+            if (generatedKeys != null) {
+                while (generatedKeys.next()) generatedKey = generatedKeys.getLong(1);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return generatedKey;
+    }
+
+    @Override
+    public long update(String update, Object... args) {
+        long generatedKey = DEFAULT_UPDATE_LONG;
+        if (dataSource == null) return generatedKey;
+
+        Connection connection = getConnection();
+        if (connection == null) return generatedKey;
+        try {
+            return update(connection, update, args);
+        } finally {
+            close(connection);
+        }
+    }
+
+    @Override
+    public Result query(Connection connection, String sql, Object... args) {
+        Result result;
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+            for (int i = 0; i < args.length; i++) {
+                statement.setObject(i + 1, args[i]);
+            }
+            result = Result.from(statement.executeQuery());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return result;
+    }
+
+    @Override
+    public Result query(String query, Object... args) {
+        if (dataSource == null) return new Result();
+
+        Connection connection = getConnection();
+        if (connection == null) return new Result();
+        try {
+            return query(connection, query, args);
+        } finally {
+            close(connection);
+        }
+    }
+
+    @Override
+    public @NotNull Map<String, Object> serialize() {
+        return Map.of(
+                "host", host,
+                "port", port,
+                "database", database,
+                "user", user,
+                "password", password
+        );
+    }
+
+    public static MariaDB deserialize(Map<String, Object> args) {
+        return new MariaDB(
+                (String) args.get("host"),
+                (int) args.get("port"),
+                (String) args.get("database"),
+                (String) args.get("user"),
+                (String) args.get("password")
+        );
+    }
+}

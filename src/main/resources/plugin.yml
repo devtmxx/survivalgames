@@ -4,3 +4,7 @@ main: de.tmxx.survivalgames.SurvivalGames
 description: A SurvivalGames minigame extended with player abilities and kits
 author: tmxx
 api-version: '1.21.4'
+
+libraries:
+  - org.mariadb.jdbc:mariadb-java-client:3.5.1
+  - org.apache.commons:commons-dbcp2:2.13.0

@@ -18,3 +18,16 @@ locales:
   supported:
     - en_US
     - de_DE
+
+#########################
+# Database Configuration
+#########################
+
+# This plugin only supports mariadb databases for now.
+database:
+  ==: de.tmxx.survivalgames.database.MariaDB
+  host: "localhost"
+  port: 3306
+  database: "survivalgames"
+  user: "survivalgames"
+  password: "password"
