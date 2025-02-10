@@ -1,0 +1,6 @@
+name: SurvivalGames
+version: 1.0.0
+main: de.tmxx.survivalgames.SurvivalGames
+description: A SurvivalGames minigame extended with player abilities and kits
+author: tmxx
+api-version: '1.21.4'
