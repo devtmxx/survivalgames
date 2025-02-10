@@ -1,1 +1,5 @@
 prefix: '<gold><bold>SG<reset>:'
+
+command:
+  setlobby:
+    success: '%prefix% Du hast den <green>Lobby-Spawn <white>gesetzt.'

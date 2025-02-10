@@ -1,1 +1,5 @@
 prefix: '<gold><bold>SG<reset>:'
+
+command:
+  setlobby:
+    success: '%prefix% Set the <green>lobby spawn <white>to your position.'

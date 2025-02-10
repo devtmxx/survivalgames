@@ -1,5 +1,6 @@
 package de.tmxx.survivalgames;
 
+import de.tmxx.survivalgames.auto.AutoRegistrar;
 import de.tmxx.survivalgames.database.Database;
 import de.tmxx.survivalgames.database.MariaDB;
 import de.tmxx.survivalgames.i18n.I18n;
@@ -29,6 +30,17 @@ public class SurvivalGames extends JavaPlugin {
 
         i18n = new I18n(this);
 
+        setupDatabase();
+
+        AutoRegistrar.registerListeners(this);
+        AutoRegistrar.registerCommands(this);
+    }
+
+    public boolean isSetup() {
+        return getConfig().getBoolean("setup");
+    }
+
+    private void setupDatabase() {
         database = getConfig().getSerializable("database", MariaDB.class);
         if (database == null) {
             getLogger().info("Cannot find database configuration");
