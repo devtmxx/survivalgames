@@ -4,6 +4,7 @@ import de.tmxx.survivalgames.SurvivalGames;
 import de.tmxx.survivalgames.auto.AutoCommand;
 import de.tmxx.survivalgames.auto.AutoRegister;
 import de.tmxx.survivalgames.auto.RegisterState;
+import de.tmxx.survivalgames.config.SpawnPosition;
 import de.tmxx.survivalgames.user.User;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import lombok.RequiredArgsConstructor;
@@ -20,25 +21,26 @@ import static de.tmxx.survivalgames.command.CommandSnippets.*;
  */
 @AutoRegister(RegisterState.SETUP)
 @RequiredArgsConstructor
-public class SetLobbyCommand implements AutoCommand {
+public class SetSpawnCommand implements AutoCommand {
     private final SurvivalGames plugin;
 
     @Override
     public String name() {
-        return "setlobby";
+        return "setspawn";
     }
 
     @Override
     public void execute(CommandSourceStack source, String[] args) {
         User user = getUser(source);
+        if (user == null) return;
 
-        plugin.getConfig().set("lobby.spawn", user.getPlayer().getLocation());
+        plugin.getConfig().set("spawn", new SpawnPosition(user.getPlayer().getLocation()));
         plugin.saveConfig();
-        user.sendMessage("command.setlobby.success");
+        user.sendMessage("command.setspawn.success");
     }
 
     @Override
     public @Nullable String permission() {
-        return "survivalgames.command.setlobby";
+        return "survivalgames.command.setspawn";
     }
 }

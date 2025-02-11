@@ -1,7 +1,7 @@
 prefix: '<gold><bold>SG<reset>:'
 
 command:
-  setlobby:
+  setspawn:
     success: '%prefix% Set the <green>lobby spawn <white>to your position.'
   createmap:
     help: '%prefix% Use <yellow>/createmap <id><white>.'
@@ -30,3 +30,13 @@ command:
   common:
     map-not-found: '%prefix% <red>There is no known map with id {0}.'
     wrong-world: '%prefix% <red>Positions for a map should be in the same world.'
+
+join: '<gray>> <yellow>{0} <white>joined <gray>(<gold>{1}<white>/<gold>{2}<gray>)'
+quit: '<gray>< <yellow>{0} <white>quit'
+
+timers:
+  lobby:
+    action-bar:
+      single: '<yellow>The game starts in <gold>{0} second'
+      multiple: '<yellow>The game starts in <gold>{0} seconds'
+      waiting: '<yellow>Waiting for more players...'

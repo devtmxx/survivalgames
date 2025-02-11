@@ -4,8 +4,11 @@ import de.tmxx.survivalgames.auto.AutoRegistrar;
 import de.tmxx.survivalgames.config.SpawnPosition;
 import de.tmxx.survivalgames.database.Database;
 import de.tmxx.survivalgames.database.MariaDB;
+import de.tmxx.survivalgames.game.Game;
+import de.tmxx.survivalgames.game.phase.LobbyPhase;
 import de.tmxx.survivalgames.i18n.I18n;
 import de.tmxx.survivalgames.map.MapManager;
+import de.tmxx.survivalgames.user.User;
 import lombok.Getter;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -26,6 +29,7 @@ public class SurvivalGames extends JavaPlugin {
     private I18n i18n;
     private Database database;
     private MapManager mapManager;
+    private Game game;
 
     @Override
     public void onEnable() {
@@ -41,6 +45,12 @@ public class SurvivalGames extends JavaPlugin {
 
         AutoRegistrar.registerListeners(this);
         AutoRegistrar.registerCommands(this);
+
+        if (isSetup()) return;
+
+        game = new Game(this);
+        game.changeGamePhase(new LobbyPhase(this));
+        game.start();
     }
 
     public boolean isSetup() {
@@ -48,11 +58,15 @@ public class SurvivalGames extends JavaPlugin {
     }
 
     public int getMinPlayers() {
-        return getConfig().getInt("players.min");
+        return Math.max(getConfig().getInt("players.min"), 2);
     }
 
     public int getMaxPlayers() {
-        return getConfig().getInt("players.max");
+        return Math.max(getConfig().getInt("players.max"), getMinPlayers());
+    }
+
+    public void broadcast(String key, Object... args) {
+        User.getOnlineUsers().forEach(user -> user.sendMessage(key, args));
     }
 
     private void setupDatabase() {

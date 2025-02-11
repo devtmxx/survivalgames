@@ -2,6 +2,7 @@ package de.tmxx.survivalgames.user;
 
 import de.tmxx.survivalgames.SurvivalGames;
 import lombok.Getter;
+import lombok.Setter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -39,6 +40,8 @@ public class User {
     @Getter private final UUID uniqueId;
     @Getter private final String name;
     @Getter private final Player player;
+
+    @Getter @Setter private UserState state = UserState.PLAYING;
 
     public User(SurvivalGames plugin, Player player) {
         this.plugin = plugin;

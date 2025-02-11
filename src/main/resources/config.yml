@@ -39,8 +39,70 @@ database:
 # Game Configuration
 #######################
 
+# The directory in which the game worlds are stored. Available worlds are not instantly loaded into memory, instead
+# the voted map will be moved into the world container and loaded just in time to save resources. If the worlds are
+# already stored within bukkits worlds container, this configuration will be ignored.
 worlds-container: 'worlds'
 
+# Configures the player amounts within the game.
 players:
+
+  # The minimum amount of players. The lobby timer will not start before the specified value of players is reached.
+  # This value must be greater than 1.
   min: 4
+
+  # The maximum amount of players. This specifies the maximum of players playing simultaneously. There may be more
+  # concurrent online players after the game has started (players + spectators). This value must be higher or equal
+  # to the minimum player amount.
   max: 24
+
+# Configures the timers in each game state.
+timers:
+
+  # The lobby timer. This will not start counting down before the minimum amount of players is reached and may shorten
+  # to 5 seconds when the maximum amount of players are online.
+  lobby: 60
+
+  # The starting time. Players have already been teleported to the map and are waiting to be able to move.
+  starting: 20
+
+  # The time players have to play until the death match starts. If the game ends within this time frame, the death match
+  # phase will be skipped.
+  in-game: 1200
+
+  # The time players have to end the game until a draw.
+  death-match: 300
+
+  # The time to celebrate the winner. The server restarts when the countdown has ended.
+  ending: 20
+
+# Configures blocks which players should be able to use / not use in-game.
+blocks:
+
+  # Block which players should be able to break in-game. This blocks will naturally break and may drop items which players
+  # will be able to pick up.
+  breakable:
+    - 'OAK_LEAVES'
+    - 'SPRUCE_LEAVES'
+    - 'BIRCH_LEAVES'
+    - 'JUNGLE_LEAVES'
+    - 'ACACIA_LEAVES'
+    - 'CHERRY_LEAVES'
+    - 'DARK_OAK_LEAVES'
+    - 'PALE_OAK_LEAVES'
+    - 'MANGROVE_LEAVES'
+    - 'AZALEA_LEAVES'
+    - 'FLOWERING_AZALEA_LEAVES'
+    - 'SHORT_GRASS'
+    - 'FERN'
+    - 'TALL_GRASS'
+    - 'LARGE_FERN'
+
+  # Blocks which players should be able to place in-game.
+  placeable:
+    - 'TNT' # <-- Important for auto-ignite-tnt to work
+    - 'LAVA'
+    - 'WATER'
+
+# Whether placed tnt blocks should automatically be replaced with primed tnt.
+auto-ignite-tnt: true
