@@ -16,6 +16,10 @@ import static de.tmxx.survivalgames.command.CommandSnippets.*;
  * Project: survivalgames
  * 11.02.2025
  *
+ * <p>
+ *     Saves changes made to a map config.
+ * </p>
+ *
  * @author timmauersberger
  * @version 1.0
  */
@@ -24,11 +28,17 @@ import static de.tmxx.survivalgames.command.CommandSnippets.*;
 public class SaveCommand implements AutoCommand {
     private final SurvivalGames plugin;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String name() {
         return "save";
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void execute(CommandSourceStack source, String[] args) {
         User user = getUser(source);
@@ -48,6 +58,9 @@ public class SaveCommand implements AutoCommand {
         user.sendMessage("command.save.ready." + map.isReady());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @Nullable String permission() {
         return "survivalgames.command.save";

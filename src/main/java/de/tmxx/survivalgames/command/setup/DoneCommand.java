@@ -16,6 +16,10 @@ import static de.tmxx.survivalgames.command.CommandSnippets.*;
  * Project: survivalgames
  * 11.02.2025
  *
+ * <p>
+ *     Disables setup mode and restarts the server.
+ * </p>
+ *
  * @author timmauersberger
  * @version 1.0
  */
@@ -24,11 +28,17 @@ import static de.tmxx.survivalgames.command.CommandSnippets.*;
 public class DoneCommand implements AutoCommand {
     private final SurvivalGames plugin;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String name() {
         return "done";
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void execute(CommandSourceStack source, String[] args) {
         User user = getUser(source);
@@ -41,6 +51,9 @@ public class DoneCommand implements AutoCommand {
         Bukkit.getScheduler().runTaskLater(plugin, Bukkit::shutdown, 20L * 10);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @Nullable String permission() {
         return "survivalgames.command.done";

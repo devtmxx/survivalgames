@@ -2,6 +2,7 @@ package de.tmxx.survivalgames.database;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.bukkit.configuration.ConfigurationSection;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,6 +14,10 @@ import java.util.concurrent.CopyOnWriteArraySet;
 /**
  * Project: survivalgames
  * 10.02.2025
+ *
+ * <p>
+ *     Builds connections to a mariadb database.
+ * </p>
  *
  * @author timmauersberger
  * @version 1.0
@@ -30,6 +35,12 @@ public class MariaDB implements Database {
     private final String user;
     private final String password;
 
+    /**
+     * Creates a new mariadb instance using the specified {@link ConfigurationSection} to retrieve the connection
+     * details and authentication credentials from.
+     *
+     * @param section the config section
+     */
     public MariaDB(ConfigurationSection section) {
         host = section.getString("host");
         port = section.getInt("port");
@@ -38,6 +49,9 @@ public class MariaDB implements Database {
         password = section.getString("password");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void connect() {
         dataSource = new BasicDataSource();
@@ -47,6 +61,9 @@ public class MariaDB implements Database {
         dataSource.setPassword(password);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void disconnect() {
         if (connections.isEmpty()) return;
@@ -59,6 +76,9 @@ public class MariaDB implements Database {
         connections.clear();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Connection getConnection() {
         try {
@@ -70,6 +90,9 @@ public class MariaDB implements Database {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void close(Connection connection) {
         if (connection == null) return;
@@ -82,6 +105,9 @@ public class MariaDB implements Database {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public long update(Connection connection, String sql, Object... args) {
         long generatedKey = DEFAULT_UPDATE_LONG;
@@ -103,6 +129,9 @@ public class MariaDB implements Database {
         return generatedKey;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public long update(String update, Object... args) {
         long generatedKey = DEFAULT_UPDATE_LONG;
@@ -117,8 +146,11 @@ public class MariaDB implements Database {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public Result query(Connection connection, String sql, Object... args) {
+    public @NotNull Result query(Connection connection, String sql, Object... args) {
         Result result;
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -133,8 +165,11 @@ public class MariaDB implements Database {
         return result;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public Result query(String query, Object... args) {
+    public @NotNull Result query(String query, Object... args) {
         if (dataSource == null) return new Result();
 
         Connection connection = getConnection();

@@ -1,6 +1,7 @@
 package de.tmxx.survivalgames.database;
 
 import lombok.Getter;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -12,6 +13,10 @@ import java.util.List;
  * Project: survivalgames
  * 10.02.2025
  *
+ * <p>
+ *     Compiles the result of a database query in to a better accessible result.
+ * </p>
+ *
  * @author timmauersberger
  * @version 1.0
  */
@@ -19,11 +24,23 @@ import java.util.List;
 public class Result {
     private final List<Row> rows = new ArrayList<>();
 
+    /**
+     * Adds a row to the data set.
+     *
+     * @param row the row to add
+     */
     public void addRow(Row row) {
         rows.add(row);
     }
 
-    public static Result from(ResultSet resultSet) {
+    /**
+     * Creates a result from a specified {@link ResultSet}. The generated result will never be null but may be empty.
+     * Throws a {@link RuntimeException} if an error occurs while reading the result set.
+     *
+     * @param resultSet the result set
+     * @return the compiled result
+     */
+    public static @NotNull Result from(ResultSet resultSet) {
         Result result = new Result();
 
         if (resultSet == null) return result;

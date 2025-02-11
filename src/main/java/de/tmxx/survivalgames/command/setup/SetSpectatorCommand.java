@@ -16,6 +16,10 @@ import static de.tmxx.survivalgames.command.CommandSnippets.*;
  * Project: survivalgames
  * 11.02.2025
  *
+ * <p>
+ *     Sets the spectator spawn position.
+ * </p>
+ *
  * @author timmauersberger
  * @version 1.0
  */
@@ -24,11 +28,17 @@ import static de.tmxx.survivalgames.command.CommandSnippets.*;
 public class SetSpectatorCommand implements AutoCommand {
     private final SurvivalGames plugin;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String name() {
         return "setspectator";
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void execute(CommandSourceStack source, String[] args) {
         User user = getUser(source);
@@ -50,6 +60,9 @@ public class SetSpectatorCommand implements AutoCommand {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @Nullable String permission() {
         return "survivalgames.command.setspectator";

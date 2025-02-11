@@ -15,6 +15,10 @@ import static de.tmxx.survivalgames.command.CommandSnippets.*;
  * Project: survivalgames
  * 11.02.2025
  *
+ * <p>
+ *     Creates a new map.
+ * </p>
+ *
  * @author timmauersberger
  * @version 1.0
  */
@@ -23,11 +27,17 @@ import static de.tmxx.survivalgames.command.CommandSnippets.*;
 public class CreateMapCommand implements AutoCommand {
     private final SurvivalGames plugin;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String name() {
         return "createmap";
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void execute(CommandSourceStack source, String[] args) {
         User user = getUser(source);
@@ -47,6 +57,9 @@ public class CreateMapCommand implements AutoCommand {
         user.sendMessage("command.createmap.success", id);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @Nullable String permission() {
         return "survivalgames.command.createmap";

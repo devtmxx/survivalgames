@@ -16,6 +16,10 @@ import static de.tmxx.survivalgames.command.CommandSnippets.*;
  * Project: survivalgames
  * 10.02.2025
  *
+ * <p>
+ *     Sets the main spawn position.
+ * </p>
+ *
  * @author timmauersberger
  * @version 1.0
  */
@@ -24,11 +28,17 @@ import static de.tmxx.survivalgames.command.CommandSnippets.*;
 public class SetSpawnCommand implements AutoCommand {
     private final SurvivalGames plugin;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String name() {
         return "setspawn";
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void execute(CommandSourceStack source, String[] args) {
         User user = getUser(source);
@@ -39,6 +49,9 @@ public class SetSpawnCommand implements AutoCommand {
         user.sendMessage("command.setspawn.success");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @Nullable String permission() {
         return "survivalgames.command.setspawn";

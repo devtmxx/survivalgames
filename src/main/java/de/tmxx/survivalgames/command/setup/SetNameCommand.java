@@ -16,6 +16,10 @@ import static de.tmxx.survivalgames.command.CommandSnippets.*;
  * Project: survivalgames
  * 11.02.2025
  *
+ * <p>
+ *     Sets the display name of a map.
+ * </p>
+ *
  * @author timmauersberger
  * @version 1.0
  */
@@ -24,11 +28,17 @@ import static de.tmxx.survivalgames.command.CommandSnippets.*;
 public class SetNameCommand implements AutoCommand {
     private final SurvivalGames plugin;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String name() {
         return "setname";
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void execute(CommandSourceStack source, String[] args) {
         User user = getUser(source);
@@ -48,6 +58,9 @@ public class SetNameCommand implements AutoCommand {
         user.sendMessage("command.setname.success", id, name);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public @Nullable String permission() {
         return "survivalgames.command.setname";
