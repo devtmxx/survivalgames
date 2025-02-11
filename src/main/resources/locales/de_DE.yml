@@ -25,6 +25,8 @@ command:
   setspectator:
     help: '%prefix% Nutze <yellow>/setspectator <Map ID><white>.'
     success: '%prefix% Du hast den <green>Zuschauer-Spawn <white>der Map <green>{0} <white>gesetzt.'
+  done:
+    restart: '%prefix% Der Setup-Prozess wurde beendet. Der Server startet neu in <yellow>10 Sekunden<white>...'
   common:
     map-not-found: '%prefix% <red>Es existiert keine Map mit der ID {0}.'
     wrong-world: '%prefix% <red>Positionen einer Map sollten in derselben Welt liegen.'

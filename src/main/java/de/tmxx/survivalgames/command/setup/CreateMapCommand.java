@@ -4,11 +4,12 @@ import de.tmxx.survivalgames.SurvivalGames;
 import de.tmxx.survivalgames.auto.AutoCommand;
 import de.tmxx.survivalgames.auto.AutoRegister;
 import de.tmxx.survivalgames.auto.RegisterState;
-import de.tmxx.survivalgames.command.CommandSnippets;
 import de.tmxx.survivalgames.user.User;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.Nullable;
+
+import static de.tmxx.survivalgames.command.CommandSnippets.*;
 
 /**
  * Project: survivalgames
@@ -29,7 +30,7 @@ public class CreateMapCommand implements AutoCommand {
 
     @Override
     public void execute(CommandSourceStack source, String[] args) {
-        User user = CommandSnippets.getUser(source);
+        User user = getUser(source);
         if (user == null) return;
 
         if (args.length == 0) {
