@@ -9,6 +9,10 @@ setup: true
 ##########################
 
 locales:
+  # The directory where locales are stored. By default, locales are stored within the plugins data folder, but they
+  # can exist anywhere on the machine.
+  directory: 'locales'
+
   # The default locale. This is used to search for translations if there is no suitable translation in the players
   # preferred locale.
   default: en_US
@@ -25,9 +29,18 @@ locales:
 
 # This plugin only supports mariadb databases for now.
 database:
-  ==: de.tmxx.survivalgames.database.MariaDB
   host: "localhost"
   port: 3306
   database: "survivalgames"
   user: "survivalgames"
   password: "password"
+
+#######################
+# Game Configuration
+#######################
+
+worlds-container: 'worlds'
+
+players:
+  min: 4
+  max: 24

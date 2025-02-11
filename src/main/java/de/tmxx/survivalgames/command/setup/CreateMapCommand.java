@@ -12,32 +12,42 @@ import org.jspecify.annotations.Nullable;
 
 /**
  * Project: survivalgames
- * 10.02.2025
+ * 11.02.2025
  *
  * @author timmauersberger
  * @version 1.0
  */
 @AutoRegister(RegisterState.SETUP)
 @RequiredArgsConstructor
-public class SetLobbyCommand implements AutoCommand {
+public class CreateMapCommand implements AutoCommand {
     private final SurvivalGames plugin;
 
     @Override
     public String name() {
-        return "setlobby";
+        return "createmap";
     }
 
     @Override
     public void execute(CommandSourceStack source, String[] args) {
         User user = CommandSnippets.getUser(source);
+        if (user == null) return;
 
-        plugin.getConfig().set("lobby.spawn", user.getPlayer().getLocation());
-        plugin.saveConfig();
-        user.sendMessage("command.setlobby.success");
+        if (args.length == 0) {
+            user.sendMessage("command.createmap.help");
+            return;
+        }
+
+        String id = args[0];
+        if (plugin.getMapManager().create(id) == null) {
+            user.sendMessage("command.createmap.error", id);
+            return;
+        }
+
+        user.sendMessage("command.createmap.success", id);
     }
 
     @Override
     public @Nullable String permission() {
-        return "survivalgames.command.setlobby";
+        return "survivalgames.command.createmap";
     }
 }

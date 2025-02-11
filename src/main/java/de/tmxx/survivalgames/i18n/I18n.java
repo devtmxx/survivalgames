@@ -34,11 +34,12 @@ public class I18n {
     private final Map<Locale, I18nCache> cache = new HashMap<>();
 
     public I18n(Plugin plugin) {
-        directory = new File(plugin.getDataFolder(), "locales");
-        saveDefaultLocales(plugin);
-
         ConfigurationSection configSection = plugin.getConfig().getConfigurationSection("locales");
         if (configSection == null) throw new IllegalStateException("no locales section. config file may be corrupted");
+
+        String directoryPath = configSection.getString("directory", "locales");
+        directory = directoryPath.startsWith("/") ? new File(directoryPath) : new File(plugin.getDataFolder(), directoryPath);
+        saveDefaultLocales(plugin);
 
         defaultLocale = localeFromString(configSection.getString("default"));
         supportedLocales = configSection.getStringList("supported").stream().map(this::localeFromString).collect(Collectors.toSet());

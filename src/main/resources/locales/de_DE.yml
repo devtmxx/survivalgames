@@ -3,3 +3,28 @@ prefix: '<gold><bold>SG<reset>:'
 command:
   setlobby:
     success: '%prefix% Du hast den <green>Lobby-Spawn <white>gesetzt.'
+  createmap:
+    help: '%prefix% Nutze <yellow>/createmap <ID><white>.'
+    error: '%prefix% <red>Eine Map mit der ID {0} existiert bereits.'
+    success: '%prefix% Die Map mit der ID <green>{0}<white> wurde erstellt.'
+  addspawn:
+    help: '%prefix% Nutze <yellow>/addspawn <Map ID><white>.'
+    success: '%prefix% Du hast Spawn <green>#{1} <white>für die Map <green>{0}<white> gesetzt.'
+  setname:
+    help: '%prefix% Nutze <yellow>/setname <Map ID> <Map Name><white>.'
+    success: '%prefix% <green>{1} <white>ist jetzt der Name von der Map <green>{0}<white>.'
+  setauthor:
+    help: '%prefix% Nutze <yellow>/setauthor <Map ID> <Map Erbauer><white>.'
+    success: '%prefix% <green>{1} <white>wurde eingetragen als der Erbauer von der Map <green>{0}<white>.'
+  save:
+    help: '%prefix% Nutze <yellow>/save <Map ID><white>.'
+    success: '%prefix% Map <green>{0}<white> wurde gespeichert.'
+    ready:
+      yes: '%prefix% Diese Map ist <green>bereit<white>, um im Spiel genutzt zu werden.'
+      no: '%prefix% Diese Map ist kann noch <red>nicht <white>im Spiel genutzt werden.'
+  setspectator:
+    help: '%prefix% Nutze <yellow>/setspectator <Map ID><white>.'
+    success: '%prefix% Du hast den <green>Zuschauer-Spawn <white>der Map <green>{0} <white>gesetzt.'
+  common:
+    map-not-found: '%prefix% <red>Es existiert keine Map mit der ID {0}.'
+    wrong-world: '%prefix% <red>Positionen einer Map sollten in derselben Welt liegen.'

@@ -1,6 +1,7 @@
 package de.tmxx.survivalgames.user;
 
 import de.tmxx.survivalgames.SurvivalGames;
+import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -35,9 +36,9 @@ public class User {
     }
 
     private final SurvivalGames plugin;
-    private final UUID uniqueId;
-    private final String name;
-    private final Player player;
+    @Getter private final UUID uniqueId;
+    @Getter private final String name;
+    @Getter private final Player player;
 
     public User(SurvivalGames plugin, Player player) {
         this.plugin = plugin;

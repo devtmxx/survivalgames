@@ -1,16 +1,12 @@
 package de.tmxx.survivalgames.database;
 
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
 import org.apache.commons.dbcp2.BasicDataSource;
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
-import org.jetbrains.annotations.NotNull;
+import org.bukkit.configuration.ConfigurationSection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
@@ -21,8 +17,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * @author timmauersberger
  * @version 1.0
  */
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public class MariaDB implements Database, ConfigurationSerializable {
+public class MariaDB implements Database {
     private static final String DRIVER_CLASS = "org.mariadb.jdbc.Driver";
     private static final String CONNECTION_URL = "jdbc:mariadb://%s:%d/%s";
 
@@ -34,6 +29,14 @@ public class MariaDB implements Database, ConfigurationSerializable {
     private final String database;
     private final String user;
     private final String password;
+
+    public MariaDB(ConfigurationSection section) {
+        host = section.getString("host");
+        port = section.getInt("port");
+        database = section.getString("database");
+        user = section.getString("user");
+        password = section.getString("password");
+    }
 
     @Override
     public void connect() {
@@ -141,26 +144,5 @@ public class MariaDB implements Database, ConfigurationSerializable {
         } finally {
             close(connection);
         }
-    }
-
-    @Override
-    public @NotNull Map<String, Object> serialize() {
-        return Map.of(
-                "host", host,
-                "port", port,
-                "database", database,
-                "user", user,
-                "password", password
-        );
-    }
-
-    public static MariaDB deserialize(Map<String, Object> args) {
-        return new MariaDB(
-                (String) args.get("host"),
-                (int) args.get("port"),
-                (String) args.get("database"),
-                (String) args.get("user"),
-                (String) args.get("password")
-        );
     }
 }

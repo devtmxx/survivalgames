@@ -3,3 +3,28 @@ prefix: '<gold><bold>SG<reset>:'
 command:
   setlobby:
     success: '%prefix% Set the <green>lobby spawn <white>to your position.'
+  createmap:
+    help: '%prefix% Use <yellow>/createmap <id><white>.'
+    error: '%prefix% <red>A map with id {0} already exists.'
+    success: '%prefix% Created a map with id <green>{0}<white>.'
+  addspawn:
+    help: '%prefix% Use <yellow>/addspawn <map id><white>.'
+    success: '%prefix% You set spawn <green>#{1} <white>for map <green>{0}<white>.'
+  setname:
+    help: '%prefix% Use <yellow>/setname <map id> <map name><white>.'
+    success: '%prefix% Set <green>{1} <white>as the name of map <green>{0}<white>.'
+  setauthor:
+    help: '%prefix% Use <yellow>/setauthor <map id> <author name><white>.'
+    success: '%prefix% Set <green>{1} <white>as the author of map <green>{0}<white>.'
+  save:
+    help: '%prefix% Use <yellow>/save <map id><white>.'
+    success: '%prefix% Saved map <green>{0}<white>.'
+    ready:
+      yes: '%prefix% This map is <green>ready <white>to be used.'
+      no: '%prefix% This map is <red>not <white>ready to be used.'
+  setspectator:
+    help: '%prefix% Use <yellow>/setspectator <map id><white>.'
+    success: '%prefix% Set the <green>spectator spawn <white>for map <green>{0}<white>.'
+  common:
+    map-not-found: '%prefix% <red>There is no known map with id {0}.'
+    wrong-world: '%prefix% <red>Positions for a map should be in the same world.'
