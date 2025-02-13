@@ -42,4 +42,8 @@ public class Game implements Runnable {
         if (currentPhase == null) return;
         currentPhase.tick();
     }
+
+    public void checkEnd() {
+
+    }
 }

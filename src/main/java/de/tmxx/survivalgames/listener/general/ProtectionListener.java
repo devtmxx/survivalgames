@@ -2,13 +2,14 @@ package de.tmxx.survivalgames.listener.general;
 
 import de.tmxx.survivalgames.auto.AutoRegister;
 import de.tmxx.survivalgames.auto.RegisterState;
+import de.tmxx.survivalgames.user.User;
 import lombok.NoArgsConstructor;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockFadeEvent;
-import org.bukkit.event.block.BlockFormEvent;
-import org.bukkit.event.block.BlockFromToEvent;
+import org.bukkit.event.block.*;
+import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 
 import java.util.Set;
 
@@ -49,5 +50,29 @@ public class ProtectionListener implements Listener {
     public void onBlockFromTo(BlockFromToEvent event) {
         // cancel water and lava flow
         event.setCancelled(LIQUIDS.contains(event.getToBlock().getType()));
+    }
+
+    @EventHandler
+    public void onBlockSpread(BlockSpreadEvent event) {
+        // cancel all block spreads, i.e. fire
+        event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onEntityTargetLivingEntity(EntityTargetLivingEntityEvent event) {
+        if (!(event.getTarget() instanceof Player player)) return;
+
+        User user = User.getUser(player);
+        if (user == null) return;
+
+        // spectators should never be targeted by mobs
+        event.setCancelled(user.isSpectator());
+    }
+
+    @EventHandler
+    public void onLeavesDecay(LeavesDecayEvent event) {
+        // leaves are not allowed to decay under normal circumstances at all. nevertheless players could be able to
+        // break leaves depending on the configuration.
+        event.setCancelled(true);
     }
 }

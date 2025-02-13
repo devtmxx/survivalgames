@@ -40,3 +40,10 @@ timers:
       single: '<yellow>The game starts in <gold>{0} second'
       multiple: '<yellow>The game starts in <gold>{0} seconds'
       waiting: '<yellow>Waiting for more players...'
+
+kill:
+  other: '%prefix% <red>{0} <white>died.'
+  by-player: '%prefix% <red>{0} <white>got killed by <green>{1}'
+  players-left:
+    single: '%prefix% There is <yellow>{0} player <white>left.'
+    multiple: '%prefix% There are <yellow>{0} players <white>left.'

@@ -106,3 +106,31 @@ blocks:
 
 # Whether placed tnt blocks should automatically be replaced with primed tnt.
 auto-ignite-tnt: true
+
+# A list of entities allowed to spawn during the in game phases.
+allowed-entities:
+  - 'SHEEP'
+  - 'COW'
+  - 'CHICKEN'
+
+# Whether the world should spawn lightning strikes at a players death location
+lightning-on-kill: true
+
+# The amount of slots of a chest should have. This amount should always be divisible by 9.
+chest-inventory-size: 27
+
+# A list of possible tiers used to populate items in chests. The plugin checks the first item in the top left of the
+# inventory to determine its tier. If there is no item placed in the chests inventory or there is no tier found for the
+# item, it uses the specified default tier. If the default tier is not specified it uses 0.
+tiers:
+  default: 0
+  IRON: 1
+  GOLD: 2
+
+
+################################
+##
+## The following values were generated in-game.
+## Do not touch them if you don't know exactly what you are doing.
+##
+################################

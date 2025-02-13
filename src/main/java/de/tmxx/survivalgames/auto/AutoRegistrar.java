@@ -208,6 +208,8 @@ public class AutoRegistrar {
      * @return whether the state applies to the game states
      */
     private static boolean compareStates(GameState[] states, GameState state) {
+        if (state == null) return true;
+
         for (GameState toCheck : states) {
             if (state.equals(toCheck)) return true;
         }

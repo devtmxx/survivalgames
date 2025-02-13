@@ -1,6 +1,7 @@
 package de.tmxx.survivalgames;
 
 import de.tmxx.survivalgames.auto.AutoRegistrar;
+import de.tmxx.survivalgames.chest.ChestFiller;
 import de.tmxx.survivalgames.config.SpawnPosition;
 import de.tmxx.survivalgames.database.Database;
 import de.tmxx.survivalgames.database.MariaDB;
@@ -30,6 +31,7 @@ public class SurvivalGames extends JavaPlugin {
     private Database database;
     private MapManager mapManager;
     private Game game;
+    private ChestFiller chestFiller;
 
     @Override
     public void onEnable() {
@@ -42,6 +44,8 @@ public class SurvivalGames extends JavaPlugin {
 
         mapManager = new MapManager(this);
         mapManager.load();
+
+        chestFiller = new ChestFiller(this);
 
         AutoRegistrar.registerListeners(this);
         AutoRegistrar.registerCommands(this);
