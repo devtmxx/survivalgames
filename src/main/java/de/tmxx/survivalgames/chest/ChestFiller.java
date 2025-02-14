@@ -19,6 +19,7 @@ import java.util.Map;
  */
 public class ChestFiller {
     private final Map<Integer, ChestTier> tiers = new HashMap<>();
+    private int defaultTier = 0;
 
     public ChestFiller(SurvivalGames plugin) {
         plugin.saveResource("tiers.yml", false);
@@ -26,6 +27,7 @@ public class ChestFiller {
         ConfigurationSection tiersSection = plugin.getConfig().getConfigurationSection("tiers");
         if (tiersSection == null) return;
 
+        defaultTier = tiersSection.getInt("default", 0);
         List<Integer> tiers = tiersSection.getKeys(false).stream().map(tiersSection::getInt).toList();
 
         FileConfiguration tiersConfig = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder(), "tiers.yml"));
@@ -35,5 +37,10 @@ public class ChestFiller {
         }
 
         plugin.getLogger().info("Loaded " + this.tiers.size() + " chest tiers");
+    }
+
+    public ChestTier getTier(int tier) {
+        if (tiers.containsKey(tier)) return tiers.get(tier);
+        return tiers.get(defaultTier);
     }
 }
