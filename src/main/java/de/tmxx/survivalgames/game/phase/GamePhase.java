@@ -13,4 +13,8 @@ public interface GamePhase {
     void end();
     int countdownSeconds();
     void nextPhase();
+
+    default boolean shouldBroadcastTimeLeft(int timeLeft) {
+        return timeLeft % 10 == 0 || timeLeft <= 5;
+    }
 }

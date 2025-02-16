@@ -40,6 +40,16 @@ timers:
       single: '<yellow>The game starts in <gold>{0} second'
       multiple: '<yellow>The game starts in <gold>{0} seconds'
       waiting: '<yellow>Waiting for more players...'
+    chat:
+      single: '%prefix% The game starts in <gold>{0} second<white>.'
+      multiple: '%prefix% The game starts in <gold>{0} seconds<white>.'
+    title:
+      5: '<dark_red><bold>5'
+      4: '<red><bold>4'
+      3: '<gold><bold>3'
+      2: '<yellow><bold>2'
+      1: '<green><bold>1'
+      0: '<aqua><bold>Go!'
 
 kill:
   other: '%prefix% <red>{0} <white>died.'

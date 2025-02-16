@@ -9,6 +9,7 @@ import de.tmxx.survivalgames.module.game.Starting;
 import de.tmxx.survivalgames.user.UserBroadcaster;
 import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
+import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -61,6 +62,16 @@ public class LobbyPhase implements GamePhase {
             int timeLeft = game.secondsLeft();
             String key = "timers.lobby.action-bar." + (timeLeft == 1 ? "single" : "multiple");
             broadcaster.broadcastActionBar(key, timeLeft);
+
+            if (shouldBroadcastTimeLeft(timeLeft)) {
+                key = "timers.lobby.chat." + (timeLeft == 1 ? "single" : "multiple");
+                broadcaster.broadcast(key, timeLeft);
+                broadcaster.broadcastSound(Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1F, 1F);
+            }
+
+            if (timeLeft <= 5) {
+                broadcaster.broadcastTitle("timers.lobby.title." + timeLeft, null, 200, 600, 200);
+            }
         } else {
             broadcaster.broadcastActionBar("timers.lobby.action-bar.waiting");
         }
@@ -68,6 +79,8 @@ public class LobbyPhase implements GamePhase {
 
     @Override
     public void end() {
+        broadcaster.broadcastTitle("timers.lobby.title.0", null, 200, 600, 200);
+        broadcaster.broadcastSound(Sound.ENTITY_PLAYER_LEVELUP, 1F, 1F);
         listenerRegistrar.unregisterPhaseSpecific(Lobby.class);
     }
 

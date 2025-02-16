@@ -12,6 +12,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Chest;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -51,9 +52,14 @@ public class ChestFillerImpl implements ChestFiller {
         load();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Inventory fill(Chest chest) {
         Inventory inventory = inventories.get(chest.getLocation());
+
+        // do not re-fill the inventory if it already exists
         if (inventory != null) return inventory;
 
         inventory = Bukkit.createInventory(null, mainConfig.getInt("chest.inventory-size"));
@@ -67,7 +73,15 @@ public class ChestFillerImpl implements ChestFiller {
         return inventory;
     }
 
+    @Override
+    public void reset() {
+        // close all open chest inventories to prevent unwanted behaviour
+        inventories.values().forEach(inventory -> inventory.getViewers().forEach(HumanEntity::closeInventory));
+        inventories.clear();
+    }
+
     private ChestTier getTier(ItemStack stack) {
+        // using the default tier if no item is used to specify a tier
         if (stack == null) return tiers.get(defaultTier);
 
         Material material = stack.getType();
