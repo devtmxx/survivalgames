@@ -5,10 +5,7 @@ import de.tmxx.survivalgames.game.Game;
 import de.tmxx.survivalgames.module.config.MainConfig;
 import de.tmxx.survivalgames.module.game.phase.DeathMatch;
 import de.tmxx.survivalgames.module.game.phase.InGame;
-import de.tmxx.survivalgames.user.User;
-import de.tmxx.survivalgames.user.UserBroadcaster;
-import de.tmxx.survivalgames.user.UserRegistry;
-import de.tmxx.survivalgames.user.UserState;
+import de.tmxx.survivalgames.user.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -27,13 +24,21 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 public class KillListener implements Listener {
     private final FileConfiguration config;
     private final UserRegistry registry;
+    private final UserPreparer preparer;
     private final UserBroadcaster broadcaster;
     private final Game game;
 
     @Inject
-    public KillListener(@MainConfig FileConfiguration config, UserRegistry registry, UserBroadcaster broadcaster, Game game) {
+    public KillListener(
+            @MainConfig FileConfiguration config,
+            UserRegistry registry,
+            UserPreparer preparer,
+            UserBroadcaster broadcaster,
+            Game game
+    ) {
         this.config = config;
         this.registry = registry;
+        this.preparer = preparer;
         this.broadcaster = broadcaster;
         this.game = game;
     }
@@ -53,7 +58,7 @@ public class KillListener implements Listener {
         User dead = registry.getUser(deadPlayer);
         if (dead == null) return;
 
-        // TODO: make the dead player a spectator
+        preparer.prepareUserForSpectator(dead);
 
         User killer = null;
         if (deadPlayer.getKiller() != null) killer = registry.getUser(deadPlayer.getKiller());

@@ -32,6 +32,7 @@ import de.tmxx.survivalgames.module.game.phase.*;
 import de.tmxx.survivalgames.user.*;
 import de.tmxx.survivalgames.user.impl.UserBroadcasterImpl;
 import de.tmxx.survivalgames.user.impl.UserImpl;
+import de.tmxx.survivalgames.user.impl.UserPreparerImpl;
 import de.tmxx.survivalgames.user.impl.UserRegistryImpl;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -70,6 +71,7 @@ public class GameModule extends AbstractModule {
         bind(GameHandler.class).to(GameHandlerImpl.class);
         bind(Game.class).to(GameImpl.class);
         bind(ChestFiller.class).to(ChestFillerImpl.class);
+        bind(UserPreparer.class).to(UserPreparerImpl.class);
 
         bindGamePhases();
         bindItems();

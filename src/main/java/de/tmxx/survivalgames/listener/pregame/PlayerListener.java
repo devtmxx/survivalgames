@@ -7,7 +7,10 @@ import de.tmxx.survivalgames.module.config.MainConfig;
 import de.tmxx.survivalgames.module.config.MaxPlayers;
 import de.tmxx.survivalgames.module.config.MinPlayers;
 import de.tmxx.survivalgames.module.game.phase.Lobby;
+import de.tmxx.survivalgames.user.User;
 import de.tmxx.survivalgames.user.UserBroadcaster;
+import de.tmxx.survivalgames.user.UserPreparer;
+import de.tmxx.survivalgames.user.UserRegistry;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -31,6 +34,8 @@ public class PlayerListener implements Listener {
     private final UserBroadcaster broadcaster;
     private final Game game;
     private final FileConfiguration config;
+    private final UserRegistry registry;
+    private final UserPreparer preparer;
 
     @Inject
     public PlayerListener(
@@ -38,17 +43,24 @@ public class PlayerListener implements Listener {
             @MinPlayers int minPlayers,
             UserBroadcaster broadcaster,
             Game game,
-            @MainConfig FileConfiguration config
+            @MainConfig FileConfiguration config,
+            UserRegistry registry,
+            UserPreparer preparer
     ) {
         this.maxPlayers = maxPlayers;
         this.minPlayers = minPlayers;
         this.broadcaster = broadcaster;
         this.game = game;
         this.config = config;
+        this.registry = registry;
+        this.preparer = preparer;
     }
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
+        User user = registry.getUser(event.getPlayer());
+        if (user == null) return;
+
         event.joinMessage(null);
 
         int onlinePlayers = Bukkit.getOnlinePlayers().size();
@@ -59,7 +71,7 @@ public class PlayerListener implements Listener {
             game.startTimer();
         }
 
-        preparePlayer(event.getPlayer());
+        preparer.prepareUserForLobby(user);
     }
 
     @EventHandler
@@ -84,15 +96,5 @@ public class PlayerListener implements Listener {
 
         // all players should spawn at the lobby spawn (if it exists)
         event.setSpawnLocation(spawn.getCentered());
-    }
-
-    private void preparePlayer(Player player) {
-        player.setHealth(20.0D);
-        player.setFoodLevel(20);
-        player.setExp(0);
-        player.setLevel(0);
-        player.clearActivePotionEffects();
-        player.getInventory().clear();
-        player.updateInventory();
     }
 }
