@@ -1,8 +1,8 @@
 package de.tmxx.survivalgames.listener.pregame;
 
-import de.tmxx.survivalgames.module.game.Ending;
-import de.tmxx.survivalgames.module.game.Lobby;
-import de.tmxx.survivalgames.module.game.Starting;
+import de.tmxx.survivalgames.module.game.phase.Ending;
+import de.tmxx.survivalgames.module.game.phase.Lobby;
+import de.tmxx.survivalgames.module.game.phase.Starting;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;

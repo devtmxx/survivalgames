@@ -17,12 +17,18 @@ import de.tmxx.survivalgames.game.impl.GameImpl;
 import de.tmxx.survivalgames.game.phase.*;
 import de.tmxx.survivalgames.i18n.I18n;
 import de.tmxx.survivalgames.i18n.impl.I18nImpl;
+import de.tmxx.survivalgames.item.ClickableItem;
+import de.tmxx.survivalgames.item.ItemRegistry;
+import de.tmxx.survivalgames.item.impl.ItemRegistryImpl;
+import de.tmxx.survivalgames.item.impl.VoteItem;
 import de.tmxx.survivalgames.listener.ListenerRegistrar;
 import de.tmxx.survivalgames.listener.ListenerRegistrarImpl;
 import de.tmxx.survivalgames.map.*;
 import de.tmxx.survivalgames.map.impl.MapImpl;
 import de.tmxx.survivalgames.map.impl.MapManagerImpl;
 import de.tmxx.survivalgames.module.config.Setup;
+import de.tmxx.survivalgames.module.game.item.Vote;
+import de.tmxx.survivalgames.module.game.phase.*;
 import de.tmxx.survivalgames.user.*;
 import de.tmxx.survivalgames.user.impl.UserBroadcasterImpl;
 import de.tmxx.survivalgames.user.impl.UserImpl;
@@ -63,14 +69,23 @@ public class GameModule extends AbstractModule {
         bind(UserRegistry.class).to(UserRegistryImpl.class);
         bind(GameHandler.class).to(GameHandlerImpl.class);
         bind(Game.class).to(GameImpl.class);
+        bind(ChestFiller.class).to(ChestFillerImpl.class);
 
+        bindGamePhases();
+        bindItems();
+    }
+
+    private void bindGamePhases() {
         bind(GamePhase.class).annotatedWith(Lobby.class).to(LobbyPhase.class);
         bind(GamePhase.class).annotatedWith(Starting.class).to(StartingPhase.class);
         bind(GamePhase.class).annotatedWith(InGame.class).to(InGamePhase.class);
         bind(GamePhase.class).annotatedWith(DeathMatch.class).to(DeathMatchPhase.class);
         bind(GamePhase.class).annotatedWith(Ending.class).to(EndingPhase.class);
+    }
 
-        bind(ChestFiller.class).to(ChestFillerImpl.class);
+    private void bindItems() {
+        bind(ItemRegistry.class).to(ItemRegistryImpl.class);
+        bind(ClickableItem.class).annotatedWith(Vote.class).to(VoteItem.class);
     }
 
     @Provides

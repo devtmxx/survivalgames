@@ -2,8 +2,8 @@ package de.tmxx.survivalgames.listener.ingame;
 
 import com.google.inject.Inject;
 import de.tmxx.survivalgames.chest.ChestFiller;
-import de.tmxx.survivalgames.module.game.DeathMatch;
-import de.tmxx.survivalgames.module.game.InGame;
+import de.tmxx.survivalgames.module.game.phase.DeathMatch;
+import de.tmxx.survivalgames.module.game.phase.InGame;
 import org.bukkit.block.Chest;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

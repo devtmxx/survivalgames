@@ -2,8 +2,8 @@ package de.tmxx.survivalgames.listener.ingame;
 
 import com.google.inject.Inject;
 import de.tmxx.survivalgames.module.config.MainConfig;
-import de.tmxx.survivalgames.module.game.DeathMatch;
-import de.tmxx.survivalgames.module.game.InGame;
+import de.tmxx.survivalgames.module.game.phase.DeathMatch;
+import de.tmxx.survivalgames.module.game.phase.InGame;
 import de.tmxx.survivalgames.user.User;
 import de.tmxx.survivalgames.user.UserRegistry;
 import org.bukkit.configuration.file.FileConfiguration;

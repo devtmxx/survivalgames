@@ -1,4 +1,4 @@
-package de.tmxx.survivalgames.module.game;
+package de.tmxx.survivalgames.module.game.phase;
 
 import jakarta.inject.Qualifier;
 

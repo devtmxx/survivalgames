@@ -6,7 +6,7 @@ import de.tmxx.survivalgames.game.Game;
 import de.tmxx.survivalgames.module.config.MainConfig;
 import de.tmxx.survivalgames.module.config.MaxPlayers;
 import de.tmxx.survivalgames.module.config.MinPlayers;
-import de.tmxx.survivalgames.module.game.Lobby;
+import de.tmxx.survivalgames.module.game.phase.Lobby;
 import de.tmxx.survivalgames.user.UserBroadcaster;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;

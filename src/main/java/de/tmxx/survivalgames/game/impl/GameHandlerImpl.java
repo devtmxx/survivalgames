@@ -9,7 +9,7 @@ import de.tmxx.survivalgames.game.phase.GamePhase;
 import de.tmxx.survivalgames.listener.ListenerRegistrar;
 import de.tmxx.survivalgames.map.MapManager;
 import de.tmxx.survivalgames.module.config.Setup;
-import de.tmxx.survivalgames.module.game.Lobby;
+import de.tmxx.survivalgames.module.game.phase.Lobby;
 
 /**
  * Project: survivalgames

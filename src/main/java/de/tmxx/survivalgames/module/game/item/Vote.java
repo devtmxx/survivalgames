@@ -1,4 +1,4 @@
-package de.tmxx.survivalgames.module.game;
+package de.tmxx.survivalgames.module.game.item;
 
 import jakarta.inject.Qualifier;
 
@@ -9,13 +9,13 @@ import java.lang.annotation.Target;
 
 /**
  * Project: survivalgames
- * 15.02.25
+ * 16.02.25
  *
  * @author timmauersberger
  * @version 1.0
  */
 @Qualifier
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.PARAMETER, ElementType.TYPE })
-public @interface Lobby {
+@Target({ ElementType.PARAMETER })
+public @interface Vote {
 }
