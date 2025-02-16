@@ -1,9 +1,10 @@
-package de.tmxx.survivalgames.command;
+package de.tmxx.survivalgames.command.util;
 
 import com.google.common.base.Joiner;
 import de.tmxx.survivalgames.map.Map;
 import de.tmxx.survivalgames.map.MapManager;
 import de.tmxx.survivalgames.user.User;
+import de.tmxx.survivalgames.user.UserRegistry;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import org.bukkit.entity.Player;
 
@@ -25,11 +26,12 @@ public final class CommandSnippets {
      * not a player or the player is not yet registered as a user.
      *
      * @param stack the command source stack
+     * @param registry the user registry
      * @return the user or null
      */
-    public static User getUser(CommandSourceStack stack) {
+    public static User getUser(CommandSourceStack stack, UserRegistry registry) {
         if (!(stack.getSender() instanceof Player player)) return null;
-        return User.getUser(player);
+        return registry.getUser(player);
     }
 
     /**

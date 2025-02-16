@@ -1,11 +1,10 @@
 package de.tmxx.survivalgames.listener.ingame;
 
-import de.tmxx.survivalgames.SurvivalGames;
-import de.tmxx.survivalgames.auto.AutoRegister;
-import de.tmxx.survivalgames.auto.RegisterState;
-import de.tmxx.survivalgames.game.GameState;
+import com.google.inject.Inject;
+import de.tmxx.survivalgames.module.game.DeathMatch;
+import de.tmxx.survivalgames.module.game.InGame;
 import de.tmxx.survivalgames.user.User;
-import lombok.RequiredArgsConstructor;
+import de.tmxx.survivalgames.user.UserRegistry;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -20,13 +19,15 @@ import org.bukkit.event.entity.EntityDamageEvent;
  * @author timmauersberger
  * @version 1.0
  */
-@AutoRegister(value = RegisterState.GAME, states = {
-        GameState.IN_GAME,
-        GameState.DEATH_MATCH
-})
-@RequiredArgsConstructor
+@InGame
+@DeathMatch
 public class DamageListener implements Listener {
-    private final SurvivalGames survivalGames;
+    private final UserRegistry registry;
+
+    @Inject
+    public DamageListener(UserRegistry registry) {
+        this.registry = registry;
+    }
 
     @EventHandler
     public void onEntityDamage(EntityDamageEvent event) {
@@ -35,7 +36,7 @@ public class DamageListener implements Listener {
 
         // the user should always be defined. if that's not the case we just ignore the outcome so players can complain
         // about the error, and it may be easier to fix (if this ever happens at all)
-        User user = User.getUser(player);
+        User user = registry.getUser(player);
         if (user == null) return;
 
         // cancel damage for spectators
@@ -47,9 +48,9 @@ public class DamageListener implements Listener {
         User target = null;
         User damager = null;
 
-        if (event.getEntity() instanceof Player player) target = User.getUser(player);
-        if (event.getDamager() instanceof Player player) damager = User.getUser(player);
-        if (event.getDamager() instanceof Arrow arrow && arrow.getShooter() instanceof Player player) damager = User.getUser(player);
+        if (event.getEntity() instanceof Player player) target = registry.getUser(player);
+        if (event.getDamager() instanceof Player player) damager = registry.getUser(player);
+        if (event.getDamager() instanceof Arrow arrow && arrow.getShooter() instanceof Player player) damager = registry.getUser(player);
 
         // cancel damage if either the target or the damager are spectators
         event.setCancelled(

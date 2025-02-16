@@ -1,11 +1,11 @@
 package de.tmxx.survivalgames.listener.feature;
 
-import de.tmxx.survivalgames.SurvivalGames;
-import de.tmxx.survivalgames.auto.AutoRegister;
-import de.tmxx.survivalgames.auto.RegisterState;
-import de.tmxx.survivalgames.game.GameState;
-import lombok.RequiredArgsConstructor;
+import com.google.inject.Inject;
+import de.tmxx.survivalgames.module.config.MainConfig;
+import de.tmxx.survivalgames.module.game.DeathMatch;
+import de.tmxx.survivalgames.module.game.InGame;
 import org.bukkit.Material;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -19,18 +19,20 @@ import org.bukkit.event.block.BlockPlaceEvent;
  * @author timmauersberger
  * @version 1.0
  */
-@AutoRegister(value = RegisterState.GAME, states = {
-        GameState.IN_GAME,
-        GameState.DEATH_MATCH
-})
-@RequiredArgsConstructor
+@InGame
+@DeathMatch
 public class InstantTNTListener implements Listener {
-    private final SurvivalGames plugin;
+    private final FileConfiguration config;
+
+    @Inject
+    public InstantTNTListener(@MainConfig FileConfiguration config) {
+        this.config = config;
+    }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onBlockPlace(BlockPlaceEvent event) {
         if (!event.getBlock().getType().equals(Material.TNT)) return;
-        if (!plugin.getConfig().getBoolean("auto-ignite-tnt", true)) return;
+        if (!config.getBoolean("auto-ignite-tnt", true)) return;
 
         event.getBlock().setType(Material.AIR);
         event.getBlock().getWorld().spawn(event.getBlock().getLocation(), TNTPrimed.class);

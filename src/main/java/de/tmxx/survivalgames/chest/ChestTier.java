@@ -1,6 +1,7 @@
 package de.tmxx.survivalgames.chest;
 
 import de.tmxx.survivalgames.config.ChestItem;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
@@ -26,7 +27,7 @@ public class ChestTier {
         });
     }
 
-    public ChestItem getRandomItem() {
+    public @Nullable ChestItem getRandomItem() {
         // there are no items in this tier if the total weight is zero
         if (totalWeight == 0) return null;
 

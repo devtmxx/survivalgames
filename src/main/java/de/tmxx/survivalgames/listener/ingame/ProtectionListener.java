@@ -1,11 +1,12 @@
 package de.tmxx.survivalgames.listener.ingame;
 
-import de.tmxx.survivalgames.SurvivalGames;
-import de.tmxx.survivalgames.auto.AutoRegister;
-import de.tmxx.survivalgames.auto.RegisterState;
-import de.tmxx.survivalgames.game.GameState;
+import com.google.inject.Inject;
+import de.tmxx.survivalgames.module.config.MainConfig;
+import de.tmxx.survivalgames.module.game.DeathMatch;
+import de.tmxx.survivalgames.module.game.InGame;
 import de.tmxx.survivalgames.user.User;
-import lombok.RequiredArgsConstructor;
+import de.tmxx.survivalgames.user.UserRegistry;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -24,17 +25,21 @@ import org.bukkit.event.player.PlayerInteractEvent;
  * @author timmauersberger
  * @version 1.0
  */
-@AutoRegister(value = RegisterState.GAME, states = {
-        GameState.IN_GAME,
-        GameState.DEATH_MATCH
-})
-@RequiredArgsConstructor
+@InGame
+@DeathMatch
 public class ProtectionListener implements Listener {
-    private final SurvivalGames plugin;
+    private final UserRegistry registry;
+    private final FileConfiguration config;
+
+    @Inject
+    public ProtectionListener(UserRegistry registry, @MainConfig FileConfiguration config) {
+        this.registry = registry;
+        this.config = config;
+    }
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
-        User user = User.getUser(event.getPlayer());
+        User user = registry.getUser(event.getPlayer());
         if (user == null || user.isSpectator()) {
             event.setCancelled(true);
             return;
@@ -42,13 +47,13 @@ public class ProtectionListener implements Listener {
 
         // cancel for all blocks not listed under breakable blocks
         event.setCancelled(
-                !plugin.getConfig().getStringList("blocks.breakable").contains(event.getBlock().getType().name())
+                !config.getStringList("blocks.breakable").contains(event.getBlock().getType().name())
         );
     }
 
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {
-        User user = User.getUser(event.getPlayer());
+        User user = registry.getUser(event.getPlayer());
         if (user == null || user.isSpectator()) {
             event.setCancelled(true);
             return;
@@ -56,7 +61,7 @@ public class ProtectionListener implements Listener {
 
         // cancel for all blocks not listed under placeable blocks
         event.setCancelled(
-                !plugin.getConfig().getStringList("blocks.placeable").contains(event.getBlock().getType().name())
+                !config.getStringList("blocks.placeable").contains(event.getBlock().getType().name())
         );
     }
 
@@ -70,7 +75,7 @@ public class ProtectionListener implements Listener {
     public void onCreatureSpawn(CreatureSpawnEvent event) {
         // only spawn allowed entities
         event.setCancelled(
-                !plugin.getConfig().getStringList("allowed-entities").contains(event.getEntity().getType().name())
+                !config.getStringList("allowed-entities").contains(event.getEntity().getType().name())
         );
     }
 
@@ -78,7 +83,7 @@ public class ProtectionListener implements Listener {
     public void onHangingBreakByEntity(HangingBreakByEntityEvent event) {
         if (!(event.getRemover() instanceof Player player)) return;
 
-        User user = User.getUser(player);
+        User user = registry.getUser(player);
         if (user == null) return;
 
         // spectators are not allowed to change anything in the world
@@ -87,7 +92,7 @@ public class ProtectionListener implements Listener {
 
     @EventHandler
     public void onPlayerDropItem(PlayerDropItemEvent event) {
-        User user = User.getUser(event.getPlayer());
+        User user = registry.getUser(event.getPlayer());
         if (user == null) return;
 
         // spectators are not allowed to drop items
@@ -96,7 +101,7 @@ public class ProtectionListener implements Listener {
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
-        User user = User.getUser(event.getPlayer());
+        User user = registry.getUser(event.getPlayer());
         if (user == null) return;
 
         // spectators are not allowed to interact with the environment

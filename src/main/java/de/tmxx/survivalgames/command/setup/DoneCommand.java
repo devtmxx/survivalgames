@@ -1,16 +1,16 @@
 package de.tmxx.survivalgames.command.setup;
 
-import de.tmxx.survivalgames.SurvivalGames;
-import de.tmxx.survivalgames.auto.AutoCommand;
-import de.tmxx.survivalgames.auto.AutoRegister;
-import de.tmxx.survivalgames.auto.RegisterState;
+import com.google.inject.Inject;
+import de.tmxx.survivalgames.command.Command;
+import de.tmxx.survivalgames.command.Setup;
 import de.tmxx.survivalgames.user.User;
+import de.tmxx.survivalgames.user.UserRegistry;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
-import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jspecify.annotations.Nullable;
 
-import static de.tmxx.survivalgames.command.CommandSnippets.*;
+import static de.tmxx.survivalgames.command.util.CommandSnippets.*;
 
 /**
  * Project: survivalgames
@@ -23,10 +23,16 @@ import static de.tmxx.survivalgames.command.CommandSnippets.*;
  * @author timmauersberger
  * @version 1.0
  */
-@AutoRegister(RegisterState.SETUP)
-@RequiredArgsConstructor
-public class DoneCommand implements AutoCommand {
-    private final SurvivalGames plugin;
+@Setup
+public class DoneCommand implements Command {
+    private final UserRegistry registry;
+    private final JavaPlugin plugin;
+
+    @Inject
+    public DoneCommand(UserRegistry registry, JavaPlugin plugin) {
+        this.registry = registry;
+        this.plugin = plugin;
+    }
 
     /**
      * {@inheritDoc}
@@ -41,7 +47,7 @@ public class DoneCommand implements AutoCommand {
      */
     @Override
     public void execute(CommandSourceStack source, String[] args) {
-        User user = getUser(source);
+        User user = getUser(source, registry);
         if (user == null) return;
 
         plugin.getConfig().set("setup", false);

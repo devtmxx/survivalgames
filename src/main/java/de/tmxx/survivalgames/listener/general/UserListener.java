@@ -1,10 +1,10 @@
 package de.tmxx.survivalgames.listener.general;
 
-import de.tmxx.survivalgames.SurvivalGames;
-import de.tmxx.survivalgames.auto.AutoRegister;
-import de.tmxx.survivalgames.auto.RegisterState;
+import com.google.inject.Inject;
+import de.tmxx.survivalgames.listener.RegisterAlways;
 import de.tmxx.survivalgames.user.User;
-import lombok.RequiredArgsConstructor;
+import de.tmxx.survivalgames.user.UserFactory;
+import de.tmxx.survivalgames.user.UserRegistry;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -18,21 +18,28 @@ import org.bukkit.event.player.PlayerQuitEvent;
  * @author timmauersberger
  * @version 1.0
  */
-@AutoRegister(RegisterState.ALWAYS)
-@RequiredArgsConstructor
+@RegisterAlways
 public class UserListener implements Listener {
-    private final SurvivalGames survivalGames;
+    private final UserRegistry registry;
+    private final UserFactory factory;
+
+    @Inject
+    public UserListener(UserRegistry registry, UserFactory factory) {
+        this.registry = registry;
+        this.factory = factory;
+    }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
-        new User(survivalGames, event.getPlayer());
+        User user = factory.createUser(event.getPlayer());
+        registry.registerUser(user);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerQuit(PlayerQuitEvent event) {
-        User user = User.getUser(event.getPlayer());
+        User user = registry.getUser(event.getPlayer());
         if (user == null) return;
 
-        user.remove();
+        registry.unregisterUser(user);
     }
 }

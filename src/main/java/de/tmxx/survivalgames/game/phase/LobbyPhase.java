@@ -1,11 +1,16 @@
 package de.tmxx.survivalgames.game.phase;
 
-import de.tmxx.survivalgames.SurvivalGames;
-import de.tmxx.survivalgames.game.GameState;
-import de.tmxx.survivalgames.user.User;
+import com.google.inject.Inject;
+import de.tmxx.survivalgames.game.Game;
+import de.tmxx.survivalgames.listener.ListenerRegistrar;
+import de.tmxx.survivalgames.module.config.MainConfig;
+import de.tmxx.survivalgames.module.game.Lobby;
+import de.tmxx.survivalgames.module.game.Starting;
+import de.tmxx.survivalgames.user.UserBroadcaster;
 import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
 import org.bukkit.World;
+import org.bukkit.configuration.file.FileConfiguration;
 
 /**
  * Project: survivalgames
@@ -14,13 +19,34 @@ import org.bukkit.World;
  * @author timmauersberger
  * @version 1.0
  */
-public class LobbyPhase extends GamePhase {
-    public LobbyPhase(SurvivalGames plugin) {
-        super(plugin, GameState.LOBBY);
+public class LobbyPhase implements GamePhase {
+    private static final int DEFAULT_COUNTDOWN_SECONDS = 60;
+
+    private final Game game;
+    private final UserBroadcaster broadcaster;
+    private final FileConfiguration config;
+    private final GamePhase nextPhase;
+    private final ListenerRegistrar listenerRegistrar;
+
+    @Inject
+    public LobbyPhase(
+            Game game,
+            UserBroadcaster broadcaster,
+            @MainConfig FileConfiguration config,
+            @Starting GamePhase nextPhase,
+            ListenerRegistrar listenerRegistrar
+    ) {
+        this.game = game;
+        this.broadcaster = broadcaster;
+        this.config = config;
+        this.nextPhase = nextPhase;
+        this.listenerRegistrar = listenerRegistrar;
     }
 
     @Override
-    public void onStart() {
+    public void start() {
+        listenerRegistrar.registerPhaseSpecific(Lobby.class);
+
         for (World world : Bukkit.getWorlds()) {
             world.setTime(7000);
             world.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
@@ -30,17 +56,28 @@ public class LobbyPhase extends GamePhase {
     }
 
     @Override
-    public void onTick() {
-        if (isCounting()) {
-            int timeLeft = getTimeLeft();
+    public void tick() {
+        if (game.isCounting()) {
+            int timeLeft = game.secondsLeft();
             String key = "timers.lobby.action-bar." + (timeLeft == 1 ? "single" : "multiple");
-            User.getOnlineUsers().forEach(user -> user.getPlayer().sendActionBar(user.translate(key, timeLeft)));
+            broadcaster.broadcastActionBar(key, timeLeft);
         } else {
-            User.getOnlineUsers().forEach(user -> user.getPlayer().sendActionBar(user.translate("timers.lobby.action-bar.waiting")));
+            broadcaster.broadcastActionBar("timers.lobby.action-bar.waiting");
         }
     }
 
     @Override
-    public void onEnd() {
+    public void end() {
+        listenerRegistrar.unregisterPhaseSpecific(Lobby.class);
+    }
+
+    @Override
+    public int countdownSeconds() {
+        return config.getInt("timers.lobby", DEFAULT_COUNTDOWN_SECONDS);
+    }
+
+    @Override
+    public void nextPhase() {
+        game.changeGamePhase(nextPhase);
     }
 }

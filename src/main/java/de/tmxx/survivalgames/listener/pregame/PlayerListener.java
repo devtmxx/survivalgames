@@ -1,13 +1,15 @@
 package de.tmxx.survivalgames.listener.pregame;
 
-import de.tmxx.survivalgames.SurvivalGames;
-import de.tmxx.survivalgames.auto.AutoRegister;
-import de.tmxx.survivalgames.auto.RegisterState;
+import com.google.inject.Inject;
 import de.tmxx.survivalgames.config.SpawnPosition;
-import de.tmxx.survivalgames.game.GameState;
-import de.tmxx.survivalgames.game.phase.GamePhase;
-import lombok.RequiredArgsConstructor;
+import de.tmxx.survivalgames.game.Game;
+import de.tmxx.survivalgames.module.config.MainConfig;
+import de.tmxx.survivalgames.module.config.MaxPlayers;
+import de.tmxx.survivalgames.module.config.MinPlayers;
+import de.tmxx.survivalgames.module.game.Lobby;
+import de.tmxx.survivalgames.user.UserBroadcaster;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -22,23 +24,39 @@ import org.spigotmc.event.player.PlayerSpawnLocationEvent;
  * @author timmauersberger
  * @version 1.0
  */
-@AutoRegister(value = RegisterState.GAME, states = { GameState.LOBBY })
-@RequiredArgsConstructor
+@Lobby
 public class PlayerListener implements Listener {
-    private final SurvivalGames plugin;
+    private final int maxPlayers;
+    private final int minPlayers;
+    private final UserBroadcaster broadcaster;
+    private final Game game;
+    private final FileConfiguration config;
+
+    @Inject
+    public PlayerListener(
+            @MaxPlayers int maxPlayers,
+            @MinPlayers int minPlayers,
+            UserBroadcaster broadcaster,
+            Game game,
+            @MainConfig FileConfiguration config
+    ) {
+        this.maxPlayers = maxPlayers;
+        this.minPlayers = minPlayers;
+        this.broadcaster = broadcaster;
+        this.game = game;
+        this.config = config;
+    }
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         event.joinMessage(null);
 
         int onlinePlayers = Bukkit.getOnlinePlayers().size();
-        int minPlayers = plugin.getMinPlayers();
-        int maxPlayers = plugin.getMaxPlayers();
-        plugin.broadcast("join", event.getPlayer().getName(), onlinePlayers, maxPlayers);
+        broadcaster.broadcast("join", event.getPlayer().getName(), onlinePlayers, maxPlayers);
 
         if (onlinePlayers >= minPlayers) {
             // start the timer if there are enough players online
-            plugin.getGame().getCurrentPhase().setCounting(true);
+            game.startTimer();
         }
 
         preparePlayer(event.getPlayer());
@@ -47,22 +65,20 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         event.quitMessage(null);
-        plugin.broadcast("quit", event.getPlayer().getName());
+        broadcaster.broadcast("quit", event.getPlayer().getName());
 
-        int minPlayers = plugin.getMinPlayers();
         int onlinePlayers = Bukkit.getOnlinePlayers().size();
 
         if (onlinePlayers < minPlayers) {
             // stop and reset the timer if there are not enough players online
-            GamePhase phase = plugin.getGame().getCurrentPhase();
-            phase.setCounting(false);
-            phase.reset();
+            game.stopTimer();
+            game.resetTimer();
         }
     }
 
     @EventHandler
     public void onPlayerSpawnLocation(PlayerSpawnLocationEvent event) {
-        SpawnPosition spawn = plugin.getConfig().getSerializable("spawn", SpawnPosition.class);
+        SpawnPosition spawn = config.getSerializable("spawn", SpawnPosition.class);
         if (spawn == null) return;
 
         // all players should spawn at the lobby spawn (if it exists)

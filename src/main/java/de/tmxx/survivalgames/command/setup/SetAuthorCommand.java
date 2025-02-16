@@ -1,16 +1,16 @@
 package de.tmxx.survivalgames.command.setup;
 
-import de.tmxx.survivalgames.SurvivalGames;
-import de.tmxx.survivalgames.auto.AutoCommand;
-import de.tmxx.survivalgames.auto.AutoRegister;
-import de.tmxx.survivalgames.auto.RegisterState;
+import com.google.inject.Inject;
+import de.tmxx.survivalgames.command.Command;
+import de.tmxx.survivalgames.command.Setup;
 import de.tmxx.survivalgames.map.Map;
+import de.tmxx.survivalgames.map.MapManager;
 import de.tmxx.survivalgames.user.User;
+import de.tmxx.survivalgames.user.UserRegistry;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
-import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.Nullable;
 
-import static de.tmxx.survivalgames.command.CommandSnippets.*;
+import static de.tmxx.survivalgames.command.util.CommandSnippets.*;
 
 /**
  * Project: survivalgames
@@ -23,10 +23,16 @@ import static de.tmxx.survivalgames.command.CommandSnippets.*;
  * @author timmauersberger
  * @version 1.0
  */
-@AutoRegister(RegisterState.SETUP)
-@RequiredArgsConstructor
-public class SetAuthorCommand implements AutoCommand {
-    private final SurvivalGames plugin;
+@Setup
+public class SetAuthorCommand implements Command {
+    private final UserRegistry registry;
+    private final MapManager mapManager;
+
+    @Inject
+    public SetAuthorCommand(UserRegistry registry, MapManager mapManager) {
+        this.registry = registry;
+        this.mapManager = mapManager;
+    }
 
     /**
      * {@inheritDoc}
@@ -41,7 +47,7 @@ public class SetAuthorCommand implements AutoCommand {
      */
     @Override
     public void execute(CommandSourceStack source, String[] args) {
-        User user = getUser(source);
+        User user = getUser(source, registry);
         if (user == null) return;
 
         if (args.length < 2) {
@@ -50,7 +56,7 @@ public class SetAuthorCommand implements AutoCommand {
         }
 
         String id = args[0];
-        Map map = getMap(plugin.getMapManager(), id, user);
+        Map map = getMap(mapManager, id, user);
         if (map == null) return;
 
         String author = sumArgs(1, args);

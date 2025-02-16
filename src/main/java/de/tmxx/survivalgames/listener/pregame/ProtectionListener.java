@@ -1,9 +1,8 @@
 package de.tmxx.survivalgames.listener.pregame;
 
-import de.tmxx.survivalgames.auto.AutoRegister;
-import de.tmxx.survivalgames.auto.RegisterState;
-import de.tmxx.survivalgames.game.GameState;
-import lombok.NoArgsConstructor;
+import de.tmxx.survivalgames.module.game.Ending;
+import de.tmxx.survivalgames.module.game.Lobby;
+import de.tmxx.survivalgames.module.game.Starting;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -23,12 +22,9 @@ import org.bukkit.event.player.PlayerInteractEvent;
  * @author timmauersberger
  * @version 1.0
  */
-@AutoRegister(value = RegisterState.GAME, states = {
-        GameState.LOBBY,
-        GameState.STARTING,
-        GameState.ENDING
-})
-@NoArgsConstructor
+@Lobby
+@Starting
+@Ending
 public class ProtectionListener implements Listener {
     @EventHandler
     public void onBlockPlace(BlockPlaceEvent event) {

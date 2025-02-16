@@ -1,8 +1,6 @@
 package de.tmxx.survivalgames.listener.general;
 
-import de.tmxx.survivalgames.auto.AutoRegister;
-import de.tmxx.survivalgames.auto.RegisterState;
-import lombok.NoArgsConstructor;
+import de.tmxx.survivalgames.listener.RegisterAlways;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.weather.WeatherChangeEvent;
@@ -14,8 +12,7 @@ import org.bukkit.event.weather.WeatherChangeEvent;
  * @author timmauersberger
  * @version 1.0
  */
-@AutoRegister(RegisterState.ALWAYS)
-@NoArgsConstructor
+@RegisterAlways
 public class WeatherChangeListener implements Listener {
     @EventHandler
     public void onWeatherChange(WeatherChangeEvent event) {

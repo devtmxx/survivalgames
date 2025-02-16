@@ -1,9 +1,9 @@
 package de.tmxx.survivalgames.listener.general;
 
-import de.tmxx.survivalgames.auto.AutoRegister;
-import de.tmxx.survivalgames.auto.RegisterState;
+import com.google.inject.Inject;
+import de.tmxx.survivalgames.listener.RegisterAlways;
 import de.tmxx.survivalgames.user.User;
-import lombok.NoArgsConstructor;
+import de.tmxx.survivalgames.user.UserRegistry;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -20,8 +20,7 @@ import java.util.Set;
  * @author timmauersberger
  * @version 1.0
  */
-@AutoRegister(RegisterState.ALWAYS)
-@NoArgsConstructor
+@RegisterAlways
 public class ProtectionListener implements Listener {
     private static final Set<Material> LAVA_FORM_RESULTS = Set.of(
             Material.OBSIDIAN,
@@ -33,6 +32,13 @@ public class ProtectionListener implements Listener {
             Material.LAVA,
             Material.WATER
     );
+
+    private final UserRegistry registry;
+
+    @Inject
+    public ProtectionListener(UserRegistry registry) {
+        this.registry = registry;
+    }
 
     @EventHandler
     public void onBlockFade(BlockFadeEvent event) {
@@ -62,7 +68,7 @@ public class ProtectionListener implements Listener {
     public void onEntityTargetLivingEntity(EntityTargetLivingEntityEvent event) {
         if (!(event.getTarget() instanceof Player player)) return;
 
-        User user = User.getUser(player);
+        User user = registry.getUser(player);
         if (user == null) return;
 
         // spectators should never be targeted by mobs

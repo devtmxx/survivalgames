@@ -1,4 +1,4 @@
-package de.tmxx.survivalgames.auto;
+package de.tmxx.survivalgames.command;
 
 import io.papermc.paper.command.brigadier.BasicCommand;
 
@@ -9,14 +9,14 @@ import java.util.List;
  * 10.02.2025
  *
  * <p>
- *     An interface used to signal to the {@link AutoRegistrar} that a command should automatically be registered. This
+ *     An interface used to signal to the {@link CommandRegistrar} that a command should automatically be registered. This
  *     provides some basic information necessary to register a command using the new brigadier command system.
  * </p>
  *
  * @author timmauersberger
  * @version 1.0
  */
-public interface AutoCommand extends BasicCommand {
+public interface Command extends BasicCommand {
     /**
      * Retrieves the name of the command to register. This name should always be in lower case for easier access by the
      * player since commands are registered case-sensitive.

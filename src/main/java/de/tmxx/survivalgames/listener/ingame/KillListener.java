@@ -1,12 +1,15 @@
 package de.tmxx.survivalgames.listener.ingame;
 
-import de.tmxx.survivalgames.SurvivalGames;
-import de.tmxx.survivalgames.auto.AutoRegister;
-import de.tmxx.survivalgames.auto.RegisterState;
-import de.tmxx.survivalgames.game.GameState;
+import com.google.inject.Inject;
+import de.tmxx.survivalgames.game.Game;
+import de.tmxx.survivalgames.module.config.MainConfig;
+import de.tmxx.survivalgames.module.game.DeathMatch;
+import de.tmxx.survivalgames.module.game.InGame;
 import de.tmxx.survivalgames.user.User;
+import de.tmxx.survivalgames.user.UserBroadcaster;
+import de.tmxx.survivalgames.user.UserRegistry;
 import de.tmxx.survivalgames.user.UserState;
-import lombok.RequiredArgsConstructor;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -19,47 +22,54 @@ import org.bukkit.event.entity.PlayerDeathEvent;
  * @author timmauersberger
  * @version 1.0
  */
-@AutoRegister(value = RegisterState.GAME, states = {
-        GameState.IN_GAME,
-        GameState.DEATH_MATCH
-})
-@RequiredArgsConstructor
+@InGame
+@DeathMatch
 public class KillListener implements Listener {
-    private final SurvivalGames plugin;
+    private final FileConfiguration config;
+    private final UserRegistry registry;
+    private final UserBroadcaster broadcaster;
+    private final Game game;
+
+    @Inject
+    public KillListener(@MainConfig FileConfiguration config, UserRegistry registry, UserBroadcaster broadcaster, Game game) {
+        this.config = config;
+        this.registry = registry;
+        this.broadcaster = broadcaster;
+        this.game = game;
+    }
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
         // do not send the standard death message
         event.deathMessage(null);
 
-        if (plugin.getConfig().getBoolean("lightning-on-kill", true)) {
+        if (config.getBoolean("lightning-on-kill", true)) {
             // strike a lightning effect at the death location. this does not harm any entity but is used to signal a
             // players death and possibly reveal the killers location to other players.
             event.getEntity().getWorld().strikeLightningEffect(event.getEntity().getLocation());
         }
 
         Player deadPlayer = event.getPlayer();
-        User dead = User.getUser(deadPlayer);
+        User dead = registry.getUser(deadPlayer);
         if (dead == null) return;
 
-        // make the dead player a spectator
-        dead.setSpectator();
+        // TODO: make the dead player a spectator
 
         User killer = null;
-        if (deadPlayer.getKiller() != null) killer = User.getUser(deadPlayer.getKiller());
+        if (deadPlayer.getKiller() != null) killer = registry.getUser(deadPlayer.getKiller());
 
         // announce the death of a player
         if (killer == null) {
-            plugin.broadcast("kill.other", dead.getName());
+            broadcaster.broadcast("kill.other", dead.getName());
         } else {
-            plugin.broadcast("kill.by-player", dead.getName(), killer.getName());
+            broadcaster.broadcast("kill.by-player", dead.getName(), killer.getName());
         }
 
         // announce the amount of players left over
-        int playersLeft = User.getUsers(UserState.PLAYING).size();
-        plugin.broadcast("kill.players-left." + (playersLeft == 1 ? "single" : "multiple"), playersLeft);
+        int playersLeft = registry.getUsers(UserState.PLAYING).size();
+        broadcaster.broadcast("kill.players-left." + (playersLeft == 1 ? "single" : "multiple"), playersLeft);
 
         // check if the game has ended
-        plugin.getGame().checkEnd();
+        game.checkEnd();
     }
 }

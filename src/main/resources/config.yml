@@ -116,8 +116,17 @@ allowed-entities:
 # Whether the world should spawn lightning strikes at a players death location
 lightning-on-kill: true
 
-# The amount of slots of a chest should have. This amount should always be divisible by 9.
-chest-inventory-size: 27
+# The chest configuration section. This affects how chests are filled in game.
+chest:
+  # The amount of slots of a chest should have. This amount should always be divisible by 9.
+  inventory-size: 27
+  items:
+
+    # The minimum amount of items per chest.
+    min: 2
+
+    # The maximum amount of items per chest.
+    max: 5
 
 # A list of possible tiers used to populate items in chests. The plugin checks the first item in the top left of the
 # inventory to determine its tier. If there is no item placed in the chests inventory or there is no tier found for the
