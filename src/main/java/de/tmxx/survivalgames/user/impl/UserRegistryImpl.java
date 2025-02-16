@@ -7,10 +7,7 @@ import jakarta.inject.Singleton;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Project: survivalgames
@@ -52,7 +49,14 @@ public class UserRegistryImpl implements UserRegistry {
 
     @Override
     public Collection<User> getOnlineUsers() {
-        return Bukkit.getOnlinePlayers().stream().map(this::getUser).toList();
+        List<User> online = new ArrayList<>();
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            User user = getUser(player);
+            if (user == null) continue;
+
+            online.add(user);
+        }
+        return Collections.unmodifiableCollection(online);
     }
 
     @Override

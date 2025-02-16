@@ -67,7 +67,8 @@ public class PlayerListener implements Listener {
         event.quitMessage(null);
         broadcaster.broadcast("quit", event.getPlayer().getName());
 
-        int onlinePlayers = Bukkit.getOnlinePlayers().size();
+        // subtracting 1 because the leaving player still counts as an online player right now
+        int onlinePlayers = Bukkit.getOnlinePlayers().size() - 1;
 
         if (onlinePlayers < minPlayers) {
             // stop and reset the timer if there are not enough players online

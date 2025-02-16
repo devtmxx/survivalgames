@@ -3,11 +3,13 @@ package de.tmxx.survivalgames.listener;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.reflect.ClassPath;
+import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Singleton;
 import de.tmxx.survivalgames.SurvivalGames;
 import de.tmxx.survivalgames.module.game.PluginLogger;
 import org.bukkit.Bukkit;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -35,6 +37,7 @@ public class ListenerRegistrarImpl implements ListenerRegistrar {
     private final Multimap<Class<? extends Annotation>, Class<? extends Listener>> listenerClasses = HashMultimap.create();
     private final Multimap<Class<? extends Annotation>, Listener> registeredListeners = HashMultimap.create();
 
+    @Inject
     public ListenerRegistrarImpl(@PluginLogger Logger logger, JavaPlugin plugin) {
         this.logger = logger;
         this.plugin = plugin;
@@ -61,7 +64,7 @@ public class ListenerRegistrarImpl implements ListenerRegistrar {
 
     @Override
     public void unregisterPhaseSpecific(Class<? extends Annotation> annotation) {
-
+        registeredListeners.removeAll(annotation).forEach(HandlerList::unregisterAll);
     }
 
     private void loadClassesIfNotLoaded() {
@@ -75,8 +78,8 @@ public class ListenerRegistrarImpl implements ListenerRegistrar {
                 if (!Listener.class.isAssignableFrom(clazz)) return;
 
                 Class<? extends Listener> listenerClass = clazz.asSubclass(Listener.class);
-                for (Annotation annotation : clazz.getAnnotations()) {
-                    listenerClasses.put(annotation.getClass(), listenerClass);
+                for (Annotation annotation : listenerClass.getDeclaredAnnotations()) {
+                    listenerClasses.put(annotation.annotationType(), listenerClass);
                 }
             });
         } catch (IOException e) {

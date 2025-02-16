@@ -5,8 +5,11 @@ import com.google.inject.Singleton;
 import de.tmxx.survivalgames.command.CommandRegistrar;
 import de.tmxx.survivalgames.game.Game;
 import de.tmxx.survivalgames.game.GameHandler;
+import de.tmxx.survivalgames.game.phase.GamePhase;
 import de.tmxx.survivalgames.listener.ListenerRegistrar;
 import de.tmxx.survivalgames.map.MapManager;
+import de.tmxx.survivalgames.module.config.Setup;
+import de.tmxx.survivalgames.module.game.Lobby;
 
 /**
  * Project: survivalgames
@@ -21,13 +24,24 @@ public class GameHandlerImpl implements GameHandler {
     private final ListenerRegistrar listenerRegistrar;
     private final CommandRegistrar commandRegistrar;
     private final Game game;
+    private final GamePhase lobbyPhase;
+    private final boolean setup;
 
     @Inject
-    public GameHandlerImpl(MapManager mapManager, ListenerRegistrar listenerRegistrar, CommandRegistrar commandRegistrar, Game game) {
+    public GameHandlerImpl(
+            MapManager mapManager,
+            ListenerRegistrar listenerRegistrar,
+            CommandRegistrar commandRegistrar,
+            Game game,
+            @Lobby GamePhase lobbyPhase,
+            @Setup boolean setup
+    ) {
         this.mapManager = mapManager;
         this.listenerRegistrar = listenerRegistrar;
         this.commandRegistrar = commandRegistrar;
         this.game = game;
+        this.lobbyPhase = lobbyPhase;
+        this.setup = setup;
     }
 
     @Override
@@ -35,8 +49,11 @@ public class GameHandlerImpl implements GameHandler {
         listenerRegistrar.registerGeneral();
         commandRegistrar.register();
 
+        if (setup) return;
+
         mapManager.load();
 
+        game.changeGamePhase(lobbyPhase);
         game.startGame();
     }
 

@@ -1,6 +1,7 @@
 package de.tmxx.survivalgames.i18n.impl;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import de.tmxx.survivalgames.i18n.I18n;
 import de.tmxx.survivalgames.i18n.I18nCache;
 import de.tmxx.survivalgames.module.config.DefaultLocale;
@@ -23,6 +24,7 @@ import java.util.*;
  * @author timmauersberger
  * @version 1.0
  */
+@Singleton
 public class I18nImpl implements I18n {
     private static final String MESSAGE_SPLIT = "%n";
     private static final Set<Locale> DEFAULT_LOCALES = Set.of(
@@ -90,6 +92,12 @@ public class I18nImpl implements I18n {
     }
 
     private void saveDefaultLocales(Plugin plugin) {
-        DEFAULT_LOCALES.forEach(locale -> plugin.saveResource("locales/%s.yml".formatted(locale.toString()), false));
+        DEFAULT_LOCALES.forEach(locale -> {
+            File file = new File(directory, locale.toString() + ".yml");
+            // Skipping saveResource if the file exists because this will otherwise print an ugly warning into the console
+            if (file.exists()) return;
+
+            plugin.saveResource("locales/%s.yml".formatted(locale.toString()), false);
+        });
     }
 }

@@ -29,10 +29,10 @@ public class ChestListener implements Listener {
         this.filler = filler;
     }
 
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = false)
     public void onChestOpen(PlayerInteractEvent event) {
         // ignore all interactions where players do not right-click a block
-        if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) return;
+        if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) return;
 
         // the clicked block will never be null since the action suggests, that a block has been clicked, but this
         // if-clause will prevent IntelliJ from warning about a possible NPE

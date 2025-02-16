@@ -3,10 +3,7 @@ package de.tmxx.survivalgames.chest;
 import de.tmxx.survivalgames.config.ChestItem;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-import java.util.Map;
-import java.util.NavigableMap;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * Project: survivalgames
@@ -16,6 +13,7 @@ import java.util.TreeMap;
  * @version 1.0
  */
 public class ChestTier {
+    private static final Random RANDOM = new Random();
     private final NavigableMap<Integer, ChestItem> cumulativeMap = new TreeMap<>();
     private int totalWeight = 0;
 
@@ -31,7 +29,7 @@ public class ChestTier {
         // there are no items in this tier if the total weight is zero
         if (totalWeight == 0) return null;
 
-        int rand = (int) (Math.random() * totalWeight);
+        int rand = RANDOM.nextInt(totalWeight) + 1;
         return cumulativeMap.ceilingEntry(rand).getValue();
     }
 }

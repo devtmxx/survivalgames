@@ -78,7 +78,7 @@ public class ChestFillerImpl implements ChestFiller {
     private void randomizeItems(Inventory inventory, ChestTier tier) {
         int min = mainConfig.getInt("chest.items.min");
         int max = mainConfig.getInt("chest.items.max");
-        int amount = RANDOM.nextInt(min, max);
+        int amount = RANDOM.nextInt(max - min) + min;
 
         for (int i = 0; i < amount; i++) {
             ChestItem item = tier.getRandomItem();

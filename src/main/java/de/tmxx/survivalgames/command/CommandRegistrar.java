@@ -28,11 +28,11 @@ public interface CommandRegistrar {
     default List<Class<? extends Command>> loadClasses(Class<? extends Annotation> annotation, Logger logger) {
         List<Class<? extends Command>> classes = new ArrayList<>();
 
-        String packageName = getClass().getPackage().getName();
+        String packageName = CommandRegistrar.class.getPackage().getName();
         try {
             ClassPath.from(getClass().getClassLoader()).getTopLevelClassesRecursive(packageName).forEach(classInfo -> {
                 Class<?> clazz = classInfo.load();
-                if (!clazz.isAssignableFrom(Command.class) || clazz.equals(Command.class)) return;
+                if (!Command.class.isAssignableFrom(clazz) || clazz.equals(Command.class)) return;
 
                 Class<? extends Command> command = clazz.asSubclass(Command.class);
                 if (!command.isAnnotationPresent(annotation)) return;
