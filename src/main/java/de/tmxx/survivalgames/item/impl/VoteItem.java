@@ -3,8 +3,10 @@ package de.tmxx.survivalgames.item.impl;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import de.tmxx.survivalgames.i18n.I18n;
+import de.tmxx.survivalgames.inventory.InventoryGUI;
 import de.tmxx.survivalgames.item.ClickableItem;
 import de.tmxx.survivalgames.item.ItemRegistry;
+import de.tmxx.survivalgames.module.game.interactable.Vote;
 import de.tmxx.survivalgames.user.User;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -21,10 +23,12 @@ import java.util.Locale;
 @Singleton
 public class VoteItem implements ClickableItem {
     private final I18n i18n;
+    private final InventoryGUI inventory;
 
     @Inject
-    public VoteItem(I18n i18n, ItemRegistry registry) {
+    VoteItem(I18n i18n, ItemRegistry registry, @Vote InventoryGUI inventory) {
         this.i18n = i18n;
+        this.inventory = inventory;
         registry.registerItem(this);
     }
 
@@ -35,7 +39,7 @@ public class VoteItem implements ClickableItem {
 
     @Override
     public void onClick(User user) {
-        // TODO: open votes inventory
+        inventory.openInventory(user);
     }
 
     @Override

@@ -27,7 +27,7 @@ public class GameImpl implements Game, Runnable {
     private int currentTick = 0;
 
     @Inject
-    public GameImpl(JavaPlugin plugin) {
+    GameImpl(JavaPlugin plugin) {
         this.plugin = plugin;
     }
 

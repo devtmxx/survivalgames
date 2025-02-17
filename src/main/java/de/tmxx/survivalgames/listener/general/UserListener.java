@@ -8,7 +8,7 @@ import de.tmxx.survivalgames.user.UserRegistry;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 /**
@@ -24,15 +24,24 @@ public class UserListener implements Listener {
     private final UserFactory factory;
 
     @Inject
-    public UserListener(UserRegistry registry, UserFactory factory) {
+    UserListener(UserRegistry registry, UserFactory factory) {
         this.registry = registry;
         this.factory = factory;
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onPlayerJoin(PlayerJoinEvent event) {
+    public void onPlayerLogin(PlayerLoginEvent event) {
         User user = factory.createUser(event.getPlayer());
         registry.registerUser(user);
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void afterPlayerLogin(PlayerLoginEvent event) {
+        if (event.getResult().equals(PlayerLoginEvent.Result.ALLOWED)) return;
+
+        // unregister the user again if the login is disallowed
+        User user = registry.getUser(event.getPlayer());
+        registry.unregisterUser(user);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)

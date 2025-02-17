@@ -1,4 +1,4 @@
-package de.tmxx.survivalgames.module.game.item;
+package de.tmxx.survivalgames.module.game.interactable;
 
 import jakarta.inject.Qualifier;
 

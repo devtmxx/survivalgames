@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 /**
  * Project: survivalgames
@@ -29,7 +30,7 @@ public class KillListener implements Listener {
     private final Game game;
 
     @Inject
-    public KillListener(
+    KillListener(
             @MainConfig FileConfiguration config,
             UserRegistry registry,
             UserPreparer preparer,
@@ -48,15 +49,33 @@ public class KillListener implements Listener {
         // do not send the standard death message
         event.deathMessage(null);
 
+        User dead = registry.getUser(event.getEntity());
+        if (dead == null) return;
+
+        // why ever spectators should die, but we don't count them as regular deaths
+        if (dead.isSpectator()) return;
+
+        handleDeath(dead);
+    }
+
+    @EventHandler
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        event.quitMessage(null);
+
+        User dead = registry.getUser(event.getPlayer());
+        if (dead == null) return;
+        if (dead.isSpectator()) return;
+
+        handleDeath(dead);
+    }
+
+    private void handleDeath(User dead) {
+        Player deadPlayer = dead.getPlayer();
         if (config.getBoolean("lightning-on-kill", true)) {
             // strike a lightning effect at the death location. this does not harm any entity but is used to signal a
             // players death and possibly reveal the killers location to other players.
-            event.getEntity().getWorld().strikeLightningEffect(event.getEntity().getLocation());
+            deadPlayer.getWorld().strikeLightningEffect(deadPlayer.getLocation());
         }
-
-        Player deadPlayer = event.getPlayer();
-        User dead = registry.getUser(deadPlayer);
-        if (dead == null) return;
 
         preparer.prepareUserForSpectator(dead);
 

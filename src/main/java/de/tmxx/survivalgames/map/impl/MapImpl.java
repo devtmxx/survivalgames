@@ -49,7 +49,7 @@ public class MapImpl implements Map {
     private final Set<UUID> votes = new HashSet<>();
 
     @Inject
-    public MapImpl(
+    MapImpl(
             @PluginLogger Logger logger,
             @WorldsContainer File worldsContainer,
             @MaxPlayers int maxPlayers,
@@ -142,11 +142,13 @@ public class MapImpl implements Map {
         }
     }
 
-    public boolean castVote(UUID uniqueId) {
-        if (votes.contains(uniqueId)) return false;
-
+    public void castVote(UUID uniqueId) {
         votes.add(uniqueId);
-        return true;
+    }
+
+    @Override
+    public boolean hasVoted(UUID uniqueId) {
+        return votes.contains(uniqueId);
     }
 
     public int getVotes() {

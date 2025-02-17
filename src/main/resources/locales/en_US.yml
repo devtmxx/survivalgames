@@ -34,6 +34,12 @@ command:
 join: '<gray>> <yellow>{0} <white>joined <gray>(<gold>{1}<white>/<gold>{2}<gray>)'
 quit: '<gray>< <yellow>{0} <white>quit'
 
+kick:
+  full: '<red>The server is already full. You need a premium rank to join.'
+  full-priority: '<red>The server is already full of prioritized players.'
+  error: '<red>An error occurred. Please try again later.'
+  priority: '<red>You were thrown of the server to make space for a prioritized player.'
+
 timers:
   lobby:
     action-bar:
@@ -57,3 +63,16 @@ kill:
   players-left:
     single: '%prefix% There is <yellow>{0} player <white>left.'
     multiple: '%prefix% There are <yellow>{0} players <white>left.'
+
+item:
+  vote:
+    name: '<yellow>Vote'
+    lore: '%n<gray>Click to vote for a map.'
+
+inventory:
+  vote:
+    name: '<yellow>Vote for a map'
+    item:
+      name: '<yellow>{0}'
+      lore: '<gray>Built by <green>{0}%n<white>{0} <gray>vote(s)'
+      voted: '%n<yellow>You voted for this map.'

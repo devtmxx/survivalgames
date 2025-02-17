@@ -38,7 +38,7 @@ public class I18nImpl implements I18n {
     private final Map<Locale, I18nCache> cache = new HashMap<>();
 
     @Inject
-    public I18nImpl(
+    I18nImpl(
             JavaPlugin plugin,
             @LocalesDirectory File directory,
             @DefaultLocale Locale defaultLocale,

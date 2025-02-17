@@ -2,6 +2,7 @@ package de.tmxx.survivalgames.user.impl;
 
 import de.tmxx.survivalgames.user.User;
 import de.tmxx.survivalgames.user.UserPreparer;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 
 /**
@@ -22,11 +23,13 @@ public class UserPreparerImpl implements UserPreparer {
         player.clearActivePotionEffects();
         player.getInventory().clear();
         player.updateInventory();
+        player.setGameMode(GameMode.ADVENTURE);
     }
 
     @Override
     public void prepareUserForGame(User user) {
-
+        Player player = user.getPlayer();
+        player.setGameMode(GameMode.SURVIVAL);
     }
 
     @Override

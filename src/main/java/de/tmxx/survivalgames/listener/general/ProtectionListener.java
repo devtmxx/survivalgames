@@ -1,15 +1,10 @@
 package de.tmxx.survivalgames.listener.general;
 
-import com.google.inject.Inject;
 import de.tmxx.survivalgames.listener.RegisterAlways;
-import de.tmxx.survivalgames.user.User;
-import de.tmxx.survivalgames.user.UserRegistry;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
-import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 
 import java.util.Set;
 
@@ -33,13 +28,6 @@ public class ProtectionListener implements Listener {
             Material.WATER
     );
 
-    private final UserRegistry registry;
-
-    @Inject
-    public ProtectionListener(UserRegistry registry) {
-        this.registry = registry;
-    }
-
     @EventHandler
     public void onBlockFade(BlockFadeEvent event) {
         // prevent all block fades
@@ -62,17 +50,6 @@ public class ProtectionListener implements Listener {
     public void onBlockSpread(BlockSpreadEvent event) {
         // cancel all block spreads, i.e. fire
         event.setCancelled(true);
-    }
-
-    @EventHandler
-    public void onEntityTargetLivingEntity(EntityTargetLivingEntityEvent event) {
-        if (!(event.getTarget() instanceof Player player)) return;
-
-        User user = registry.getUser(player);
-        if (user == null) return;
-
-        // spectators should never be targeted by mobs
-        event.setCancelled(user.isSpectator());
     }
 
     @EventHandler

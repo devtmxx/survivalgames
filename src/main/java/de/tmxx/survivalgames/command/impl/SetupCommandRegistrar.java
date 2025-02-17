@@ -26,7 +26,7 @@ public class SetupCommandRegistrar implements CommandRegistrar {
     private final List<Class<? extends Command>> commands = new ArrayList<>();
 
     @Inject
-    public SetupCommandRegistrar(JavaPlugin plugin, @PluginLogger Logger logger) {
+    SetupCommandRegistrar(JavaPlugin plugin, @PluginLogger Logger logger) {
         this.plugin = plugin;
         this.logger = logger;
     }

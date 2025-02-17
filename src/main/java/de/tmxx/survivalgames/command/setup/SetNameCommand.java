@@ -29,7 +29,7 @@ public class SetNameCommand implements Command {
     private final MapManager mapManager;
 
     @Inject
-    public SetNameCommand(UserRegistry registry, MapManager mapManager) {
+    SetNameCommand(UserRegistry registry, MapManager mapManager) {
         this.registry = registry;
         this.mapManager = mapManager;
     }

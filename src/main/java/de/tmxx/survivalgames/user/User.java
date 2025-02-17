@@ -1,5 +1,6 @@
 package de.tmxx.survivalgames.user;
 
+import de.tmxx.survivalgames.map.Map;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 
@@ -22,4 +23,5 @@ public interface User {
     Component translate(String key, Object... args);
     List<Component> translateList(String key, Object... args);
     boolean isSpectator();
+    void vote(Map map);
 }

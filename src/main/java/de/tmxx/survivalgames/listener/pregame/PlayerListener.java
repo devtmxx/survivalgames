@@ -1,9 +1,7 @@
 package de.tmxx.survivalgames.listener.pregame;
 
 import com.google.inject.Inject;
-import de.tmxx.survivalgames.config.SpawnPosition;
 import de.tmxx.survivalgames.game.Game;
-import de.tmxx.survivalgames.module.config.MainConfig;
 import de.tmxx.survivalgames.module.config.MaxPlayers;
 import de.tmxx.survivalgames.module.config.MinPlayers;
 import de.tmxx.survivalgames.module.game.phase.Lobby;
@@ -12,13 +10,10 @@ import de.tmxx.survivalgames.user.UserBroadcaster;
 import de.tmxx.survivalgames.user.UserPreparer;
 import de.tmxx.survivalgames.user.UserRegistry;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.spigotmc.event.player.PlayerSpawnLocationEvent;
 
 /**
  * Project: survivalgames
@@ -33,17 +28,15 @@ public class PlayerListener implements Listener {
     private final int minPlayers;
     private final UserBroadcaster broadcaster;
     private final Game game;
-    private final FileConfiguration config;
     private final UserRegistry registry;
     private final UserPreparer preparer;
 
     @Inject
-    public PlayerListener(
+    PlayerListener(
             @MaxPlayers int maxPlayers,
             @MinPlayers int minPlayers,
             UserBroadcaster broadcaster,
             Game game,
-            @MainConfig FileConfiguration config,
             UserRegistry registry,
             UserPreparer preparer
     ) {
@@ -51,7 +44,6 @@ public class PlayerListener implements Listener {
         this.minPlayers = minPlayers;
         this.broadcaster = broadcaster;
         this.game = game;
-        this.config = config;
         this.registry = registry;
         this.preparer = preparer;
     }
@@ -87,14 +79,5 @@ public class PlayerListener implements Listener {
             game.stopTimer();
             game.resetTimer();
         }
-    }
-
-    @EventHandler
-    public void onPlayerSpawnLocation(PlayerSpawnLocationEvent event) {
-        SpawnPosition spawn = config.getSerializable("spawn", SpawnPosition.class);
-        if (spawn == null) return;
-
-        // all players should spawn at the lobby spawn (if it exists)
-        event.setSpawnLocation(spawn.getCentered());
     }
 }

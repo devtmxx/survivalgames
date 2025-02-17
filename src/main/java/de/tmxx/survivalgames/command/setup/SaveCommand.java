@@ -29,7 +29,7 @@ public class SaveCommand implements Command {
     private final MapManager mapManager;
 
     @Inject
-    public SaveCommand(UserRegistry registry, MapManager mapManager) {
+    SaveCommand(UserRegistry registry, MapManager mapManager) {
         this.registry = registry;
         this.mapManager = mapManager;
     }

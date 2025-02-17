@@ -25,7 +25,7 @@ public class DamageListener implements Listener {
     private final UserRegistry registry;
 
     @Inject
-    public DamageListener(UserRegistry registry) {
+    DamageListener(UserRegistry registry) {
         this.registry = registry;
     }
 

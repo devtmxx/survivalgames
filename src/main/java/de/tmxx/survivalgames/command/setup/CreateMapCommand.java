@@ -28,7 +28,7 @@ public class CreateMapCommand implements Command {
     private final MapManager mapManager;
 
     @Inject
-    public CreateMapCommand(UserRegistry registry, MapManager mapManager) {
+    CreateMapCommand(UserRegistry registry, MapManager mapManager) {
         this.registry = registry;
         this.mapManager = mapManager;
     }

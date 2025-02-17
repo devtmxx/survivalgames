@@ -3,6 +3,7 @@ package de.tmxx.survivalgames.user.impl;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 import de.tmxx.survivalgames.i18n.I18n;
+import de.tmxx.survivalgames.map.Map;
 import de.tmxx.survivalgames.user.User;
 import de.tmxx.survivalgames.user.UserState;
 import lombok.Getter;
@@ -26,9 +27,10 @@ public class UserImpl implements User {
     @Getter private final Player player;
 
     @Getter @Setter private UserState state = UserState.PLAYING;
+    private boolean hasVoted = false;
 
     @Inject
-    public UserImpl(I18n i18n, @Assisted Player player) {
+    UserImpl(I18n i18n, @Assisted Player player) {
         this.i18n = i18n;
         this.player = player;
         uniqueId = player.getUniqueId();
@@ -54,5 +56,17 @@ public class UserImpl implements User {
     @Override
     public boolean isSpectator() {
         return state.equals(UserState.SPECTATING);
+    }
+
+    @Override
+    public void vote(Map map) {
+        if (hasVoted) {
+            sendMessage("vote.already-voted");
+            return;
+        }
+
+        hasVoted = true;
+        map.castVote(uniqueId);
+        sendMessage("vote.voted", map.getName());
     }
 }

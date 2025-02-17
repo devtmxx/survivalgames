@@ -1,16 +1,14 @@
 package de.tmxx.survivalgames.game.phase;
 
 import com.google.inject.Inject;
+import de.tmxx.survivalgames.config.SpawnPosition;
 import de.tmxx.survivalgames.game.Game;
 import de.tmxx.survivalgames.listener.ListenerRegistrar;
 import de.tmxx.survivalgames.module.config.MainConfig;
 import de.tmxx.survivalgames.module.game.phase.Lobby;
 import de.tmxx.survivalgames.module.game.phase.Starting;
 import de.tmxx.survivalgames.user.UserBroadcaster;
-import org.bukkit.Bukkit;
-import org.bukkit.GameRule;
-import org.bukkit.Sound;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
 
 /**
@@ -30,7 +28,7 @@ public class LobbyPhase implements GamePhase {
     private final ListenerRegistrar listenerRegistrar;
 
     @Inject
-    public LobbyPhase(
+    LobbyPhase(
             Game game,
             UserBroadcaster broadcaster,
             @MainConfig FileConfiguration config,
@@ -87,6 +85,14 @@ public class LobbyPhase implements GamePhase {
     @Override
     public int countdownSeconds() {
         return config.getInt("timers.lobby", DEFAULT_COUNTDOWN_SECONDS);
+    }
+
+    @Override
+    public Location spawnLocation() {
+        SpawnPosition position = config.getSerializable("spawn", SpawnPosition.class);
+        if (position == null) return null;
+
+        return position.getCentered();
     }
 
     @Override

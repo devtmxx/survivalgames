@@ -26,6 +26,7 @@ public interface Map {
     void setAuthor(String author);
     String getAuthor();
     void save();
-    boolean castVote(UUID uniqueId);
+    void castVote(UUID uniqueId);
+    boolean hasVoted(UUID uniqueId);
     int getVotes();
 }

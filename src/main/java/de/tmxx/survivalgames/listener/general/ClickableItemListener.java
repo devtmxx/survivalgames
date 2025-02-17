@@ -24,7 +24,7 @@ public class ClickableItemListener implements Listener {
     private final ItemRegistry itemRegistry;
 
     @Inject
-    public ClickableItemListener(UserRegistry userRegistry, ItemRegistry itemRegistry) {
+    ClickableItemListener(UserRegistry userRegistry, ItemRegistry itemRegistry) {
         this.userRegistry = userRegistry;
         this.itemRegistry = itemRegistry;
     }

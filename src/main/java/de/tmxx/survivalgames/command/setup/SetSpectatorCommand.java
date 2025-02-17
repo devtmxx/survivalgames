@@ -29,7 +29,7 @@ public class SetSpectatorCommand implements Command {
     private final MapManager mapManager;
 
     @Inject
-    public SetSpectatorCommand(UserRegistry registry, MapManager mapManager) {
+    SetSpectatorCommand(UserRegistry registry, MapManager mapManager) {
         this.registry = registry;
         this.mapManager = mapManager;
     }

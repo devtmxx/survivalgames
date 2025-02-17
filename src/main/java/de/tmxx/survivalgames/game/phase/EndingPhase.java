@@ -1,5 +1,7 @@
 package de.tmxx.survivalgames.game.phase;
 
+import org.bukkit.Location;
+
 /**
  * Project: survivalgames
  * 16.02.25
@@ -25,6 +27,11 @@ package de.tmxx.survivalgames.game.phase;
     @Override
     public int countdownSeconds() {
         return 0;
+    }
+
+    @Override
+    public Location spawnLocation() {
+        return null;
     }
 
     @Override

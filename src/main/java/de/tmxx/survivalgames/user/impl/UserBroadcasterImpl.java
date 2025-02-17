@@ -19,7 +19,7 @@ public class UserBroadcasterImpl implements UserBroadcaster {
     private final UserRegistry registry;
 
     @Inject
-    public UserBroadcasterImpl(UserRegistry registry) {
+    UserBroadcasterImpl(UserRegistry registry) {
         this.registry = registry;
     }
 

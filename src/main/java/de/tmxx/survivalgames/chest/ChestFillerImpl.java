@@ -41,7 +41,7 @@ public class ChestFillerImpl implements ChestFiller {
     private int defaultTier = 0;
 
     @Inject
-    public ChestFillerImpl(
+    ChestFillerImpl(
             @PluginLogger Logger logger,
             @MainConfig FileConfiguration config,
             @TiersConfig FileConfiguration tiersConfig

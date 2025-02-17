@@ -1,5 +1,7 @@
 package de.tmxx.survivalgames.game.phase;
 
+import org.bukkit.Location;
+
 /**
  * Project: survivalgames
  * 11.02.2025
@@ -12,6 +14,7 @@ public interface GamePhase {
     void tick();
     void end();
     int countdownSeconds();
+    Location spawnLocation();
     void nextPhase();
 
     default boolean shouldBroadcastTimeLeft(int timeLeft) {

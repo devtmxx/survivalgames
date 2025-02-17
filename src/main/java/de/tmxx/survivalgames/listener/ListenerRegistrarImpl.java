@@ -38,7 +38,7 @@ public class ListenerRegistrarImpl implements ListenerRegistrar {
     private final Multimap<Class<? extends Annotation>, Listener> registeredListeners = HashMultimap.create();
 
     @Inject
-    public ListenerRegistrarImpl(@PluginLogger Logger logger, JavaPlugin plugin) {
+    ListenerRegistrarImpl(@PluginLogger Logger logger, JavaPlugin plugin) {
         this.logger = logger;
         this.plugin = plugin;
         pluginManager = Bukkit.getPluginManager();

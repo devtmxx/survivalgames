@@ -34,6 +34,12 @@ command:
 join: '<gray>> <yellow>{0} <white>ist beigetreten <gray>(<gold>{1}<white>/<gold>{2}<gray>)'
 quit: '<gray>< <yellow>{0} <white>ist gegangen'
 
+kick:
+  full: '<red>Der Server ist bereits voll. Du benötigst einen Premium-Rang, um trotzdem Spielen zu können.'
+  full-priority: '<red>Der Server ist bereits voll mit priorisierten Spielern.'
+  error: '<red>Ein Fehler ist aufgetreten. Bitte versuche es später erneut.'
+  priority: '<red>Du wurdest aus der Lobby geworfen, um Platz für einen priorisierten Spieler zu machen.'
+
 timers:
   lobby:
     action-bar:
@@ -57,3 +63,16 @@ kill:
   players-left:
     single: '%prefix% Es ist noch <yellow>{0} Spieler <white>übrig.'
     multiple: '%prefix% Es sind noch <yellow>{0} Spieler <white>übrig.'
+
+item:
+  vote:
+    name: '<yellow>Voten'
+    lore: '%n<gray>Klicke, um für eine Map zu voten.'
+
+inventory:
+  vote:
+    name: '<yellow>Vote für eine Map'
+    item:
+      name: '<yellow>{0}'
+      lore: '<gray>Erbaut von <green>{0}%n<white>{0} <gray>Vote(s)'
+      voted: '%n<yellow>Du hast für diese Map abgestimmt.'

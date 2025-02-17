@@ -29,7 +29,7 @@ public class AddSpawnCommand implements Command {
     private final MapManager mapManager;
 
     @Inject
-    public AddSpawnCommand(UserRegistry registry, MapManager mapManager) {
+    AddSpawnCommand(UserRegistry registry, MapManager mapManager) {
         this.registry = registry;
         this.mapManager = mapManager;
     }

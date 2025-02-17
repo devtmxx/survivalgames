@@ -17,6 +17,8 @@ import de.tmxx.survivalgames.game.impl.GameImpl;
 import de.tmxx.survivalgames.game.phase.*;
 import de.tmxx.survivalgames.i18n.I18n;
 import de.tmxx.survivalgames.i18n.impl.I18nImpl;
+import de.tmxx.survivalgames.inventory.InventoryGUI;
+import de.tmxx.survivalgames.inventory.VoteInventory;
 import de.tmxx.survivalgames.item.ClickableItem;
 import de.tmxx.survivalgames.item.ItemRegistry;
 import de.tmxx.survivalgames.item.impl.ItemRegistryImpl;
@@ -26,15 +28,14 @@ import de.tmxx.survivalgames.listener.ListenerRegistrarImpl;
 import de.tmxx.survivalgames.map.*;
 import de.tmxx.survivalgames.map.impl.MapImpl;
 import de.tmxx.survivalgames.map.impl.MapManagerImpl;
+import de.tmxx.survivalgames.module.config.MainConfig;
 import de.tmxx.survivalgames.module.config.Setup;
-import de.tmxx.survivalgames.module.game.item.Vote;
+import de.tmxx.survivalgames.module.game.interactable.Vote;
 import de.tmxx.survivalgames.module.game.phase.*;
 import de.tmxx.survivalgames.user.*;
-import de.tmxx.survivalgames.user.impl.UserBroadcasterImpl;
-import de.tmxx.survivalgames.user.impl.UserImpl;
-import de.tmxx.survivalgames.user.impl.UserPreparerImpl;
-import de.tmxx.survivalgames.user.impl.UserRegistryImpl;
+import de.tmxx.survivalgames.user.impl.*;
 import lombok.RequiredArgsConstructor;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -75,6 +76,7 @@ public class GameModule extends AbstractModule {
 
         bindGamePhases();
         bindItems();
+        bindInventories();
     }
 
     private void bindGamePhases() {
@@ -88,6 +90,10 @@ public class GameModule extends AbstractModule {
     private void bindItems() {
         bind(ItemRegistry.class).to(ItemRegistryImpl.class);
         bind(ClickableItem.class).annotatedWith(Vote.class).to(VoteItem.class);
+    }
+
+    private void bindInventories() {
+        bind(InventoryGUI.class).annotatedWith(Vote.class).to(VoteInventory.class);
     }
 
     @Provides
@@ -107,5 +113,14 @@ public class GameModule extends AbstractModule {
     @Provides
     CommandRegistrar provideCommandRegistrar(@Setup boolean setup, SetupCommandRegistrar setupRegistrar, GameCommandRegistrar gameRegistrar) {
         return setup ? setupRegistrar : gameRegistrar;
+    }
+
+    @Provides
+    UserKicker provideUserKicker(@MainConfig FileConfiguration config, FirstUserKicker first, LastUserKicker last, RandomUserKicker random) {
+        return switch (config.getString("priority-kick-behavior", "RANDOM")) {
+            case "FIRST" -> first;
+            case "LAST" -> last;
+            default -> random;
+        };
     }
 }

@@ -25,7 +25,7 @@ public class ChestListener implements Listener {
     private final ChestFiller filler;
 
     @Inject
-    public ChestListener(ChestFiller filler) {
+    ChestListener(ChestFiller filler) {
         this.filler = filler;
     }
 

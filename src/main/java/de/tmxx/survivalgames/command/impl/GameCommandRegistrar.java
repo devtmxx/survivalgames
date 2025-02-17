@@ -26,7 +26,7 @@ public class GameCommandRegistrar implements CommandRegistrar {
     private final List<Class<? extends Command>> commands = new ArrayList<>();
 
     @Inject
-    public GameCommandRegistrar(JavaPlugin plugin, @PluginLogger Logger logger) {
+    GameCommandRegistrar(JavaPlugin plugin, @PluginLogger Logger logger) {
         this.plugin = plugin;
         this.logger = logger;
     }

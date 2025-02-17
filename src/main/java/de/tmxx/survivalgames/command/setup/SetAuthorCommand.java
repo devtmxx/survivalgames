@@ -29,7 +29,7 @@ public class SetAuthorCommand implements Command {
     private final MapManager mapManager;
 
     @Inject
-    public SetAuthorCommand(UserRegistry registry, MapManager mapManager) {
+    SetAuthorCommand(UserRegistry registry, MapManager mapManager) {
         this.registry = registry;
         this.mapManager = mapManager;
     }

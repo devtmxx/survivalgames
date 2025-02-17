@@ -28,7 +28,7 @@ public class GameHandlerImpl implements GameHandler {
     private final boolean setup;
 
     @Inject
-    public GameHandlerImpl(
+    GameHandlerImpl(
             MapManager mapManager,
             ListenerRegistrar listenerRegistrar,
             CommandRegistrar commandRegistrar,

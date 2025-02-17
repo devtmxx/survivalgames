@@ -29,7 +29,7 @@ public class SetSpawnCommand implements Command {
     private final JavaPlugin plugin;
 
     @Inject
-    public SetSpawnCommand(UserRegistry registry, JavaPlugin plugin) {
+    SetSpawnCommand(UserRegistry registry, JavaPlugin plugin) {
         this.registry = registry;
         this.plugin = plugin;
     }

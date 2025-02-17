@@ -25,7 +25,7 @@ public class InstantTNTListener implements Listener {
     private final FileConfiguration config;
 
     @Inject
-    public InstantTNTListener(@MainConfig FileConfiguration config) {
+    InstantTNTListener(@MainConfig FileConfiguration config) {
         this.config = config;
     }
 

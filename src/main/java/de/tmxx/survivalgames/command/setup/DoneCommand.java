@@ -29,7 +29,7 @@ public class DoneCommand implements Command {
     private final JavaPlugin plugin;
 
     @Inject
-    public DoneCommand(UserRegistry registry, JavaPlugin plugin) {
+    DoneCommand(UserRegistry registry, JavaPlugin plugin) {
         this.registry = registry;
         this.plugin = plugin;
     }

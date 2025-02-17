@@ -30,7 +30,7 @@ public class MapManagerImpl implements MapManager {
     private final java.util.Map<String, Map> maps = new HashMap<>();
 
     @Inject
-    public MapManagerImpl(@PluginLogger Logger logger, @MapsDirectory File mapsDirectory, MapFactory factory) {
+    MapManagerImpl(@PluginLogger Logger logger, @MapsDirectory File mapsDirectory, MapFactory factory) {
         this.logger = logger;
         this.factory = factory;
 

@@ -7,16 +7,12 @@ import de.tmxx.survivalgames.module.game.phase.InGame;
 import de.tmxx.survivalgames.user.User;
 import de.tmxx.survivalgames.user.UserRegistry;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.event.hanging.HangingBreakByEntityEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 
 /**
  * Project: survivalgames
@@ -32,7 +28,7 @@ public class ProtectionListener implements Listener {
     private final FileConfiguration config;
 
     @Inject
-    public ProtectionListener(UserRegistry registry, @MainConfig FileConfiguration config) {
+    ProtectionListener(UserRegistry registry, @MainConfig FileConfiguration config) {
         this.registry = registry;
         this.config = config;
     }
@@ -77,34 +73,5 @@ public class ProtectionListener implements Listener {
         event.setCancelled(
                 !config.getStringList("allowed-entities").contains(event.getEntity().getType().name())
         );
-    }
-
-    @EventHandler
-    public void onHangingBreakByEntity(HangingBreakByEntityEvent event) {
-        if (!(event.getRemover() instanceof Player player)) return;
-
-        User user = registry.getUser(player);
-        if (user == null) return;
-
-        // spectators are not allowed to change anything in the world
-        event.setCancelled(user.isSpectator());
-    }
-
-    @EventHandler
-    public void onPlayerDropItem(PlayerDropItemEvent event) {
-        User user = registry.getUser(event.getPlayer());
-        if (user == null) return;
-
-        // spectators are not allowed to drop items
-        event.setCancelled(user.isSpectator());
-    }
-
-    @EventHandler
-    public void onPlayerInteract(PlayerInteractEvent event) {
-        User user = registry.getUser(event.getPlayer());
-        if (user == null) return;
-
-        // spectators are not allowed to interact with the environment
-        event.setCancelled(user.isSpectator());
     }
 }
