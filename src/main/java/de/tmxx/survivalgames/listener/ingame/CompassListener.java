@@ -54,6 +54,10 @@ public class CompassListener implements Listener {
         Location nearestLocation = null;
         double nearestDistance = 0;
         for (User found : registry.getUsers(UserState.PLAYING)) {
+            // do not show the distance to the user himself
+            if (user.equals(found)) continue;
+
+            // if there is no nearest location, take the first found location as the new nearest location
             if (nearestLocation == null) {
                 nearestLocation = found.getPlayer().getLocation();
                 nearestDistance = originLocation.distanceSquared(nearestLocation);
@@ -62,6 +66,7 @@ public class CompassListener implements Listener {
 
             Location foundLocation = found.getPlayer().getLocation();
             double foundDistance = originLocation.distanceSquared(foundLocation);
+            // check if the found distance is less than the current nearest distance. if so -> reassign the distance
             if (foundDistance < nearestDistance) {
                 nearestLocation = foundLocation;
                 nearestDistance = foundDistance;
