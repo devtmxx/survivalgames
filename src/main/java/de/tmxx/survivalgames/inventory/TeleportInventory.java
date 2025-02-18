@@ -2,10 +2,10 @@ package de.tmxx.survivalgames.inventory;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import de.tmxx.survivalgames.map.Map;
 import de.tmxx.survivalgames.map.MapManager;
 import de.tmxx.survivalgames.user.User;
 import de.tmxx.survivalgames.user.UserRegistry;
+import de.tmxx.survivalgames.user.UserState;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -20,6 +20,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -30,16 +31,16 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @version 1.0
  */
 @Singleton
-public class VoteInventory implements InventoryGUI, Listener {
+public class TeleportInventory implements InventoryGUI, Listener {
     private final UserRegistry registry;
-    private final java.util.Map<Integer, Map> slots = new HashMap<>();
+    private final Map<Integer, User> slots = new HashMap<>();
 
     @Inject
-    VoteInventory(JavaPlugin plugin, UserRegistry registry, MapManager mapManager) {
+    TeleportInventory(JavaPlugin plugin, UserRegistry registry, MapManager mapManager) {
         this.registry = registry;
 
         AtomicInteger slot = new AtomicInteger(0);
-        mapManager.getUsableMaps().forEach(map -> slots.put(slot.getAndIncrement(), map));
+        registry.getUsers(UserState.PLAYING).forEach(user -> slots.put(slot.getAndIncrement(), user));
 
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
@@ -49,31 +50,30 @@ public class VoteInventory implements InventoryGUI, Listener {
         User user = getUser(registry, event);
         if (user == null) return;
 
-        Map map = slots.get(event.getRawSlot());
-        if (map == null) return;
+        User teleportTo = slots.get(event.getRawSlot());
+        if (teleportTo == null) return;
 
-        user.vote(map);
+        if (teleportTo.isSpectator()) {
+            // the player has died in the meantime
+            user.sendMessage("inventory.teleport.item.now-spectator");
+        }
+
+        user.getPlayer().teleport(teleportTo.getPlayer().getLocation());
     }
 
     @Override
     public void openInventory(User user) {
-        Inventory inventory = Bukkit.createInventory(this, calculateSize(slots.size()), user.translate("inventory.vote.name"));
+        Inventory inventory = Bukkit.createInventory(this, calculateSize(slots.size()), user.translate("inventory.teleport.name"));
         populateInventory(inventory, user);
         user.getPlayer().openInventory(inventory);
     }
 
     private void populateInventory(Inventory inventory, User user) {
-        slots.forEach((slot, map) -> {
-            ItemStack itemStack = ItemStack.of(Material.MAP);
+        slots.forEach((slot, teleportTo) -> {
+            ItemStack itemStack = ItemStack.of(Material.PLAYER_HEAD);
             itemStack.editMeta(meta -> {
-                meta.displayName(user.translate("inventory.vote.item.name", map.getName()));
-
-                List<Component> lore = user.translateList("inventory.vote.item.lore", map.getAuthor(), map.getVotes());
-                if (map.hasVoted(user.getUniqueId())) {
-                    lore.addAll(user.translateList("inventory.vote.item.voted"));
-                }
-
-                meta.lore(lore);
+                meta.displayName(user.translate("inventory.teleport.item.name", teleportTo.getName()));
+                meta.lore(user.translateList("inventory.teleport.item.lore"));
             });
             inventory.setItem(slot, itemStack);
         });

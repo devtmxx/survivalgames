@@ -18,10 +18,12 @@ import de.tmxx.survivalgames.game.phase.*;
 import de.tmxx.survivalgames.i18n.I18n;
 import de.tmxx.survivalgames.i18n.impl.I18nImpl;
 import de.tmxx.survivalgames.inventory.InventoryGUI;
+import de.tmxx.survivalgames.inventory.TeleportInventory;
 import de.tmxx.survivalgames.inventory.VoteInventory;
 import de.tmxx.survivalgames.item.ClickableItem;
 import de.tmxx.survivalgames.item.ItemRegistry;
 import de.tmxx.survivalgames.item.impl.ItemRegistryImpl;
+import de.tmxx.survivalgames.item.impl.TeleportItem;
 import de.tmxx.survivalgames.item.impl.VoteItem;
 import de.tmxx.survivalgames.listener.ListenerRegistrar;
 import de.tmxx.survivalgames.listener.ListenerRegistrarImpl;
@@ -30,6 +32,7 @@ import de.tmxx.survivalgames.map.impl.MapImpl;
 import de.tmxx.survivalgames.map.impl.MapManagerImpl;
 import de.tmxx.survivalgames.module.config.MainConfig;
 import de.tmxx.survivalgames.module.config.Setup;
+import de.tmxx.survivalgames.module.game.interactable.Teleport;
 import de.tmxx.survivalgames.module.game.interactable.Vote;
 import de.tmxx.survivalgames.module.game.phase.*;
 import de.tmxx.survivalgames.user.*;
@@ -90,10 +93,12 @@ public class GameModule extends AbstractModule {
     private void bindItems() {
         bind(ItemRegistry.class).to(ItemRegistryImpl.class);
         bind(ClickableItem.class).annotatedWith(Vote.class).to(VoteItem.class);
+        bind(ClickableItem.class).annotatedWith(Teleport.class).to(TeleportItem.class);
     }
 
     private void bindInventories() {
         bind(InventoryGUI.class).annotatedWith(Vote.class).to(VoteInventory.class);
+        bind(InventoryGUI.class).annotatedWith(Teleport.class).to(TeleportInventory.class);
     }
 
     @Provides

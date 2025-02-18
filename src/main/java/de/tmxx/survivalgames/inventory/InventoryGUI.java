@@ -1,7 +1,11 @@
 package de.tmxx.survivalgames.inventory;
 
 import de.tmxx.survivalgames.user.User;
+import de.tmxx.survivalgames.user.UserRegistry;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.jetbrains.annotations.NotNull;
@@ -20,5 +24,21 @@ public interface InventoryGUI extends InventoryHolder {
         // we don't need this method to take advantage of the inventory holder. we use openInventory(User) to open
         // this inventory for a player using its specific locale.
         return Bukkit.createInventory(null, 0);
+    }
+
+    default int calculateSize(int usedSlots) {
+        int base = 9;
+        int rest = usedSlots % base;
+        int rows = usedSlots / base;
+
+        return rows * base + rest == 0 ? 0 : base - rest;
+    }
+
+    default User getUser(UserRegistry registry, InventoryClickEvent event) {
+        if (event.getInventory().getHolder(false) != this) return null;
+        if (!(event.getWhoClicked() instanceof Player player)) return null;
+        event.setResult(Event.Result.DENY);
+
+        return registry.getUser(player);
     }
 }

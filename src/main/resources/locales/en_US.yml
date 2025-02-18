@@ -76,3 +76,9 @@ inventory:
       name: '<yellow>{0}'
       lore: '<gray>Built by <green>{0}%n<white>{0} <gray>vote(s)'
       voted: '%n<yellow>You voted for this map.'
+  teleport:
+    name: '<red>Teleport to a player'
+    item:
+      name: '<green>{0}'
+      lore: '<gray>Teleport to this player.'
+      now-spectator: '%prefix% This player is <red>no <white>longer alive.'
