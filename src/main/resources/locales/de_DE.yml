@@ -64,10 +64,17 @@ kill:
     single: '%prefix% Es ist noch <yellow>{0} Spieler <white>übrig.'
     multiple: '%prefix% Es sind noch <yellow>{0} Spieler <white>übrig.'
 
+compass:
+  no-target-found: '%prefix% Es konnte kein Spieler in deiner Nähe gefunden werden.'
+  new-target: '%prefix% Der nächste Spieler ist <green>{0} Blöcke <white>entfernt.'
+
 item:
   vote:
     name: '<yellow>Voten'
     lore: '%n<gray>Klicke, um für eine Map zu voten.'
+  teleport:
+    name: '<red>Teleporter'
+    lore: '%n<gray>Klicke, um dich zu Spielern zu teleportieren.'
 
 inventory:
   vote:
@@ -76,3 +83,9 @@ inventory:
       name: '<yellow>{0}'
       lore: '<gray>Erbaut von <green>{0}%n<white>{0} <gray>Vote(s)'
       voted: '%n<yellow>Du hast für diese Map abgestimmt.'
+  teleport:
+    name: '<red>Teleportiere zu einem Spieler'
+    item:
+      name: '<green>{0}'
+      lore: '<gray>Zu diesem Spieler teleportieren.'
+      now-spectator: '%prefix% Dieser Spieler ist <red>nicht <white>mehr am Leben.'

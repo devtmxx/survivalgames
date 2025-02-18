@@ -64,10 +64,17 @@ kill:
     single: '%prefix% There is <yellow>{0} player <white>left.'
     multiple: '%prefix% There are <yellow>{0} players <white>left.'
 
+compass:
+  no-target-found: "%prefix% Couldn't find a player near you."
+  new-target: '%prefix% The next player is <green>{0} blocks <white>away.'
+
 item:
   vote:
     name: '<yellow>Vote'
     lore: '%n<gray>Click to vote for a map.'
+  teleport:
+    name: '<red>Teleport'
+    lore: '%n<gray>Click to teleport to a player.'
 
 inventory:
   vote:
