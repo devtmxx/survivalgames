@@ -16,6 +16,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
@@ -79,9 +80,10 @@ public class TeleportInventory implements InventoryGUI, Listener {
     private void populateInventory(Inventory inventory) {
         slots.forEach((slot, teleportTo) -> {
             ItemStack itemStack = ItemStack.of(Material.PLAYER_HEAD);
-            itemStack.editMeta(meta -> {
+            itemStack.editMeta(SkullMeta.class, meta -> {
                 meta.displayName(user.translate("inventory.teleport.item.name", teleportTo.getName()).decoration(TextDecoration.ITALIC, false));
                 meta.lore(user.translateList("inventory.teleport.item.lore"));
+                meta.setPlayerProfile(teleportTo.getPlayer().getPlayerProfile());
             });
             inventory.setItem(slot, itemStack);
         });
