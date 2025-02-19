@@ -61,6 +61,11 @@ public class GameImpl implements Game, Runnable {
     }
 
     @Override
+    public void setTimer(int seconds) {
+        currentTick = seconds;
+    }
+
+    @Override
     public boolean isCounting() {
         return counting.get();
     }

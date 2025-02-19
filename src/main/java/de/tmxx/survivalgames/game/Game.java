@@ -17,6 +17,7 @@ public interface Game {
     void startTimer();
     void stopTimer();
     void resetTimer();
+    void setTimer(int seconds);
     boolean isCounting();
     int secondsLeft();
     int secondsElapsed();

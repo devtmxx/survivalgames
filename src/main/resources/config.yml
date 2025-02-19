@@ -130,6 +130,14 @@ lightning-on-kill: true
 chest:
   # The amount of slots of a chest should have. This amount should always be divisible by 9.
   inventory-size: 27
+
+  # If the chests should refill after a specified time.
+  refill: true
+
+  # The time after chests should refill. This has no effect if the refill option is disabled, as well as if the in-game
+  # time is less than the refill time.
+  refill-time: 600
+
   items:
 
     # The minimum amount of items per chest.
@@ -138,12 +146,17 @@ chest:
     # The maximum amount of items per chest.
     max: 5
 
-  # If the chests should refill after a specified time.
-  refill: true
+# The death match settings
+death-match:
 
-  # The time after chests should refill. This has no effect if the refill option is disabled, as well as if the in-game
-  # time is less than the refill time.
-  refill-time: 600
+  # If the in game time should be shortened if there are only a few players left.
+  shorten-in-game-time: true
+
+  # The amount of players left to shorten the in game time
+  shorten-players: 2
+
+  # The time in seconds to which the in game time should be shortened to
+  shorten-time: 30
 
 # A list of possible tiers used to populate items in chests. The plugin checks the first item in the top left of the
 # inventory to determine its tier. If there is no item placed in the chests inventory or there is no tier found for the

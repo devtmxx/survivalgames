@@ -10,6 +10,8 @@ import de.tmxx.survivalgames.module.config.MainConfig;
 import de.tmxx.survivalgames.module.game.phase.DeathMatch;
 import de.tmxx.survivalgames.module.game.phase.InGame;
 import de.tmxx.survivalgames.user.UserBroadcaster;
+import de.tmxx.survivalgames.user.UserRegistry;
+import de.tmxx.survivalgames.user.UserState;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -33,6 +35,7 @@ public class InGamePhase implements GamePhase {
     private final FileConfiguration config;
     private final GamePhase nextPhase;
     private final ChestFiller chestFiller;
+    private final UserRegistry registry;
 
     @Inject
     InGamePhase(
@@ -42,7 +45,8 @@ public class InGamePhase implements GamePhase {
             UserBroadcaster broadcaster,
             @MainConfig FileConfiguration config,
             @DeathMatch GamePhase nextPhase,
-            ChestFiller chestFiller
+            ChestFiller chestFiller,
+            UserRegistry registry
     ) {
         this.game = game;
         this.mapManager = mapManager;
@@ -51,6 +55,7 @@ public class InGamePhase implements GamePhase {
         this.config = config;
         this.nextPhase = nextPhase;
         this.chestFiller = chestFiller;
+        this.registry = registry;
     }
 
     @Override
@@ -68,6 +73,7 @@ public class InGamePhase implements GamePhase {
         if (!game.isCounting()) return;
 
         tryChestRefill();
+        tryShortenInGameTime();
         tryBroadcast();
     }
 
@@ -125,6 +131,17 @@ public class InGamePhase implements GamePhase {
         if (game.secondsElapsed() == refillTime) {
             chestFiller.reset();
             broadcaster.broadcast("chest-refill.refilled");
+        }
+    }
+
+    private void tryShortenInGameTime() {
+        if (!config.getBoolean("death-match.shorten-in-game-time", true)) return;
+
+        int playersLeft = registry.getUsers(UserState.PLAYING).size();
+        int shortenToSeconds = config.getInt("death-match.shorten-time", 30);
+        if (playersLeft <= config.getInt("death-match.shorten-players", 2) && game.secondsLeft() > shortenToSeconds) {
+            game.setTimer(countdownSeconds() - shortenToSeconds);
+            broadcaster.broadcast("death-match-shorten-in-game-time");
         }
     }
 }

@@ -106,6 +106,8 @@ chest-refill:
       multiple: '%prefix% Die <red>Kisten <white>werden in <yellow>{0} Sekunden <white>neu aufgefüllt.'
   refilled: '%prefix% Die <red>Kisten <white>wurden neu aufgefüllt.'
 
+death-match-shorten-in-game-time: '%prefix% Das <red>Deathmatch <white>startet in Kürze, weil nur noch wenige Spieler am Leben sind.'
+
 item:
   vote:
     name: '<yellow>Voten'
