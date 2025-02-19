@@ -114,6 +114,9 @@ blocks:
 # Whether placed tnt blocks should automatically be replaced with primed tnt.
 auto-ignite-tnt: true
 
+# Whether compasses should target the nearest player.
+compass-target-finder: true
+
 # A list of entities allowed to spawn during the in game phases.
 allowed-entities:
   - 'SHEEP'
