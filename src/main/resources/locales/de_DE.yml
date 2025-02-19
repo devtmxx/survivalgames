@@ -65,7 +65,15 @@ timers:
     chat:
       single: '%prefix% Das Spiel startet in <gold>einer Sekunde<white>.'
       multiple: '%prefix% Das Spiel startet in <gold>{0} Sekunden<white>.'
+  in-game:
+    chat:
       start: '%prefix% Das Spiel ist <green>gestartet<white>!'
+      minutes:
+        single: '%prefix% Das <red>Deathmatch <white>beginnt in <yellow>einer Minute<white>.'
+        multiple: '%prefix% Das <red>Deathmatch <white>beginnt in <yellow>{0} Minuten<white>.'
+      seconds:
+        single: '%prefix% Das <red>Deathmatch <white>beginnt in <yellow>einer Sekunde<white>.'
+        multiple: '%prefix% Das <red>Deathmatch <white>beginnt in <yellow>{0} Sekunden<white>.'
 
 start:
   already-starting: '%prefix% Das Spiel <green>startet <white>bereits.'

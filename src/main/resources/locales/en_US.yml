@@ -48,11 +48,11 @@ kick:
 timers:
   lobby:
     action-bar:
-      single: '<yellow>The game begins in <gold>{0} second'
+      single: '<yellow>The game begins in <gold>one second'
       multiple: '<yellow>The game begins in <gold>{0} seconds'
       waiting: '<yellow>Waiting for more players...'
     chat:
-      single: '%prefix% The game begins in <gold>{0} second<white>.'
+      single: '%prefix% The game begins in <gold>one second<white>.'
       multiple: '%prefix% The game begins in <gold>{0} seconds<white>.'
     title:
       5: '<dark_red><bold>5'
@@ -63,9 +63,17 @@ timers:
       0: '<aqua><bold>Go!'
   starting:
     chat:
-      single: '%prefix% The game starts in <gold>{0} second<white>.'
+      single: '%prefix% The game starts in <gold>one second<white>.'
       multiple: '%prefix% The game starts in <gold>{0} seconds<white>.'
+  in-game:
+    chat:
       start: '%prefix% The game has <green>started<white>!'
+      minutes:
+        single: '%prefix% <red>Deathmatch <white>begins in <yellow>one minute<white>.'
+        multiple: '%prefix% <red>Deathmatch <white>begins in <yellow>{0} minutes<white>.'
+      seconds:
+        single: '%prefix% <red>Deathmatch <white>begins in <yellow>one second<white>.'
+        multiple: '%prefix% <red>Deathmatch <white>begins in <yellow>{0} seconds<white>.'
 
 start:
   already-starting: '%prefix% The game is already <green>starting<white>.'

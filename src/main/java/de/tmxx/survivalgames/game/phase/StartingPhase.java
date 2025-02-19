@@ -91,9 +91,6 @@ public class StartingPhase implements GamePhase {
 
     @Override
     public void end() {
-        broadcaster.broadcast("timers.starting.chat.start");
-        broadcaster.broadcastSound(Sound.BLOCK_NOTE_BLOCK_PLING, 1F, 2F);
-
         listenerRegistrar.unregisterPhaseSpecific(Starting.class);
     }
 
