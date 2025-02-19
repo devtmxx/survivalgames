@@ -73,14 +73,7 @@ public class MapImpl implements Map {
         spectatorSpawn = config.getSerializable("spectator", SpawnPosition.class);
 
         spawnPositions.clear();
-        List<?> spawns = config.getList("spawns");
-        if (spawns != null) {
-            for (Object o : spawns) {
-                if (!(o instanceof SpawnPosition position)) continue;
-
-                spawnPositions.add(position);
-            }
-        }
+        spawnPositions.addAll(SpawnPosition.fromList(config.getList("spawns")));
     }
 
     public void loadWorld() {

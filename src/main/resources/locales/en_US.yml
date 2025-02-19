@@ -27,6 +27,8 @@ command:
     success: '%prefix% Set the <green>spectator spawn <white>for map <green>{0}<white>.'
   done:
     restart: '%prefix% Done setting up the game. Restarting in <yellow>10 seconds<white>...'
+  adddeathmatchspawn:
+    success: '%prefix% You added a <green>death match spawn <white>.'
   common:
     map-not-found: '%prefix% <red>There is no known map with id {0}.'
     wrong-world: '%prefix% <red>Positions for a map should be in the same world.'

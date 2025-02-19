@@ -9,6 +9,8 @@ import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -109,5 +111,19 @@ public class SpawnPosition implements ConfigurationSerializable {
                 (float) (double) args.get("yaw"),
                 (float) (double) args.get("pitch")
         );
+    }
+
+    public static List<SpawnPosition> fromList(List<?> list) {
+        List<SpawnPosition> positions = new ArrayList<>();
+
+        if (list != null) {
+            for (Object o : list) {
+                if (!(o instanceof SpawnPosition position)) continue;
+
+                positions.add(position);
+            }
+        }
+
+        return positions;
     }
 }
