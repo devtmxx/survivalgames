@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import de.tmxx.survivalgames.game.Game;
 import de.tmxx.survivalgames.game.phase.GamePhase;
+import de.tmxx.survivalgames.user.User;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -101,6 +102,23 @@ public class GameImpl implements Game, Runnable {
 
     public void checkEnd() {
 
+    }
+
+    @Override
+    public void forceStart(User user) {
+        if (secondsLeft() <= 10) {
+            user.sendMessage("start.already-starting");
+            return;
+        }
+
+        if (!counting.get()) {
+            user.sendMessage("start.unable");
+            return;
+        }
+
+        // starts the game instantly if the countdown time is <= 10 seconds, otherwise sets the time left to 10 seconds
+        currentTick = Math.max(countdownSeconds - 10, 0);
+        user.sendMessage("start.done");
     }
 
     private void startPhase(GamePhase phase) {

@@ -70,7 +70,7 @@ public class LobbyPhase implements GamePhase {
             // end the map voting 10 seconds before the game starts. this will give the world enough time to load but
             // may cause a small lag when the timer reaches 10 seconds left. we accept the small lag in order to save
             // server resources overall.
-            if (timeLeft == 10 && !mapManager.hasVotingEnded()) {
+            if (timeLeft <= 10 && !mapManager.hasVotingEnded()) {
                 mapManager.endVoting();
             }
 

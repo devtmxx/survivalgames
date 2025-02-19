@@ -30,6 +30,8 @@ command:
   common:
     map-not-found: '%prefix% <red>There is no known map with id {0}.'
     wrong-world: '%prefix% <red>Positions for a map should be in the same world.'
+  start:
+    only-lobby: '%prefix% The game can <red>only <white>be started during lobby phase.'
 
 join: '<gray>> <yellow>{0} <white>joined <gray>(<gold>{1}<white>/<gold>{2}<gray>)'
 quit: '<gray>< <yellow>{0} <white>quit'
@@ -62,6 +64,11 @@ timers:
       single: '%prefix% The game starts in <gold>{0} second<white>.'
       multiple: '%prefix% The game starts in <gold>{0} seconds<white>.'
       start: '%prefix% The game has <green>started<white>!'
+
+start:
+  already-starting: '%prefix% The game is already <green>starting<white>.'
+  unable: '%prefix% The game <red>cannot <white>be started right now.'
+  done: '%prefix% The game has <green>started<white>!'
 
 vote:
   already-voted: '%prefix% You have already <red>voted<white>.'
