@@ -8,8 +8,9 @@ command:
     error: '%prefix% <red>Eine Map mit der ID {0} existiert bereits.'
     success: '%prefix% Die Map mit der ID <green>{0}<white> wurde erstellt.'
   addspawn:
-    help: '%prefix% Nutze <yellow>/addspawn <Map ID><white>.'
+    help: '%prefix% Nutze <yellow>/addspawn <Map ID | Deathmatch><white>.'
     success: '%prefix% Du hast Spawn <green>#{1} <white>für die Map <green>{0}<white> gesetzt.'
+    deathmatch: '%prefix% Du hast einen <green>Deathmatch-Spawn <white>hinzugefügt.'
   setname:
     help: '%prefix% Nutze <yellow>/setname <Map ID> <Map Name><white>.'
     success: '%prefix% <green>{1} <white>ist jetzt der Name von der Map <green>{0}<white>.'
@@ -23,12 +24,11 @@ command:
       yes: '%prefix% Diese Map ist <green>bereit<white>, um im Spiel genutzt zu werden.'
       no: '%prefix% Diese Map ist kann noch <red>nicht <white>im Spiel genutzt werden.'
   setspectator:
-    help: '%prefix% Nutze <yellow>/setspectator <Map ID><white>.'
+    help: '%prefix% Nutze <yellow>/setspectator <Map ID | Deathmatch><white>.'
     success: '%prefix% Du hast den <green>Zuschauer-Spawn <white>der Map <green>{0} <white>gesetzt.'
+    deathmatch: '%prefix% Du hast den <green>Zuschauer-Spawn <white>für das <red>Deathmatch <white>gesetzt.'
   done:
     restart: '%prefix% Der Setup-Prozess wurde beendet. Der Server startet neu in <yellow>10 Sekunden<white>...'
-  adddeathmatchspawn:
-    success: '%prefix% Du hast einen <green>Deathmatch-Spawn <white>hinzugefügt.'
   common:
     map-not-found: '%prefix% <red>Es existiert keine Map mit der ID {0}.'
     wrong-world: '%prefix% <red>Positionen einer Map sollten in derselben Welt liegen.'
@@ -74,6 +74,14 @@ timers:
       seconds:
         single: '%prefix% Das <red>Deathmatch <white>beginnt in <yellow>einer Sekunde<white>.'
         multiple: '%prefix% Das <red>Deathmatch <white>beginnt in <yellow>{0} Sekunden<white>.'
+  death-match:
+    chat:
+      minutes:
+        single: '%prefix% Das <gold>Spiel <white>endet in <yellow>einer Minute<white>.'
+        multiple: '%prefix% Das <gold>Spiel <white>endet in <yellow>{0} Minuten<white>.'
+      seconds:
+        single: '%prefix% Das <gold>Spiel <white>endet in <yellow>einer Sekunde<white>.'
+        multiple: '%prefix% Das <gold>Spiel <white>endet in <yellow>{0} Sekunden<white>.'
 
 start:
   already-starting: '%prefix% Das Spiel <green>startet <white>bereits.'

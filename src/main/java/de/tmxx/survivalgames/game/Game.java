@@ -25,4 +25,5 @@ public interface Game {
     void changeGamePhase(GamePhase nextPhase);
     void checkEnd();
     void forceStart(User user);
+    User winner();
 }

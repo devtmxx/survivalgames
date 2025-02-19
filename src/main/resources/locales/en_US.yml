@@ -8,8 +8,9 @@ command:
     error: '%prefix% <red>A map with id {0} already exists.'
     success: '%prefix% Created a map with id <green>{0}<white>.'
   addspawn:
-    help: '%prefix% Use <yellow>/addspawn <map id><white>.'
+    help: '%prefix% Use <yellow>/addspawn <map id | deathmatch><white>.'
     success: '%prefix% You set spawn <green>#{1} <white>for map <green>{0}<white>.'
+    deathmatch: '%prefix% You added a <green>death match spawn <white>.'
   setname:
     help: '%prefix% Use <yellow>/setname <map id> <map name><white>.'
     success: '%prefix% Set <green>{1} <white>as the name of map <green>{0}<white>.'
@@ -23,8 +24,9 @@ command:
       yes: '%prefix% This map is <green>ready <white>to be used.'
       no: '%prefix% This map is <red>not <white>ready to be used.'
   setspectator:
-    help: '%prefix% Use <yellow>/setspectator <map id><white>.'
+    help: '%prefix% Use <yellow>/setspectator <map id | deathmatch><white>.'
     success: '%prefix% Set the <green>spectator spawn <white>for map <green>{0}<white>.'
+    deathmatch: '%prefix% Set the <green>spectator spawn <white>for the <red>death match<white>.'
   done:
     restart: '%prefix% Done setting up the game. Restarting in <yellow>10 seconds<white>...'
   adddeathmatchspawn:
@@ -74,6 +76,14 @@ timers:
       seconds:
         single: '%prefix% <red>Deathmatch <white>begins in <yellow>one second<white>.'
         multiple: '%prefix% <red>Deathmatch <white>begins in <yellow>{0} seconds<white>.'
+  death-match:
+    chat:
+      minutes:
+        single: '%prefix% The <gold>game <white>ends in <yellow>one minute<white>.'
+        multiple: '%prefix% The <gold>game <white>ends in <yellow>{0} minutes<white>.'
+      seconds:
+        single: '%prefix% The <gold>game <white>ends in <yellow>one second<white>.'
+        multiple: '%prefix% The <gold>game <white>ends in <yellow>{0} seconds<white>.'
 
 start:
   already-starting: '%prefix% The game is already <green>starting<white>.'

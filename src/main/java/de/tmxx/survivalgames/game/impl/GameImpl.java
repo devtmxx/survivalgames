@@ -126,6 +126,11 @@ public class GameImpl implements Game, Runnable {
         user.sendMessage("start.done");
     }
 
+    @Override
+    public User winner() {
+        return null;
+    }
+
     private void startPhase(GamePhase phase) {
         countdownSeconds = phase.countdownSeconds();
         currentTick = 0;
