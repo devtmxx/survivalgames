@@ -25,4 +25,6 @@ public interface User {
     List<Component> translateList(String key, Object... args);
     boolean isSpectator();
     void vote(Map map);
+    void setDamager(User damager);
+    User getKiller();
 }

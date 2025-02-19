@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Project: survivalgames
@@ -32,6 +33,9 @@ public class UserImpl implements User {
 
     @Getter @Setter private UserState state = UserState.PLAYING;
     private boolean hasVoted = false;
+
+    private User lastDamager = null;
+    private long lastHitFromDamager = 0;
 
     @Inject
     UserImpl(I18n i18n, JavaPlugin plugin, UserRegistry registry, @Assisted Player player) {
@@ -82,6 +86,24 @@ public class UserImpl implements User {
         hasVoted = true;
         map.castVote(uniqueId);
         sendMessage("vote.voted", map.getName());
+    }
+
+    @Override
+    public void setDamager(User damager) {
+        lastDamager = damager;
+        lastHitFromDamager = System.currentTimeMillis();
+    }
+
+    @Override
+    public User getKiller() {
+        if (player.getKiller() != null) {
+            return registry.getUser(player.getKiller());
+        }
+
+        // the last damager counts as killer if their last hit is less than 5 seconds ago
+        if (System.currentTimeMillis() - lastHitFromDamager > TimeUnit.SECONDS.toMillis(5)) return null;
+
+        return lastDamager;
     }
 
     private void hideForPlayers() {

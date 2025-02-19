@@ -57,5 +57,9 @@ public class DamageListener implements Listener {
                 (target != null && target.isSpectator()) ||
                         (damager != null && damager.isSpectator())
         );
+
+        if (!event.isCancelled() && target != null && damager != null) {
+            target.setDamager(damager);
+        }
     }
 }

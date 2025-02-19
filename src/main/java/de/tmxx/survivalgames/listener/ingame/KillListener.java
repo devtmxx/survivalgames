@@ -76,8 +76,7 @@ public class KillListener implements Listener {
 
         dead.setSpectator();
 
-        User killer = null;
-        if (deadPlayer.getKiller() != null) killer = registry.getUser(deadPlayer.getKiller());
+        User killer = dead.getKiller();
 
         // announce the death of a player
         if (killer == null) {
