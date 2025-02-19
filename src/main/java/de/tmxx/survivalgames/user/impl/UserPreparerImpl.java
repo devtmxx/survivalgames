@@ -50,6 +50,8 @@ public class UserPreparerImpl implements UserPreparer {
         resetPlayer(player);
 
         player.setGameMode(GameMode.ADVENTURE);
+        player.setAllowFlight(true);
+        player.setFlying(true);
         player.getInventory().setItem(FIRST_HOTBAR_SLOT, teleportItem.build(player.locale()));
     }
 
