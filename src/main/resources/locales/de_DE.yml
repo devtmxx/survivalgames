@@ -96,6 +96,16 @@ compass:
   no-target-found: '%prefix% Es konnte kein Spieler in deiner Nähe gefunden werden.'
   new-target: '%prefix% Der nächste Spieler ist <green>{0} Blöcke <white>entfernt.'
 
+chest-refill:
+  timer:
+    minutes:
+      single: '%prefix% Die <red>Kisten <white>werden in <yellow>einer Minute <white>neu aufgefüllt.'
+      multiple: '%prefix% Die <red>Kisten <white>werden in <yellow>{0} Minuten <white>neu aufgefüllt.'
+    seconds:
+      single: '%prefix% Die <red>Kisten <white>werden in <yellow>einer Sekunde <white>neu aufgefüllt.'
+      multiple: '%prefix% Die <red>Kisten <white>werden in <yellow>{0} Sekunden <white>neu aufgefüllt.'
+  refilled: '%prefix% Die <red>Kisten <white>wurden neu aufgefüllt.'
+
 item:
   vote:
     name: '<yellow>Voten'

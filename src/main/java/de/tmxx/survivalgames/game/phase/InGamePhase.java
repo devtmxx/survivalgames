@@ -2,6 +2,7 @@ package de.tmxx.survivalgames.game.phase;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import de.tmxx.survivalgames.chest.ChestFiller;
 import de.tmxx.survivalgames.game.Game;
 import de.tmxx.survivalgames.listener.ListenerRegistrar;
 import de.tmxx.survivalgames.map.MapManager;
@@ -23,6 +24,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 @Singleton
 public class InGamePhase implements GamePhase {
     private static final int DEFAULT_COUNTDOWN_SECONDS = 1200; // 20 minutes
+    private static final int DEFAULT_REFILL_TIME = 600; // 10 minutes
 
     private final Game game;
     private final MapManager mapManager;
@@ -30,6 +32,7 @@ public class InGamePhase implements GamePhase {
     private final UserBroadcaster broadcaster;
     private final FileConfiguration config;
     private final GamePhase nextPhase;
+    private final ChestFiller chestFiller;
 
     @Inject
     InGamePhase(
@@ -38,7 +41,8 @@ public class InGamePhase implements GamePhase {
             ListenerRegistrar listenerRegistrar,
             UserBroadcaster broadcaster,
             @MainConfig FileConfiguration config,
-            @DeathMatch GamePhase nextPhase
+            @DeathMatch GamePhase nextPhase,
+            ChestFiller chestFiller
     ) {
         this.game = game;
         this.mapManager = mapManager;
@@ -46,6 +50,7 @@ public class InGamePhase implements GamePhase {
         this.broadcaster = broadcaster;
         this.config = config;
         this.nextPhase = nextPhase;
+        this.chestFiller = chestFiller;
     }
 
     @Override
@@ -62,16 +67,8 @@ public class InGamePhase implements GamePhase {
     public void tick() {
         if (!game.isCounting()) return;
 
-        int timeLeft = game.secondsLeft();
-        if (!shouldBroadcastTimeLeft(timeLeft)) return;
-
-        boolean displayMinutes = timeLeft > 60;
-        int displayTime = displayMinutes ? timeLeft / 60 : timeLeft;
-        broadcaster.broadcast(
-                "timers.in-game.chat." + (displayMinutes ? "minutes" : "seconds") + "." + (displayTime == 1 ? "single" : "multiple"),
-                displayTime
-        );
-        broadcaster.broadcastSound(Sound.BLOCK_NOTE_BLOCK_PLING, 1F, 1F);
+        tryChestRefill();
+        tryBroadcast();
     }
 
     @Override
@@ -92,5 +89,42 @@ public class InGamePhase implements GamePhase {
     @Override
     public void nextPhase() {
         game.changeGamePhase(nextPhase);
+    }
+
+    private void tryBroadcast() {
+        int timeLeft = game.secondsLeft();
+        if (!shouldBroadcastTimeLeft(timeLeft)) return;
+
+        boolean displayMinutes = timeLeft > 60;
+        int displayTime = displayMinutes ? timeLeft / 60 : timeLeft;
+        broadcaster.broadcast(
+                "timers.in-game.chat." + (displayMinutes ? "minutes" : "seconds") + "." + (displayTime == 1 ? "single" : "multiple"),
+                displayTime
+        );
+        broadcaster.broadcastSound(Sound.BLOCK_NOTE_BLOCK_PLING, 1F, 1F);
+    }
+
+    private void tryChestRefill() {
+        if (!config.getBoolean("chest.refill", true)) return;
+
+        int refillTime = config.getInt("chest.refill-time", DEFAULT_REFILL_TIME);
+        int secondsLeft = refillTime - game.secondsElapsed();
+        if (secondsLeft < 0) return;
+
+        boolean displayMinutes = secondsLeft > 60;
+        int displayTime = displayMinutes ? secondsLeft / 60 : secondsLeft;
+
+        // we don't want to broadcast 0 seconds because we have another message for that case
+        if (shouldBroadcastTimeLeft(secondsLeft) && secondsLeft != 0) {
+            broadcaster.broadcast(
+                    "chest-refill.timer." + (displayMinutes ? "minutes" : "seconds") + "." + (displayTime == 1 ? "single" : "multiple"),
+                    displayTime
+            );
+        }
+
+        if (game.secondsElapsed() == refillTime) {
+            chestFiller.reset();
+            broadcaster.broadcast("chest-refill.refilled");
+        }
     }
 }

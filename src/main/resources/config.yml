@@ -138,6 +138,13 @@ chest:
     # The maximum amount of items per chest.
     max: 5
 
+  # If the chests should refill after a specified time.
+  refill: true
+
+  # The time after chests should refill. This has no effect if the refill option is disabled, as well as if the in-game
+  # time is less than the refill time.
+  refill-time: 600
+
 # A list of possible tiers used to populate items in chests. The plugin checks the first item in the top left of the
 # inventory to determine its tier. If there is no item placed in the chests inventory or there is no tier found for the
 # item, it uses the specified default tier. If the default tier is not specified it uses 0.

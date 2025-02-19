@@ -77,7 +77,7 @@ public class ChestFillerImpl implements ChestFiller {
     @Override
     public void reset() {
         // close all open chest inventories to prevent unwanted behaviour
-        inventories.values().forEach(inventory -> inventory.getViewers().forEach(HumanEntity::closeInventory));
+        inventories.values().forEach(Inventory::close);
         inventories.clear();
     }
 
