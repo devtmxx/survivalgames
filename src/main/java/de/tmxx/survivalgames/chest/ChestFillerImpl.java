@@ -31,6 +31,7 @@ import java.util.logging.Logger;
  */
 @Singleton
 public class ChestFillerImpl implements ChestFiller {
+    private static final int DEFAULT_CHEST_SIZE = 27;
     private static final Random RANDOM = new Random();
 
     private final Logger logger;
@@ -62,7 +63,7 @@ public class ChestFillerImpl implements ChestFiller {
         // do not re-fill the inventory if it already exists
         if (inventory != null) return inventory;
 
-        inventory = Bukkit.createInventory(null, mainConfig.getInt("chest.inventory-size"));
+        inventory = Bukkit.createInventory(null, mainConfig.getInt("chest.inventory-size", DEFAULT_CHEST_SIZE));
         inventories.put(chest.getLocation(), inventory);
 
         ItemStack firstItem = chest.getInventory().getItem(0);
