@@ -105,6 +105,7 @@ public class GameImpl implements Game, Runnable {
 
     private void startPhase(GamePhase phase) {
         countdownSeconds = phase.countdownSeconds();
+        currentTick = 0;
         phase.start();
     }
 

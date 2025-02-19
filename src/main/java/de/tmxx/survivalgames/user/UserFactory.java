@@ -11,5 +11,5 @@ import org.bukkit.entity.Player;
  * @version 1.0
  */
 public interface UserFactory {
-    UserImpl createUser(Player player);
+    User createUser(Player player);
 }

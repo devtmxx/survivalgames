@@ -1,14 +1,17 @@
 package de.tmxx.survivalgames.game.phase;
 
+import com.google.inject.Singleton;
 import org.bukkit.Location;
 
 /**
  * Project: survivalgames
  * 16.02.25
- * 
+ *
  * @author timmauersberger
  * @version 1.0
- */public class DeathMatchPhase implements GamePhase{
+ */
+@Singleton
+public class DeathMatchPhase implements GamePhase{
     @Override
     public void start() {
         

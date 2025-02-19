@@ -69,6 +69,6 @@ public class SaveCommand implements Command {
      */
     @Override
     public @Nullable String permission() {
-        return "survivalgames.command.save";
+        return "survivalgames.setup";
     }
 }

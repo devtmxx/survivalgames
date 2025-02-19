@@ -17,4 +17,7 @@ public interface MapManager {
     @Nullable Map get(String id);
     Collection<Map> getUsableMaps();
     Collection<Map> getAll();
+    void endVoting();
+    boolean hasVotingEnded();
+    Map getVotedMap();
 }

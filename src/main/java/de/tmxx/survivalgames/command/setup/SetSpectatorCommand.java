@@ -71,6 +71,6 @@ public class SetSpectatorCommand implements Command {
      */
     @Override
     public @Nullable String permission() {
-        return "survivalgames.command.setspectator";
+        return "survivalgames.setup";
     }
 }

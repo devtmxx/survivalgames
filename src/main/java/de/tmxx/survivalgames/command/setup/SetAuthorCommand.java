@@ -69,6 +69,6 @@ public class SetAuthorCommand implements Command {
      */
     @Override
     public @Nullable String permission() {
-        return "survivalgames.command.setauthor";
+        return "survivalgames.setup";
     }
 }

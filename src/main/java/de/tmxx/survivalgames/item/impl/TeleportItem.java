@@ -3,6 +3,7 @@ package de.tmxx.survivalgames.item.impl;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import de.tmxx.survivalgames.i18n.I18n;
+import de.tmxx.survivalgames.inventory.InventoryFactory;
 import de.tmxx.survivalgames.inventory.InventoryGUI;
 import de.tmxx.survivalgames.item.ClickableItem;
 import de.tmxx.survivalgames.item.ItemRegistry;
@@ -23,12 +24,12 @@ import java.util.Locale;
 @Singleton
 public class TeleportItem implements ClickableItem {
     private final I18n i18n;
-    private final InventoryGUI inventory;
+    private final InventoryFactory inventoryFactory;
 
     @Inject
-    TeleportItem(I18n i18n, ItemRegistry registry, @Teleport InventoryGUI inventory) {
+    TeleportItem(I18n i18n, ItemRegistry registry, InventoryFactory inventoryFactory) {
         this.i18n = i18n;
-        this.inventory = inventory;
+        this.inventoryFactory = inventoryFactory;
         registry.registerItem(this);
     }
 
@@ -39,7 +40,7 @@ public class TeleportItem implements ClickableItem {
 
     @Override
     public void onClick(User user) {
-        inventory.openInventory(user);
+        inventoryFactory.createTeleporterInventory(user).openInventory(user);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package de.tmxx.survivalgames.listener.ingame;
+package de.tmxx.survivalgames.listener.feature;
 
 import com.google.inject.Inject;
 import de.tmxx.survivalgames.module.game.phase.DeathMatch;
@@ -11,7 +11,6 @@ import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.meta.CompassMeta;
 
 /**
  * Project: survivalgames
@@ -26,7 +25,7 @@ public class CompassListener implements Listener {
     private final UserRegistry registry;
 
     @Inject
-    public CompassListener(UserRegistry registry) {
+    CompassListener(UserRegistry registry) {
         this.registry = registry;
     }
 

@@ -26,12 +26,10 @@ public interface InventoryGUI extends InventoryHolder {
         return Bukkit.createInventory(null, 0);
     }
 
-    default int calculateSize(int usedSlots) {
+    default int calculateSize(int target) {
         int base = 9;
-        int rest = usedSlots % base;
-        int rows = usedSlots / base;
-
-        return rows * base + rest == 0 ? 0 : base - rest;
+        int mod = target % base;
+        return Math.max(mod == 0 ? target : target + base - mod, base);
     }
 
     default User getUser(UserRegistry registry, InventoryClickEvent event) {

@@ -68,6 +68,6 @@ public class CreateMapCommand implements Command {
      */
     @Override
     public @Nullable String permission() {
-        return "survivalgames.command.createmap";
+        return "survivalgames.setup";
     }
 }

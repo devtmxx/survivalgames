@@ -7,12 +7,12 @@ import de.tmxx.survivalgames.map.MapFactory;
 import de.tmxx.survivalgames.map.MapManager;
 import de.tmxx.survivalgames.module.game.MapsDirectory;
 import de.tmxx.survivalgames.module.game.PluginLogger;
+import de.tmxx.survivalgames.user.UserBroadcaster;
+import org.bukkit.Bukkit;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
+import java.util.*;
 import java.util.logging.Logger;
 
 /**
@@ -27,12 +27,22 @@ public class MapManagerImpl implements MapManager {
     private final File mapsDirectory;
     private final Logger logger;
     private final MapFactory factory;
+    private final UserBroadcaster broadcaster;
     private final java.util.Map<String, Map> maps = new HashMap<>();
 
+    private boolean hasVotingEnded = false;
+    private Map votedMap = null;
+
     @Inject
-    MapManagerImpl(@PluginLogger Logger logger, @MapsDirectory File mapsDirectory, MapFactory factory) {
+    MapManagerImpl(
+            @PluginLogger Logger logger,
+            @MapsDirectory File mapsDirectory,
+            MapFactory factory,
+            UserBroadcaster broadcaster
+    ) {
         this.logger = logger;
         this.factory = factory;
+        this.broadcaster = broadcaster;
 
         if (!mapsDirectory.exists() && !mapsDirectory.mkdirs()) {
             logger.severe("Could not create maps directory");
@@ -85,5 +95,49 @@ public class MapManagerImpl implements MapManager {
     @Override
     public Collection<Map> getAll() {
         return Collections.unmodifiableCollection(maps.values());
+    }
+
+    @Override
+    public void endVoting() {
+        hasVotingEnded = true;
+
+        chooseMap();
+        if (votedMap == null) {
+            // we should not reach a state where there is no voted map
+            Bukkit.shutdown();
+            return;
+        }
+
+        votedMap.loadWorld();
+
+        // broadcast the map to the players
+        broadcaster.broadcast("vote.done", votedMap.getName(), votedMap.getAuthor());
+    }
+
+    @Override
+    public boolean hasVotingEnded() {
+        return hasVotingEnded;
+    }
+
+    @Override
+    public Map getVotedMap() {
+        return votedMap;
+    }
+
+    private void chooseMap() {
+        // a list of map sorted by votes in descending order
+        List<Map> sortedByVotes = getUsableMaps().stream().sorted(Comparator.comparingInt(Map::getVotes).reversed()).toList();
+        if (sortedByVotes.isEmpty()) return;
+
+        // no more calculations if there is only one map
+        if (sortedByVotes.size() == 1) {
+            votedMap = sortedByVotes.getFirst();
+            return;
+        }
+
+        // filter the maps with the most votes and choose a random one
+        int mostVotes = sortedByVotes.getFirst().getVotes();
+        sortedByVotes = sortedByVotes.stream().filter(map -> map.getVotes() == mostVotes).toList();
+        votedMap = sortedByVotes.get((int) Math.floor(Math.random() * sortedByVotes.size()));
     }
 }

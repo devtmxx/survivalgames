@@ -69,6 +69,6 @@ public class SetNameCommand implements Command {
      */
     @Override
     public @Nullable String permission() {
-        return "survivalgames.command.setname";
+        return "survivalgames.setup";
     }
 }

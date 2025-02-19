@@ -39,12 +39,13 @@ kick:
   full-priority: '<red>Der Server ist bereits voll mit priorisierten Spielern.'
   error: '<red>Ein Fehler ist aufgetreten. Bitte versuche es später erneut.'
   priority: '<red>Du wurdest aus der Lobby geworfen, um Platz für einen priorisierten Spieler zu machen.'
+  no-spawn: '<red>Es konnte kein Spawn-Punkt für dich gefunden werden.<newline><red>Bitte kontaktiere den Server-Betreiber zu diesem Problem.'
 
 timers:
   lobby:
     action-bar:
-      single: '<yellow>Das Spiel startet in <gold>einer Sekunde'
-      multiple: '<yellow>Das Spiel startet in <gold>{0} Sekunden'
+      single: '<yellow>Das Spiel beginnt in <gold>einer Sekunde'
+      multiple: '<yellow>Das Spiel beginnt in <gold>{0} Sekunden'
       waiting: '<yellow>Warten auf weitere Spieler...'
     chat:
       single: '%prefix% Das Spiel startet in <gold>einer Sekunde<white>.'
@@ -56,6 +57,16 @@ timers:
       2: '<yellow><bold>2'
       1: '<green><bold>1'
       0: '<aqua><bold>Los!'
+  starting:
+    chat:
+      single: '%prefix% Das Spiel startet in <gold>einer Sekunde<white>.'
+      multiple: '%prefix% Das Spiel startet in <gold>{0} Sekunden<white>.'
+      start: '%prefix% Das Spiel ist <green>gestartet<white>!'
+
+vote:
+  already-voted: '%prefix% Du hast bereits <red>abgestimmt<white>.'
+  voted: '%prefix% Du hast für <green>{0} <white>abgestimmt.'
+  done: '%prefix% Das <red>Map-Voting <white>ist beendet. Gewonnen hat <yellow>{0} <white>von <green>{1}<white>.'
 
 kill:
   other: '%prefix% <red>{0} <white>ist gestorben.'
@@ -81,7 +92,7 @@ inventory:
     name: '<yellow>Vote für eine Map'
     item:
       name: '<yellow>{0}'
-      lore: '<gray>Erbaut von <green>{0}%n<white>{0} <gray>Vote(s)'
+      lore: '<gray>Erbaut von <green>{0}%n<white>{1} <gray>Vote(s)'
       voted: '%n<yellow>Du hast für diese Map abgestimmt.'
   teleport:
     name: '<red>Teleportiere zu einem Spieler'

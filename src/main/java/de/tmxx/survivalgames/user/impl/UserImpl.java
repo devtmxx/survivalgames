@@ -5,11 +5,13 @@ import com.google.inject.assistedinject.Assisted;
 import de.tmxx.survivalgames.i18n.I18n;
 import de.tmxx.survivalgames.map.Map;
 import de.tmxx.survivalgames.user.User;
+import de.tmxx.survivalgames.user.UserRegistry;
 import de.tmxx.survivalgames.user.UserState;
 import lombok.Getter;
 import lombok.Setter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.*;
 
@@ -22,6 +24,8 @@ import java.util.*;
  */
 public class UserImpl implements User {
     private final I18n i18n;
+    private final JavaPlugin plugin;
+    private final UserRegistry registry;
     @Getter private final UUID uniqueId;
     @Getter private final String name;
     @Getter private final Player player;
@@ -30,11 +34,21 @@ public class UserImpl implements User {
     private boolean hasVoted = false;
 
     @Inject
-    UserImpl(I18n i18n, @Assisted Player player) {
+    UserImpl(I18n i18n, JavaPlugin plugin, UserRegistry registry, @Assisted Player player) {
         this.i18n = i18n;
+        this.plugin = plugin;
+        this.registry = registry;
         this.player = player;
         uniqueId = player.getUniqueId();
         name = player.getName();
+    }
+
+    @Override
+    public void setSpectator() {
+        state = UserState.SPECTATING;
+
+        hideForPlayers();
+        showForSpectators();
     }
 
     @Override
@@ -68,5 +82,13 @@ public class UserImpl implements User {
         hasVoted = true;
         map.castVote(uniqueId);
         sendMessage("vote.voted", map.getName());
+    }
+
+    private void hideForPlayers() {
+        registry.getUsers(UserState.PLAYING).forEach(user -> user.getPlayer().hidePlayer(plugin, player));
+    }
+
+    private void showForSpectators() {
+        registry.getUsers(UserState.SPECTATING).forEach(user -> user.getPlayer().showPlayer(plugin, player));
     }
 }

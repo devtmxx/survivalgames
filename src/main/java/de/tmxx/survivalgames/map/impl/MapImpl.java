@@ -42,6 +42,7 @@ public class MapImpl implements Map {
     @Getter @Setter private String name = null;
     @Setter private String world = null;
     @Getter @Setter private String author = null;
+    private int currentSpawnIndex = 0;
     private final List<SpawnPosition> spawnPositions = new ArrayList<>();
     private SpawnPosition spectatorSpawn = null;
 
@@ -100,10 +101,10 @@ public class MapImpl implements Map {
                 spectatorSpawn != null;
     }
 
-    public @Nullable Location getSpawnPosition(int index) {
-        if (index >= spawnPositions.size()) return null;
+    public @Nullable Location getNextSpawn() {
+        if (currentSpawnIndex >= spawnPositions.size()) return null;
 
-        return spawnPositions.get(index).getCentered();
+        return spawnPositions.get(currentSpawnIndex++).getCentered();
     }
 
     public boolean addSpawnPosition(Location location) {
@@ -124,6 +125,11 @@ public class MapImpl implements Map {
 
         spectatorSpawn = new SpawnPosition(location);
         return true;
+    }
+
+    @Override
+    public Location getSpectatorSpawn() {
+        return spectatorSpawn.getCentered();
     }
 
     @Override

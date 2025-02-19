@@ -16,6 +16,6 @@ import java.lang.annotation.Target;
  */
 @Qualifier
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ ElementType.PARAMETER })
+@Target({ ElementType.PARAMETER, ElementType.METHOD })
 public @interface Teleport {
 }

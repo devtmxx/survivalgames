@@ -56,6 +56,13 @@ players:
   # to the minimum player amount.
   max: 24
 
+# The priority kick behavior decides which player gets kicked from the server if the server is full and a prioritized
+# player joins the server (players with the "survivalgames.priority" permission).
+# RANDOM - kicks a random non-prioritized player
+# FIRST - orders non-prioritized players by their join order and kicks the oldest one
+# LAST - orders non-prioritized players by their join order and kicks the newest one
+priority-kick-behavior: 'RANDOM'
+
 # Configures the timers in each game state.
 timers:
 
@@ -136,10 +143,13 @@ tiers:
   IRON: 1
   GOLD: 2
 
-
 ################################
 ##
 ## The following values were generated in-game.
 ## Do not touch them if you don't know exactly what you are doing.
 ##
 ################################
+
+# This is only a dummy value. This is not used in the game and is just there to force bukkit to generate in-game created
+# values (such as the lobby spawn) below this value.
+dummy: true

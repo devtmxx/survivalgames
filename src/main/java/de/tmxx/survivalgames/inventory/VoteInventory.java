@@ -9,8 +9,6 @@ import de.tmxx.survivalgames.user.UserRegistry;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -18,6 +16,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -53,6 +52,7 @@ public class VoteInventory implements InventoryGUI, Listener {
         if (map == null) return;
 
         user.vote(map);
+        event.getWhoClicked().closeInventory();
     }
 
     @Override
@@ -68,7 +68,7 @@ public class VoteInventory implements InventoryGUI, Listener {
             itemStack.editMeta(meta -> {
                 meta.displayName(user.translate("inventory.vote.item.name", map.getName()));
 
-                List<Component> lore = user.translateList("inventory.vote.item.lore", map.getAuthor(), map.getVotes());
+                List<Component> lore = new ArrayList<>(user.translateList("inventory.vote.item.lore", map.getAuthor(), map.getVotes()));
                 if (map.hasVoted(user.getUniqueId())) {
                     lore.addAll(user.translateList("inventory.vote.item.voted"));
                 }

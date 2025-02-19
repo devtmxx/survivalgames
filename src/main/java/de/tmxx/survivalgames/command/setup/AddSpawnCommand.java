@@ -71,6 +71,6 @@ public class AddSpawnCommand implements Command {
      */
     @Override
     public @Nullable String permission() {
-        return "survivalgames.command.addspawn";
+        return "survivalgames.setup";
     }
 }

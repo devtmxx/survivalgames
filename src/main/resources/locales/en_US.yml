@@ -39,16 +39,17 @@ kick:
   full-priority: '<red>The server is already full of prioritized players.'
   error: '<red>An error occurred. Please try again later.'
   priority: '<red>You were thrown of the server to make space for a prioritized player.'
+  no-spawn: '<red>Could not find a spawn for you.<newline><red>Please contact the server operator about this problem.'
 
 timers:
   lobby:
     action-bar:
-      single: '<yellow>The game starts in <gold>{0} second'
-      multiple: '<yellow>The game starts in <gold>{0} seconds'
+      single: '<yellow>The game begins in <gold>{0} second'
+      multiple: '<yellow>The game begins in <gold>{0} seconds'
       waiting: '<yellow>Waiting for more players...'
     chat:
-      single: '%prefix% The game starts in <gold>{0} second<white>.'
-      multiple: '%prefix% The game starts in <gold>{0} seconds<white>.'
+      single: '%prefix% The game begins in <gold>{0} second<white>.'
+      multiple: '%prefix% The game begins in <gold>{0} seconds<white>.'
     title:
       5: '<dark_red><bold>5'
       4: '<red><bold>4'
@@ -56,6 +57,16 @@ timers:
       2: '<yellow><bold>2'
       1: '<green><bold>1'
       0: '<aqua><bold>Go!'
+  starting:
+    chat:
+      single: '%prefix% The game starts in <gold>{0} second<white>.'
+      multiple: '%prefix% The game starts in <gold>{0} seconds<white>.'
+      start: '%prefix% The game has <green>started<white>!'
+
+vote:
+  already-voted: '%prefix% You have already <red>voted<white>.'
+  voted: '%prefix% You have voted for <green>{0}<white>.'
+  done: '%prefix% <red>Map-Voting <white>has ended. <yellow>{0} <white>by <green>{1}<white> won.'
 
 kill:
   other: '%prefix% <red>{0} <white>died.'
@@ -81,7 +92,7 @@ inventory:
     name: '<yellow>Vote for a map'
     item:
       name: '<yellow>{0}'
-      lore: '<gray>Built by <green>{0}%n<white>{0} <gray>vote(s)'
+      lore: '<gray>Built by <green>{0}%n<white>{1} <gray>vote(s)'
       voted: '%n<yellow>You voted for this map.'
   teleport:
     name: '<red>Teleport to a player'
