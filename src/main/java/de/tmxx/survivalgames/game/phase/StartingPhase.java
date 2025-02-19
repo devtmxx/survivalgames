@@ -3,6 +3,7 @@ package de.tmxx.survivalgames.game.phase;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import de.tmxx.survivalgames.game.Game;
+import de.tmxx.survivalgames.game.GamePhaseChanger;
 import de.tmxx.survivalgames.listener.ListenerRegistrar;
 import de.tmxx.survivalgames.map.Map;
 import de.tmxx.survivalgames.map.MapManager;
@@ -36,6 +37,7 @@ public class StartingPhase implements GamePhase {
     private final FileConfiguration config;
     private final GamePhase nextPhase;
     private final ListenerRegistrar listenerRegistrar;
+    private final GamePhaseChanger gamePhaseChanger;
 
     @Inject
     StartingPhase(
@@ -46,7 +48,8 @@ public class StartingPhase implements GamePhase {
             @MainConfig FileConfiguration config,
             MapManager mapManager,
             @InGame GamePhase nextPhase,
-            ListenerRegistrar listenerRegistrar
+            ListenerRegistrar listenerRegistrar,
+            GamePhaseChanger gamePhaseChanger
     ) {
         this.game = game;
         this.registry = registry;
@@ -56,10 +59,12 @@ public class StartingPhase implements GamePhase {
         this.mapManager = mapManager;
         this.nextPhase = nextPhase;
         this.listenerRegistrar = listenerRegistrar;
+        this.gamePhaseChanger = gamePhaseChanger;
     }
 
     @Override
     public void start() {
+        game.resetTimer();
         listenerRegistrar.registerPhaseSpecific(Starting.class);
 
         Map map = mapManager.getVotedMap();
@@ -74,8 +79,6 @@ public class StartingPhase implements GamePhase {
             preparer.prepareUserForGame(user);
             user.getPlayer().teleport(spawnLocation);
         });
-
-        game.startTimer();
     }
 
     @Override
@@ -106,6 +109,6 @@ public class StartingPhase implements GamePhase {
 
     @Override
     public void nextPhase() {
-        game.changeGamePhase(nextPhase);
+        gamePhaseChanger.changeGamePhase(nextPhase);
     }
 }

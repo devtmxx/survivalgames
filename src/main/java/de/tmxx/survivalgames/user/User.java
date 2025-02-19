@@ -27,4 +27,5 @@ public interface User {
     void vote(Map map);
     void setDamager(User damager);
     User getKiller();
+    void showForAllPlayers();
 }

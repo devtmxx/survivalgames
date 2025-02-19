@@ -12,8 +12,10 @@ import de.tmxx.survivalgames.command.impl.GameCommandRegistrar;
 import de.tmxx.survivalgames.command.impl.SetupCommandRegistrar;
 import de.tmxx.survivalgames.game.Game;
 import de.tmxx.survivalgames.game.GameHandler;
+import de.tmxx.survivalgames.game.GamePhaseChanger;
 import de.tmxx.survivalgames.game.impl.GameHandlerImpl;
 import de.tmxx.survivalgames.game.impl.GameImpl;
+import de.tmxx.survivalgames.game.impl.GamePhaseChangerImpl;
 import de.tmxx.survivalgames.game.phase.*;
 import de.tmxx.survivalgames.i18n.I18n;
 import de.tmxx.survivalgames.i18n.impl.I18nImpl;
@@ -75,6 +77,7 @@ public class GameModule extends AbstractModule {
         bind(UserRegistry.class).to(UserRegistryImpl.class);
         bind(GameHandler.class).to(GameHandlerImpl.class);
         bind(Game.class).to(GameImpl.class);
+        bind(GamePhaseChanger.class).to(GamePhaseChangerImpl.class);
         bind(ChestFiller.class).to(ChestFillerImpl.class);
         bind(UserPreparer.class).to(UserPreparerImpl.class);
 

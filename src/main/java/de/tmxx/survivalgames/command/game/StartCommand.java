@@ -3,6 +3,7 @@ package de.tmxx.survivalgames.command.game;
 import com.google.inject.Inject;
 import de.tmxx.survivalgames.command.Command;
 import de.tmxx.survivalgames.game.Game;
+import de.tmxx.survivalgames.game.GamePhaseChanger;
 import de.tmxx.survivalgames.game.phase.GamePhase;
 import de.tmxx.survivalgames.module.game.phase.Lobby;
 import de.tmxx.survivalgames.user.User;
@@ -23,12 +24,14 @@ import static de.tmxx.survivalgames.command.util.CommandSnippets.*;
 public class StartCommand implements Command {
     private final UserRegistry registry;
     private final Game game;
+    private final GamePhaseChanger gamePhaseChanger;
     private final GamePhase lobbyPhase;
 
     @Inject
-    StartCommand(UserRegistry registry, Game game, @Lobby GamePhase lobbyPhase) {
+    StartCommand(UserRegistry registry, Game game, GamePhaseChanger gamePhaseChanger, @Lobby GamePhase lobbyPhase) {
         this.registry = registry;
         this.game = game;
+        this.gamePhaseChanger = gamePhaseChanger;
         this.lobbyPhase = lobbyPhase;
     }
 
@@ -48,7 +51,7 @@ public class StartCommand implements Command {
         User user = getUser(source, registry);
         if (user == null) return;
 
-        if (!game.currentPhase().equals(lobbyPhase)) {
+        if (!lobbyPhase.equals(gamePhaseChanger.currentPhase())) {
             user.sendMessage("command.start.only-lobby");
             return;
         }

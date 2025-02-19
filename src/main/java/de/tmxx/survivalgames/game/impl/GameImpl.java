@@ -3,11 +3,16 @@ package de.tmxx.survivalgames.game.impl;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import de.tmxx.survivalgames.game.Game;
+import de.tmxx.survivalgames.game.GamePhaseChanger;
 import de.tmxx.survivalgames.game.phase.GamePhase;
 import de.tmxx.survivalgames.user.User;
+import de.tmxx.survivalgames.user.UserRegistry;
+import de.tmxx.survivalgames.user.UserState;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -20,16 +25,20 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Singleton
 public class GameImpl implements Game, Runnable {
     private final JavaPlugin plugin;
+    private final GamePhaseChanger gamePhaseChanger;
+    private final UserRegistry registry;
 
-    private final AtomicBoolean counting = new AtomicBoolean(false);
+    private final AtomicBoolean counting = new AtomicBoolean(true);
     private int taskId = -1;
-    private GamePhase currentPhase = null;
     private int countdownSeconds = -1;
     private int currentTick = 0;
+    private User winner = null;
 
     @Inject
-    GameImpl(JavaPlugin plugin) {
+    GameImpl(JavaPlugin plugin, GamePhaseChanger gamePhaseChanger, UserRegistry registry) {
         this.plugin = plugin;
+        this.gamePhaseChanger = gamePhaseChanger;
+        this.registry = registry;
     }
 
     @Override
@@ -57,7 +66,11 @@ public class GameImpl implements Game, Runnable {
 
     @Override
     public void resetTimer() {
+        GamePhase currentPhase = gamePhaseChanger.currentPhase();
+        if (currentPhase == null) return;
+
         currentTick = 0;
+        countdownSeconds = currentPhase.countdownSeconds();
     }
 
     @Override
@@ -81,18 +94,8 @@ public class GameImpl implements Game, Runnable {
     }
 
     @Override
-    public GamePhase currentPhase() {
-        return currentPhase;
-    }
-
-    public void changeGamePhase(GamePhase nextPhase) {
-        if (currentPhase != null) endPhase(currentPhase);
-        currentPhase = nextPhase;
-        startPhase(currentPhase);
-    }
-
-    @Override
     public void run() {
+        GamePhase currentPhase = gamePhaseChanger.currentPhase();
         if (currentPhase == null) return;
         if (counting.get()) {
             currentTick++;
@@ -106,7 +109,13 @@ public class GameImpl implements Game, Runnable {
     }
 
     public void checkEnd() {
+        List<User> playing = registry.getUsers(UserState.PLAYING);
 
+        // the only scenario where a player wins is if he is the only one left
+        if (playing.size() != 1) return;
+
+        winner = playing.getFirst();
+        gamePhaseChanger.endGame();
     }
 
     @Override
@@ -128,17 +137,6 @@ public class GameImpl implements Game, Runnable {
 
     @Override
     public User winner() {
-        return null;
-    }
-
-    private void startPhase(GamePhase phase) {
-        countdownSeconds = phase.countdownSeconds();
-        currentTick = 0;
-        phase.start();
-    }
-
-    private void endPhase(GamePhase phase) {
-        counting.set(false);
-        phase.end();
+        return winner;
     }
 }

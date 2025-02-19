@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import de.tmxx.survivalgames.config.SpawnPosition;
 import de.tmxx.survivalgames.game.Game;
+import de.tmxx.survivalgames.game.GamePhaseChanger;
 import de.tmxx.survivalgames.listener.ListenerRegistrar;
 import de.tmxx.survivalgames.module.config.MainConfig;
 import de.tmxx.survivalgames.module.game.phase.DeathMatch;
@@ -35,6 +36,7 @@ public class DeathMatchPhase implements GamePhase {
     private final FileConfiguration config;
     private final GamePhase nextPhase;
     private final ListenerRegistrar listenerRegistrar;
+    private final GamePhaseChanger gamePhaseChanger;
 
     @Inject
     DeathMatchPhase(
@@ -43,7 +45,8 @@ public class DeathMatchPhase implements GamePhase {
             UserBroadcaster broadcaster,
             @MainConfig FileConfiguration config,
             @Ending GamePhase nextPhase,
-            ListenerRegistrar listenerRegistrar
+            ListenerRegistrar listenerRegistrar,
+            GamePhaseChanger gamePhaseChanger
     ) {
         this.game = game;
         this.registry = registry;
@@ -51,16 +54,16 @@ public class DeathMatchPhase implements GamePhase {
         this.config = config;
         this.nextPhase = nextPhase;
         this.listenerRegistrar = listenerRegistrar;
+        this.gamePhaseChanger = gamePhaseChanger;
     }
 
     @Override
     public void start() {
+        game.resetTimer();
         listenerRegistrar.registerPhaseSpecific(DeathMatch.class);
 
         teleportPlayers();
         teleportSpectators();
-
-        game.startTimer();
     }
 
     @Override
@@ -100,7 +103,7 @@ public class DeathMatchPhase implements GamePhase {
 
     @Override
     public void nextPhase() {
-        game.changeGamePhase(nextPhase);
+        gamePhaseChanger.changeGamePhase(nextPhase);
     }
 
     private void teleportPlayers() {

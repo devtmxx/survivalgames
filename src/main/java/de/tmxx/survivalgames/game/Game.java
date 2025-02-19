@@ -21,8 +21,6 @@ public interface Game {
     boolean isCounting();
     int secondsLeft();
     int secondsElapsed();
-    GamePhase currentPhase();
-    void changeGamePhase(GamePhase nextPhase);
     void checkEnd();
     void forceStart(User user);
     User winner();

@@ -3,6 +3,7 @@ package de.tmxx.survivalgames.user;
 import org.bukkit.entity.Player;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -17,7 +18,7 @@ public interface UserRegistry {
     User getUser(UUID uniqueId);
     User getUser(String name);
     User getUser(Player player);
-    Collection<User> getUsers(UserState state);
-    Collection<User> getOnlineUsers();
+    List<User> getUsers(UserState state);
+    List<User> getOnlineUsers();
     void unregisterUser(User user);
 }

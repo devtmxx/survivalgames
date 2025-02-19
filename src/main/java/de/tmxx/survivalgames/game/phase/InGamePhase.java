@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import de.tmxx.survivalgames.chest.ChestFiller;
 import de.tmxx.survivalgames.game.Game;
+import de.tmxx.survivalgames.game.GamePhaseChanger;
 import de.tmxx.survivalgames.listener.ListenerRegistrar;
 import de.tmxx.survivalgames.map.MapManager;
 import de.tmxx.survivalgames.module.config.MainConfig;
@@ -36,6 +37,7 @@ public class InGamePhase implements GamePhase {
     private final GamePhase nextPhase;
     private final ChestFiller chestFiller;
     private final UserRegistry registry;
+    private final GamePhaseChanger gamePhaseChanger;
 
     @Inject
     InGamePhase(
@@ -46,7 +48,8 @@ public class InGamePhase implements GamePhase {
             @MainConfig FileConfiguration config,
             @DeathMatch GamePhase nextPhase,
             ChestFiller chestFiller,
-            UserRegistry registry
+            UserRegistry registry,
+            GamePhaseChanger gamePhaseChanger
     ) {
         this.game = game;
         this.mapManager = mapManager;
@@ -56,16 +59,16 @@ public class InGamePhase implements GamePhase {
         this.nextPhase = nextPhase;
         this.chestFiller = chestFiller;
         this.registry = registry;
+        this.gamePhaseChanger = gamePhaseChanger;
     }
 
     @Override
     public void start() {
+        game.resetTimer();
         listenerRegistrar.registerPhaseSpecific(InGame.class);
 
         broadcaster.broadcast("timers.in-game.chat.start");
         broadcaster.broadcastSound(Sound.BLOCK_NOTE_BLOCK_PLING, 1F, 2F);
-
-        game.startTimer();
     }
 
     @Override
@@ -94,7 +97,7 @@ public class InGamePhase implements GamePhase {
 
     @Override
     public void nextPhase() {
-        game.changeGamePhase(nextPhase);
+        gamePhaseChanger.changeGamePhase(nextPhase);
     }
 
     private void tryBroadcast() {

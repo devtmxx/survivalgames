@@ -55,6 +55,11 @@ public class UserPreparerImpl implements UserPreparer {
         player.getInventory().setItem(FIRST_HOTBAR_SLOT, teleportItem.build(player.locale()));
     }
 
+    @Override
+    public void prepareUserForEnding(User user) {
+        user.showForAllPlayers();
+    }
+
     private void resetPlayer(Player player) {
         player.setHealth(20.0D);
         player.setFoodLevel(20);

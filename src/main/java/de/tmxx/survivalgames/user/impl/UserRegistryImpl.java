@@ -43,12 +43,12 @@ public class UserRegistryImpl implements UserRegistry {
     }
 
     @Override
-    public Collection<User> getUsers(UserState state) {
+    public List<User> getUsers(UserState state) {
         return getOnlineUsers().stream().filter(user -> user.getState().equals(state)).toList();
     }
 
     @Override
-    public Collection<User> getOnlineUsers() {
+    public List<User> getOnlineUsers() {
         List<User> online = new ArrayList<>();
         for (Player player : Bukkit.getOnlinePlayers()) {
             User user = getUser(player);
@@ -56,7 +56,7 @@ public class UserRegistryImpl implements UserRegistry {
 
             online.add(user);
         }
-        return Collections.unmodifiableCollection(online);
+        return Collections.unmodifiableList(online);
     }
 
     @Override

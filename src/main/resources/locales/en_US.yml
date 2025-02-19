@@ -84,11 +84,19 @@ timers:
       seconds:
         single: '%prefix% The <gold>game <white>ends in <yellow>one second<white>.'
         multiple: '%prefix% The <gold>game <white>ends in <yellow>{0} seconds<white>.'
+  ending:
+    chat:
+      single: '%prefix% The server re-starts in <gold>one second<white>.'
+      multiple: '%prefix% The server re-starts in <gold>{0} seconds<white>.'
 
 start:
   already-starting: '%prefix% The game is already <green>starting<white>.'
   unable: '%prefix% The game <red>cannot <white>be started right now.'
   done: '%prefix% The game has <green>started<white>!'
+
+end:
+  no-winner: '%prefix% The game is a <yellow>draw<white>!'
+  winner: '%prefix% <green><bold>{0} <white>has won the game!'
 
 vote:
   already-voted: '%prefix% You have already <red>voted<white>.'

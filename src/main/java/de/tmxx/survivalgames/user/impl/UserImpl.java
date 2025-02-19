@@ -106,6 +106,11 @@ public class UserImpl implements User {
         return lastDamager;
     }
 
+    @Override
+    public void showForAllPlayers() {
+        registry.getOnlineUsers().forEach(user -> user.getPlayer().showPlayer(plugin, player));
+    }
+
     private void hideForPlayers() {
         registry.getUsers(UserState.PLAYING).forEach(user -> user.getPlayer().hidePlayer(plugin, player));
     }
