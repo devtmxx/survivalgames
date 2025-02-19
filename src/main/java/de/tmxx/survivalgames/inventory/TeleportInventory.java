@@ -5,6 +5,7 @@ import com.google.inject.assistedinject.Assisted;
 import de.tmxx.survivalgames.user.User;
 import de.tmxx.survivalgames.user.UserRegistry;
 import de.tmxx.survivalgames.user.UserState;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -79,7 +80,7 @@ public class TeleportInventory implements InventoryGUI, Listener {
         slots.forEach((slot, teleportTo) -> {
             ItemStack itemStack = ItemStack.of(Material.PLAYER_HEAD);
             itemStack.editMeta(meta -> {
-                meta.displayName(user.translate("inventory.teleport.item.name", teleportTo.getName()));
+                meta.displayName(user.translate("inventory.teleport.item.name", teleportTo.getName()).decoration(TextDecoration.ITALIC, false));
                 meta.lore(user.translateList("inventory.teleport.item.lore"));
             });
             inventory.setItem(slot, itemStack);

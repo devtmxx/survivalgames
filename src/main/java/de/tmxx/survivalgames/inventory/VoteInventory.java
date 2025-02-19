@@ -7,6 +7,7 @@ import de.tmxx.survivalgames.map.MapManager;
 import de.tmxx.survivalgames.user.User;
 import de.tmxx.survivalgames.user.UserRegistry;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
@@ -31,14 +32,15 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Singleton
 public class VoteInventory implements InventoryGUI, Listener {
     private final UserRegistry registry;
+    private final MapManager mapManager;
     private final java.util.Map<Integer, Map> slots = new HashMap<>();
+
+    private boolean built = false;
 
     @Inject
     VoteInventory(JavaPlugin plugin, UserRegistry registry, MapManager mapManager) {
         this.registry = registry;
-
-        AtomicInteger slot = new AtomicInteger(0);
-        mapManager.getUsableMaps().forEach(map -> slots.put(slot.getAndIncrement(), map));
+        this.mapManager = mapManager;
 
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
@@ -57,16 +59,26 @@ public class VoteInventory implements InventoryGUI, Listener {
 
     @Override
     public void openInventory(User user) {
+        createSlots();
+
         Inventory inventory = Bukkit.createInventory(this, calculateSize(slots.size()), user.translate("inventory.vote.name"));
         populateInventory(inventory, user);
         user.getPlayer().openInventory(inventory);
+    }
+
+    private void createSlots() {
+        if (built) return;
+        built = true;
+
+        AtomicInteger slot = new AtomicInteger(0);
+        mapManager.getUsableMaps().forEach(map -> slots.put(slot.getAndIncrement(), map));
     }
 
     private void populateInventory(Inventory inventory, User user) {
         slots.forEach((slot, map) -> {
             ItemStack itemStack = ItemStack.of(Material.MAP);
             itemStack.editMeta(meta -> {
-                meta.displayName(user.translate("inventory.vote.item.name", map.getName()));
+                meta.displayName(user.translate("inventory.vote.item.name", map.getName()).decoration(TextDecoration.ITALIC, false));
 
                 List<Component> lore = new ArrayList<>(user.translateList("inventory.vote.item.lore", map.getAuthor(), map.getVotes()));
                 if (map.hasVoted(user.getUniqueId())) {
