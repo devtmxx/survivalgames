@@ -10,6 +10,7 @@ import de.tmxx.survivalgames.map.MapManager;
 import de.tmxx.survivalgames.module.config.MainConfig;
 import de.tmxx.survivalgames.module.game.phase.InGame;
 import de.tmxx.survivalgames.module.game.phase.Starting;
+import de.tmxx.survivalgames.stats.StatsKey;
 import de.tmxx.survivalgames.user.UserBroadcaster;
 import de.tmxx.survivalgames.user.UserPreparer;
 import de.tmxx.survivalgames.user.UserRegistry;
@@ -78,6 +79,7 @@ public class StartingPhase implements GamePhase {
 
             preparer.prepareUserForGame(user);
             user.getPlayer().teleport(spawnLocation);
+            user.retrieveStats(stats -> stats.add(StatsKey.GAMES_PLAYED, 1));
         });
     }
 

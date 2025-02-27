@@ -145,3 +145,9 @@ inventory:
       name: '<green>{0}'
       lore: '<gray>Zu diesem Spieler teleportieren.'
       now-spectator: '%prefix% Dieser Spieler ist <red>nicht <white>mehr am Leben.'
+
+stat:
+  kills: 'Kills'
+  deaths: 'Tode'
+  wins: 'Gewonnene Spiele'
+  games-played: 'Gespielte Spiele'

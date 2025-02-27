@@ -147,3 +147,9 @@ inventory:
       name: '<green>{0}'
       lore: '<gray>Teleport to this player.'
       now-spectator: '%prefix% This player is <red>no <white>longer alive.'
+
+stat:
+  kills: 'Kills'
+  deaths: 'Deaths'
+  wins: 'Games won'
+  games-played: 'Games played'

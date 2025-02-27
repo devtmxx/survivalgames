@@ -2,9 +2,11 @@ package de.tmxx.survivalgames.listener.general;
 
 import com.google.inject.Inject;
 import de.tmxx.survivalgames.listener.RegisterAlways;
+import de.tmxx.survivalgames.stats.StatsService;
 import de.tmxx.survivalgames.user.User;
 import de.tmxx.survivalgames.user.UserFactory;
 import de.tmxx.survivalgames.user.UserRegistry;
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -49,6 +51,7 @@ public class UserListener implements Listener {
         User user = registry.getUser(event.getPlayer());
         if (user == null) return;
 
+        user.saveStats();
         registry.unregisterUser(user);
     }
 }

@@ -5,6 +5,7 @@ import com.google.inject.Singleton;
 import de.tmxx.survivalgames.game.Game;
 import de.tmxx.survivalgames.game.GamePhaseChanger;
 import de.tmxx.survivalgames.game.phase.GamePhase;
+import de.tmxx.survivalgames.stats.StatsKey;
 import de.tmxx.survivalgames.user.User;
 import de.tmxx.survivalgames.user.UserRegistry;
 import de.tmxx.survivalgames.user.UserState;
@@ -115,6 +116,7 @@ public class GameImpl implements Game, Runnable {
         if (playing.size() != 1) return;
 
         winner = playing.getFirst();
+        winner.retrieveStats(stats -> stats.add(StatsKey.WINS, 1));
         gamePhaseChanger.endGame();
     }
 

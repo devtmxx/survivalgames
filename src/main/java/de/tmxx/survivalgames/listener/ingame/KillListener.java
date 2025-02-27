@@ -5,6 +5,7 @@ import de.tmxx.survivalgames.game.Game;
 import de.tmxx.survivalgames.module.config.MainConfig;
 import de.tmxx.survivalgames.module.game.phase.DeathMatch;
 import de.tmxx.survivalgames.module.game.phase.InGame;
+import de.tmxx.survivalgames.stats.StatsKey;
 import de.tmxx.survivalgames.user.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -75,6 +76,7 @@ public class KillListener implements Listener {
         }
 
         dead.setSpectator();
+        dead.retrieveStats(stats -> stats.add(StatsKey.DEATHS, 1));
 
         User killer = dead.getKiller();
 
@@ -82,6 +84,7 @@ public class KillListener implements Listener {
         if (killer == null) {
             broadcaster.broadcast("kill.other", dead.getName());
         } else {
+            killer.retrieveStats(stats -> stats.add(StatsKey.KILLS, 1));
             broadcaster.broadcast("kill.by-player", dead.getName(), killer.getName());
         }
 

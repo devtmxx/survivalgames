@@ -29,7 +29,7 @@ public class ConfigModule extends AbstractModule {
 
     @Override
     protected void configure() {
-
+        bind(File.class).annotatedWith(DataFolder.class).toInstance(plugin.getDataFolder());
     }
 
     @Provides

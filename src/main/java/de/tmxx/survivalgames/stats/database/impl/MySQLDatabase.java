@@ -54,8 +54,6 @@ public class MySQLDatabase implements Database {
         dataSource.setUrl(CONNECTION_URL.formatted(credentials.host(), credentials.port(), credentials.database()));
         dataSource.setUsername(credentials.username());
         dataSource.setPassword(credentials.password());
-
-        logger.info("[Database] Ready to open connections");
     }
 
     /**

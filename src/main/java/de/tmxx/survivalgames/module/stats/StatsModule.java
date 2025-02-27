@@ -6,7 +6,9 @@ import com.google.inject.Singleton;
 import de.tmxx.survivalgames.module.config.MainConfig;
 import de.tmxx.survivalgames.stats.StatsService;
 import de.tmxx.survivalgames.stats.database.Database;
+import de.tmxx.survivalgames.stats.database.UserIDLoader;
 import de.tmxx.survivalgames.stats.database.impl.MySQLDatabase;
+import de.tmxx.survivalgames.stats.database.impl.UserIDLoaderImpl;
 import de.tmxx.survivalgames.stats.database.util.DatabaseCredentials;
 import de.tmxx.survivalgames.stats.impl.ConfigStatsService;
 import de.tmxx.survivalgames.stats.impl.MySQLStatsService;
@@ -25,6 +27,8 @@ public class StatsModule extends AbstractModule {
     protected void configure() {
         // binding directly to the mysql database as long as no other database is supported
         bind(Database.class).to(MySQLDatabase.class);
+
+        bind(UserIDLoader.class).to(UserIDLoaderImpl.class);
     }
 
     @Provides
