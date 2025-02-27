@@ -36,6 +36,9 @@ command:
     wrong-world: '%prefix% <red>Positions for a map should be in the same world.'
   start:
     only-lobby: '%prefix% The game can <red>only <white>be started during lobby phase.'
+  stats:
+    info: '%prefix% Stats of <yellow>{0}<reset>:<newline>Kills: <green>{1}<newline>Deaths: <green>{2}<newline>K/D: <green>{3}<newline>Games won: <green>{4}<newline>Games played: <green>{5}<newline>Winning chance: <green>{6}'
+    not-found: '%prefix% Player <red>{0} <white>could not be found.'
 
 join: '<gray>> <yellow>{0} <white>joined <gray>(<gold>{1}<white>/<gold>{2}<gray>)'
 quit: '<gray>< <yellow>{0} <white>quit'
