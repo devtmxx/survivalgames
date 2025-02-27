@@ -24,10 +24,16 @@ locales:
     - de_DE
 
 #########################
-# Database Configuration
+# Stats Configuration
 #########################
 
-# This plugin only supports mariadb databases for now.
+# Decide where to store user stats. This plugin currently supports the following storage types:
+# - config: Use the file system to store user stats in per-user config files.
+# - mysql: Use a mysql/mariadb database to store user stats.
+storage-type: 'CONFIG'
+
+# The connection credentials to either the mysql or mariadb database. This will only be used if storage-type is set
+# to mysql.
 database:
   host: "localhost"
   port: 3306

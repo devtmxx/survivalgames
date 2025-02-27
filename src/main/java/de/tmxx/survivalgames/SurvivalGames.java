@@ -6,6 +6,7 @@ import de.tmxx.survivalgames.config.SpawnPosition;
 import de.tmxx.survivalgames.game.GameHandler;
 import de.tmxx.survivalgames.module.config.ConfigModule;
 import de.tmxx.survivalgames.module.game.GameModule;
+import de.tmxx.survivalgames.module.stats.StatsModule;
 import lombok.Getter;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -30,7 +31,8 @@ public class SurvivalGames extends JavaPlugin {
 
         injector = Guice.createInjector(
                 new ConfigModule(this),
-                new GameModule(this)
+                new GameModule(this),
+                new StatsModule()
         );
 
         gameHandler = injector.getInstance(GameHandler.class);

@@ -28,6 +28,7 @@ dependencies {
 
     // database
     compileOnly("org.apache.commons:commons-dbcp2:2.13.0")
+    compileOnly("com.mysql:mysql-connector-j:9.2.0")
 
     // io utils
     compileOnly("commons-io:commons-io:2.18.0")

@@ -1,4 +1,4 @@
-package de.tmxx.survivalgames.database;
+package de.tmxx.survivalgames.stats.database;
 
 import org.jetbrains.annotations.Nullable;
 

@@ -1,4 +1,4 @@
-package de.tmxx.survivalgames.database;
+package de.tmxx.survivalgames.stats.database;
 
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
@@ -23,6 +23,8 @@ import java.util.List;
 @Getter
 public class Result {
     private final List<Row> rows = new ArrayList<>();
+
+    private Result() {}
 
     /**
      * Adds a row to the data set.
@@ -62,5 +64,14 @@ public class Result {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * Returns an empty result.
+     *
+     * @return empty result
+     */
+    public static @NotNull Result empty() {
+        return new Result();
     }
 }

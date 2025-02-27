@@ -1,7 +1,11 @@
-package de.tmxx.survivalgames.database;
+package de.tmxx.survivalgames.stats.database.impl;
 
+import com.google.inject.Inject;
+import de.tmxx.survivalgames.module.game.PluginLogger;
+import de.tmxx.survivalgames.stats.database.Database;
+import de.tmxx.survivalgames.stats.database.Result;
+import de.tmxx.survivalgames.stats.database.util.DatabaseCredentials;
 import org.apache.commons.dbcp2.BasicDataSource;
-import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.Connection;
@@ -10,6 +14,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Project: survivalgames
@@ -22,31 +28,20 @@ import java.util.concurrent.CopyOnWriteArraySet;
  * @author timmauersberger
  * @version 1.0
  */
-public class MariaDB implements Database {
-    private static final String DRIVER_CLASS = "org.mariadb.jdbc.Driver";
-    private static final String CONNECTION_URL = "jdbc:mariadb://%s:%d/%s";
+public class MySQLDatabase implements Database {
+    private static final String DRIVER_CLASS = "com.mysql.cj.jdbc.Driver";
+    private static final String CONNECTION_URL = "jdbc:mysql://%s:%d/%s";
 
     private BasicDataSource dataSource;
     private final Set<Connection> connections = new CopyOnWriteArraySet<>();
 
-    private final String host;
-    private final int port;
-    private final String database;
-    private final String user;
-    private final String password;
+    private final Logger logger;
+    private final DatabaseCredentials credentials;
 
-    /**
-     * Creates a new mariadb instance using the specified {@link ConfigurationSection} to retrieve the connection
-     * details and authentication credentials from.
-     *
-     * @param section the config section
-     */
-    public MariaDB(ConfigurationSection section) {
-        host = section.getString("host");
-        port = section.getInt("port");
-        database = section.getString("database");
-        user = section.getString("user");
-        password = section.getString("password");
+    @Inject
+    MySQLDatabase(@PluginLogger Logger logger, DatabaseCredentials credentials) {
+        this.logger = logger;
+        this.credentials = credentials;
     }
 
     /**
@@ -56,9 +51,11 @@ public class MariaDB implements Database {
     public void connect() {
         dataSource = new BasicDataSource();
         dataSource.setDriverClassName(DRIVER_CLASS);
-        dataSource.setUrl(CONNECTION_URL.formatted(host, port, database));
-        dataSource.setUsername(user);
-        dataSource.setPassword(password);
+        dataSource.setUrl(CONNECTION_URL.formatted(credentials.host(), credentials.port(), credentials.database()));
+        dataSource.setUsername(credentials.username());
+        dataSource.setPassword(credentials.password());
+
+        logger.info("[Database] Ready to open connections");
     }
 
     /**
@@ -66,6 +63,7 @@ public class MariaDB implements Database {
      */
     @Override
     public void disconnect() {
+        logger.info("[Database] Closing all database connections...");
         if (connections.isEmpty()) return;
 
         connections.forEach(connection -> {
@@ -86,8 +84,10 @@ public class MariaDB implements Database {
             connections.add(connection);
             return connection;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logger.log(Level.WARNING, "Error while opening connection", e);
         }
+
+        return null;
     }
 
     /**
@@ -101,7 +101,7 @@ public class MariaDB implements Database {
             connection.close();
             connections.remove(connection);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logger.log(Level.WARNING, "Error while closing connection", e);
         }
     }
 
@@ -123,7 +123,7 @@ public class MariaDB implements Database {
                 while (generatedKeys.next()) generatedKey = generatedKeys.getLong(1);
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logger.log(Level.WARNING, "Error while executing update", e);
         }
 
         return generatedKey;
@@ -151,18 +151,16 @@ public class MariaDB implements Database {
      */
     @Override
     public @NotNull Result query(Connection connection, String sql, Object... args) {
-        Result result;
-
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             for (int i = 0; i < args.length; i++) {
                 statement.setObject(i + 1, args[i]);
             }
-            result = Result.from(statement.executeQuery());
+            return Result.from(statement.executeQuery());
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            logger.log(Level.WARNING, "Error while executing query", e);
         }
 
-        return result;
+        return Result.empty();
     }
 
     /**
@@ -170,10 +168,10 @@ public class MariaDB implements Database {
      */
     @Override
     public @NotNull Result query(String query, Object... args) {
-        if (dataSource == null) return new Result();
+        if (dataSource == null) return Result.empty();
 
         Connection connection = getConnection();
-        if (connection == null) return new Result();
+        if (connection == null) return Result.empty();
         try {
             return query(connection, query, args);
         } finally {
