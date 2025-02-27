@@ -62,6 +62,6 @@ public class DoneCommand implements Command {
      */
     @Override
     public @Nullable String permission() {
-        return "survivalgames.command.done";
+        return "survivalgames.setup";
     }
 }

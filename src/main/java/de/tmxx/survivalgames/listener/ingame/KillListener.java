@@ -25,7 +25,6 @@ import org.bukkit.event.player.PlayerQuitEvent;
 public class KillListener implements Listener {
     private final FileConfiguration config;
     private final UserRegistry registry;
-    private final UserPreparer preparer;
     private final UserBroadcaster broadcaster;
     private final Game game;
 
@@ -33,13 +32,11 @@ public class KillListener implements Listener {
     KillListener(
             @MainConfig FileConfiguration config,
             UserRegistry registry,
-            UserPreparer preparer,
             UserBroadcaster broadcaster,
             Game game
     ) {
         this.config = config;
         this.registry = registry;
-        this.preparer = preparer;
         this.broadcaster = broadcaster;
         this.game = game;
     }
@@ -77,10 +74,9 @@ public class KillListener implements Listener {
             deadPlayer.getWorld().strikeLightningEffect(deadPlayer.getLocation());
         }
 
-        preparer.prepareUserForSpectator(dead);
+        dead.setSpectator();
 
-        User killer = null;
-        if (deadPlayer.getKiller() != null) killer = registry.getUser(deadPlayer.getKiller());
+        User killer = dead.getKiller();
 
         // announce the death of a player
         if (killer == null) {

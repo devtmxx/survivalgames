@@ -8,6 +8,7 @@ import de.tmxx.survivalgames.module.config.DefaultLocale;
 import de.tmxx.survivalgames.module.config.LocalesDirectory;
 import de.tmxx.survivalgames.module.config.SupportedLocales;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -65,7 +66,11 @@ public class I18nImpl implements I18n {
     }
 
     public List<Component> translateList(MiniMessage miniMessage, Locale locale, String key, Object... args) {
-        return Arrays.stream(translateRaw(locale, key, args).split(MESSAGE_SPLIT)).map(miniMessage::deserialize).toList();
+        // lists are used for item lores and as item names/lores will - for whatever reason - be automatically formatted
+        // italic, we explicitly remove that decoration for lists.
+        return Arrays.stream(translateRaw(locale, key, args).split(MESSAGE_SPLIT))
+                .map(value -> miniMessage.deserialize(value).decoration(TextDecoration.ITALIC, false))
+                .toList();
     }
 
     public String translateRaw(String key, Object... args) {

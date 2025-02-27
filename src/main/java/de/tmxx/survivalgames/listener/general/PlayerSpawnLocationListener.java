@@ -1,7 +1,7 @@
 package de.tmxx.survivalgames.listener.general;
 
 import com.google.inject.Inject;
-import de.tmxx.survivalgames.game.Game;
+import de.tmxx.survivalgames.game.GamePhaseChanger;
 import de.tmxx.survivalgames.game.phase.GamePhase;
 import de.tmxx.survivalgames.listener.RegisterAlways;
 import org.bukkit.Location;
@@ -19,11 +19,11 @@ import org.spigotmc.event.player.PlayerSpawnLocationEvent;
  */
 @RegisterAlways
 public class PlayerSpawnLocationListener implements Listener {
-    private final Game game;
+    private final GamePhaseChanger gamePhaseChanger;
 
     @Inject
-    PlayerSpawnLocationListener(Game game) {
-        this.game = game;
+    PlayerSpawnLocationListener(GamePhaseChanger gamePhaseChanger) {
+        this.gamePhaseChanger = gamePhaseChanger;
     }
 
     @EventHandler
@@ -41,7 +41,7 @@ public class PlayerSpawnLocationListener implements Listener {
     }
 
     private Location getSpawnLocation() {
-        GamePhase phase = game.currentPhase();
+        GamePhase phase = gamePhaseChanger.currentPhase();
         if (phase == null) return null;
         return phase.spawnLocation();
     }

@@ -16,10 +16,11 @@ public interface Map {
     String getId();
     void loadWorld();
     boolean isUsable();
-    @Nullable Location getSpawnPosition(int index);
+    @Nullable Location getNextSpawn();
     boolean addSpawnPosition(Location location);
     int amountOfSpawns();
     boolean setSpectatorSpawn(Location location);
+    Location getSpectatorSpawn();
     void setName(String name);
     String getName();
     void setWorld(String world);

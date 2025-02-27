@@ -29,7 +29,7 @@ public class ChestListener implements Listener {
         this.filler = filler;
     }
 
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = false)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onChestOpen(PlayerInteractEvent event) {
         // ignore all interactions where players do not right-click a block
         if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) return;
@@ -42,5 +42,7 @@ public class ChestListener implements Listener {
 
         Inventory inventory = filler.fill(chest);
         event.getPlayer().openInventory(inventory);
+
+        event.setCancelled(true);
     }
 }

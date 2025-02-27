@@ -1,6 +1,7 @@
 package de.tmxx.survivalgames.game;
 
 import de.tmxx.survivalgames.game.phase.GamePhase;
+import de.tmxx.survivalgames.user.User;
 
 /**
  * Project: survivalgames
@@ -16,10 +17,11 @@ public interface Game {
     void startTimer();
     void stopTimer();
     void resetTimer();
+    void setTimer(int seconds);
     boolean isCounting();
     int secondsLeft();
     int secondsElapsed();
-    GamePhase currentPhase();
-    void changeGamePhase(GamePhase nextPhase);
     void checkEnd();
+    void forceStart(User user);
+    User winner();
 }

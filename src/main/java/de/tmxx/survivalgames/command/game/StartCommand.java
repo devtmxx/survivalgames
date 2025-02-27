@@ -1,10 +1,11 @@
-package de.tmxx.survivalgames.command.setup;
+package de.tmxx.survivalgames.command.game;
 
 import com.google.inject.Inject;
 import de.tmxx.survivalgames.command.Command;
-import de.tmxx.survivalgames.command.Setup;
-import de.tmxx.survivalgames.map.Map;
-import de.tmxx.survivalgames.map.MapManager;
+import de.tmxx.survivalgames.game.Game;
+import de.tmxx.survivalgames.game.GamePhaseChanger;
+import de.tmxx.survivalgames.game.phase.GamePhase;
+import de.tmxx.survivalgames.module.game.phase.Lobby;
 import de.tmxx.survivalgames.user.User;
 import de.tmxx.survivalgames.user.UserRegistry;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
@@ -14,24 +15,24 @@ import static de.tmxx.survivalgames.command.util.CommandSnippets.*;
 
 /**
  * Project: survivalgames
- * 11.02.2025
- *
- * <p>
- *     Sets the display name of a map.
- * </p>
+ * 19.02.2025
  *
  * @author timmauersberger
  * @version 1.0
  */
-@Setup
-public class SetNameCommand implements Command {
+@de.tmxx.survivalgames.command.Game
+public class StartCommand implements Command {
     private final UserRegistry registry;
-    private final MapManager mapManager;
+    private final Game game;
+    private final GamePhaseChanger gamePhaseChanger;
+    private final GamePhase lobbyPhase;
 
     @Inject
-    SetNameCommand(UserRegistry registry, MapManager mapManager) {
+    StartCommand(UserRegistry registry, Game game, GamePhaseChanger gamePhaseChanger, @Lobby GamePhase lobbyPhase) {
         this.registry = registry;
-        this.mapManager = mapManager;
+        this.game = game;
+        this.gamePhaseChanger = gamePhaseChanger;
+        this.lobbyPhase = lobbyPhase;
     }
 
     /**
@@ -39,7 +40,7 @@ public class SetNameCommand implements Command {
      */
     @Override
     public String name() {
-        return "setname";
+        return "start";
     }
 
     /**
@@ -50,18 +51,12 @@ public class SetNameCommand implements Command {
         User user = getUser(source, registry);
         if (user == null) return;
 
-        if (args.length < 2) {
-            user.sendMessage("command.setname.help");
+        if (!lobbyPhase.equals(gamePhaseChanger.currentPhase())) {
+            user.sendMessage("command.start.only-lobby");
             return;
         }
 
-        String id = args[0];
-        Map map = getMap(mapManager, id, user);
-        if (map == null) return;
-
-        String name = sumArgs(1, args);
-        map.setName(name);
-        user.sendMessage("command.setname.success", id, name);
+        game.forceStart(user);
     }
 
     /**
@@ -69,6 +64,6 @@ public class SetNameCommand implements Command {
      */
     @Override
     public @Nullable String permission() {
-        return "survivalgames.setup";
+        return "survivalgames.command.start";
     }
 }

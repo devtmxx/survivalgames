@@ -6,6 +6,7 @@ import de.tmxx.survivalgames.module.game.phase.Ending;
 import de.tmxx.survivalgames.module.game.phase.InGame;
 import de.tmxx.survivalgames.module.game.phase.Starting;
 import de.tmxx.survivalgames.user.User;
+import de.tmxx.survivalgames.user.UserPreparer;
 import de.tmxx.survivalgames.user.UserRegistry;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,6 +16,8 @@ import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 
 /**
  * Project: survivalgames
@@ -29,10 +32,12 @@ import org.bukkit.event.player.PlayerInteractEvent;
 @Ending
 public class SpectatorListener implements Listener {
     private final UserRegistry registry;
+    private final UserPreparer preparer;
 
     @Inject
-    SpectatorListener(UserRegistry registry) {
+    SpectatorListener(UserRegistry registry, UserPreparer preparer) {
         this.registry = registry;
+        this.preparer = preparer;
     }
 
     @EventHandler
@@ -84,5 +89,23 @@ public class SpectatorListener implements Listener {
 
         // spectators are not allowed to interact with the environment
         event.setCancelled(user.isSpectator());
+    }
+
+    @EventHandler
+    public void onPlayerRespawn(PlayerRespawnEvent event) {
+        User user = registry.getUser(event.getPlayer());
+        if (user == null) return;
+
+        // prepare the user to be a spectator
+        preparer.prepareUserForSpectator(user);
+    }
+
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        User user = registry.getUser(event.getPlayer());
+        if (user == null) return;
+
+        // prepare the user to be a spectator
+        preparer.prepareUserForSpectator(user);
     }
 }

@@ -19,9 +19,13 @@ public interface User {
     String getName();
     UUID getUniqueId();
     UserState getState();
+    void setSpectator();
     void sendMessage(String key, Object... args);
     Component translate(String key, Object... args);
     List<Component> translateList(String key, Object... args);
     boolean isSpectator();
     void vote(Map map);
+    void setDamager(User damager);
+    User getKiller();
+    void showForAllPlayers();
 }

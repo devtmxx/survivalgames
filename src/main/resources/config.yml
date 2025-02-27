@@ -62,6 +62,13 @@ players:
   # to the minimum player amount.
   max: 24
 
+# The priority kick behavior decides which player gets kicked from the server if the server is full and a prioritized
+# player joins the server (players with the "survivalgames.priority" permission).
+# RANDOM - kicks a random non-prioritized player
+# FIRST - orders non-prioritized players by their join order and kicks the oldest one
+# LAST - orders non-prioritized players by their join order and kicks the newest one
+priority-kick-behavior: 'RANDOM'
+
 # Configures the timers in each game state.
 timers:
 
@@ -113,6 +120,9 @@ blocks:
 # Whether placed tnt blocks should automatically be replaced with primed tnt.
 auto-ignite-tnt: true
 
+# Whether compasses should target the nearest player.
+compass-target-finder: true
+
 # A list of entities allowed to spawn during the in game phases.
 allowed-entities:
   - 'SHEEP'
@@ -126,6 +136,14 @@ lightning-on-kill: true
 chest:
   # The amount of slots of a chest should have. This amount should always be divisible by 9.
   inventory-size: 27
+
+  # If the chests should refill after a specified time.
+  refill: true
+
+  # The time after chests should refill. This has no effect if the refill option is disabled, as well as if the in-game
+  # time is less than the refill time.
+  refill-time: 600
+
   items:
 
     # The minimum amount of items per chest.
@@ -133,6 +151,18 @@ chest:
 
     # The maximum amount of items per chest.
     max: 5
+
+# The death match settings
+death-match:
+
+  # If the in game time should be shortened if there are only a few players left.
+  shorten-in-game-time: true
+
+  # The amount of players left to shorten the in game time
+  shorten-players: 2
+
+  # The time in seconds to which the in game time should be shortened to
+  shorten-time: 30
 
 # A list of possible tiers used to populate items in chests. The plugin checks the first item in the top left of the
 # inventory to determine its tier. If there is no item placed in the chests inventory or there is no tier found for the
@@ -142,10 +172,13 @@ tiers:
   IRON: 1
   GOLD: 2
 
-
 ################################
 ##
 ## The following values were generated in-game.
 ## Do not touch them if you don't know exactly what you are doing.
 ##
 ################################
+
+# This is only a dummy value. This is not used in the game and is just there to force bukkit to generate in-game created
+# values (such as the lobby spawn) below this value.
+dummy: true

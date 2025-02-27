@@ -8,8 +8,9 @@ command:
     error: '%prefix% <red>A map with id {0} already exists.'
     success: '%prefix% Created a map with id <green>{0}<white>.'
   addspawn:
-    help: '%prefix% Use <yellow>/addspawn <map id><white>.'
+    help: '%prefix% Use <yellow>/addspawn <map id | deathmatch><white>.'
     success: '%prefix% You set spawn <green>#{1} <white>for map <green>{0}<white>.'
+    deathmatch: '%prefix% You added a <green>death match spawn <white>.'
   setname:
     help: '%prefix% Use <yellow>/setname <map id> <map name><white>.'
     success: '%prefix% Set <green>{1} <white>as the name of map <green>{0}<white>.'
@@ -23,13 +24,18 @@ command:
       yes: '%prefix% This map is <green>ready <white>to be used.'
       no: '%prefix% This map is <red>not <white>ready to be used.'
   setspectator:
-    help: '%prefix% Use <yellow>/setspectator <map id><white>.'
+    help: '%prefix% Use <yellow>/setspectator <map id | deathmatch><white>.'
     success: '%prefix% Set the <green>spectator spawn <white>for map <green>{0}<white>.'
+    deathmatch: '%prefix% Set the <green>spectator spawn <white>for the <red>death match<white>.'
   done:
     restart: '%prefix% Done setting up the game. Restarting in <yellow>10 seconds<white>...'
+  adddeathmatchspawn:
+    success: '%prefix% You added a <green>death match spawn <white>.'
   common:
     map-not-found: '%prefix% <red>There is no known map with id {0}.'
     wrong-world: '%prefix% <red>Positions for a map should be in the same world.'
+  start:
+    only-lobby: '%prefix% The game can <red>only <white>be started during lobby phase.'
 
 join: '<gray>> <yellow>{0} <white>joined <gray>(<gold>{1}<white>/<gold>{2}<gray>)'
 quit: '<gray>< <yellow>{0} <white>quit'
@@ -39,16 +45,17 @@ kick:
   full-priority: '<red>The server is already full of prioritized players.'
   error: '<red>An error occurred. Please try again later.'
   priority: '<red>You were thrown of the server to make space for a prioritized player.'
+  no-spawn: '<red>Could not find a spawn for you.<newline><red>Please contact the server operator about this problem.'
 
 timers:
   lobby:
     action-bar:
-      single: '<yellow>The game starts in <gold>{0} second'
-      multiple: '<yellow>The game starts in <gold>{0} seconds'
+      single: '<yellow>The game begins in <gold>one second'
+      multiple: '<yellow>The game begins in <gold>{0} seconds'
       waiting: '<yellow>Waiting for more players...'
     chat:
-      single: '%prefix% The game starts in <gold>{0} second<white>.'
-      multiple: '%prefix% The game starts in <gold>{0} seconds<white>.'
+      single: '%prefix% The game begins in <gold>one second<white>.'
+      multiple: '%prefix% The game begins in <gold>{0} seconds<white>.'
     title:
       5: '<dark_red><bold>5'
       4: '<red><bold>4'
@@ -56,6 +63,45 @@ timers:
       2: '<yellow><bold>2'
       1: '<green><bold>1'
       0: '<aqua><bold>Go!'
+  starting:
+    chat:
+      single: '%prefix% The game starts in <gold>one second<white>.'
+      multiple: '%prefix% The game starts in <gold>{0} seconds<white>.'
+  in-game:
+    chat:
+      start: '%prefix% The game has <green>started<white>!'
+      minutes:
+        single: '%prefix% <red>Deathmatch <white>begins in <yellow>one minute<white>.'
+        multiple: '%prefix% <red>Deathmatch <white>begins in <yellow>{0} minutes<white>.'
+      seconds:
+        single: '%prefix% <red>Deathmatch <white>begins in <yellow>one second<white>.'
+        multiple: '%prefix% <red>Deathmatch <white>begins in <yellow>{0} seconds<white>.'
+  death-match:
+    chat:
+      minutes:
+        single: '%prefix% The <gold>game <white>ends in <yellow>one minute<white>.'
+        multiple: '%prefix% The <gold>game <white>ends in <yellow>{0} minutes<white>.'
+      seconds:
+        single: '%prefix% The <gold>game <white>ends in <yellow>one second<white>.'
+        multiple: '%prefix% The <gold>game <white>ends in <yellow>{0} seconds<white>.'
+  ending:
+    chat:
+      single: '%prefix% The server re-starts in <gold>one second<white>.'
+      multiple: '%prefix% The server re-starts in <gold>{0} seconds<white>.'
+
+start:
+  already-starting: '%prefix% The game is already <green>starting<white>.'
+  unable: '%prefix% The game <red>cannot <white>be started right now.'
+  done: '%prefix% The game has <green>started<white>!'
+
+end:
+  no-winner: '%prefix% The game is a <yellow>draw<white>!'
+  winner: '%prefix% <green><bold>{0} <white>has won the game!'
+
+vote:
+  already-voted: '%prefix% You have already <red>voted<white>.'
+  voted: '%prefix% You have voted for <green>{0}<white>.'
+  done: '%prefix% <red>Map-Voting <white>has ended. <yellow>{0} <white>by <green>{1}<white> won.'
 
 kill:
   other: '%prefix% <red>{0} <white>died.'
@@ -67,6 +113,18 @@ kill:
 compass:
   no-target-found: "%prefix% Couldn't find a player near you."
   new-target: '%prefix% The next player is <green>{0} blocks <white>away.'
+
+chest-refill:
+  timer:
+    minutes:
+      single: '%prefix% The <red>chests <white>will be refilled in <yellow>one minute<white>.'
+      multiple: '%prefix% The <red>chests <white>will be refilled in <yellow>{0} minutes<white>.'
+    seconds:
+      single: '%prefix% The <red>chests <white>will be refilled in <yellow>one second<white>.'
+      multiple: '%prefix% The <red>chests <white>will be refilled in <yellow>{0} seconds<white>.'
+  refilled: '%prefix% Die <red>Kisten <white>wurden neu aufgefüllt.'
+
+death-match-shorten-in-game-time: '%prefix% <red>Deathmatch <white>is starting shortly because there are only a few players alive.'
 
 item:
   vote:
@@ -81,7 +139,7 @@ inventory:
     name: '<yellow>Vote for a map'
     item:
       name: '<yellow>{0}'
-      lore: '<gray>Built by <green>{0}%n<white>{0} <gray>vote(s)'
+      lore: '<gray>Built by <green>{0}%n<white>{1} <gray>vote(s)'
       voted: '%n<yellow>You voted for this map.'
   teleport:
     name: '<red>Teleport to a player'

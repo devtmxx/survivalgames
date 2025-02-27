@@ -5,6 +5,7 @@ import com.google.inject.Singleton;
 import de.tmxx.survivalgames.command.CommandRegistrar;
 import de.tmxx.survivalgames.game.Game;
 import de.tmxx.survivalgames.game.GameHandler;
+import de.tmxx.survivalgames.game.GamePhaseChanger;
 import de.tmxx.survivalgames.game.phase.GamePhase;
 import de.tmxx.survivalgames.listener.ListenerRegistrar;
 import de.tmxx.survivalgames.map.MapManager;
@@ -24,6 +25,7 @@ public class GameHandlerImpl implements GameHandler {
     private final ListenerRegistrar listenerRegistrar;
     private final CommandRegistrar commandRegistrar;
     private final Game game;
+    private final GamePhaseChanger gamePhaseChanger;
     private final GamePhase lobbyPhase;
     private final boolean setup;
 
@@ -33,6 +35,7 @@ public class GameHandlerImpl implements GameHandler {
             ListenerRegistrar listenerRegistrar,
             CommandRegistrar commandRegistrar,
             Game game,
+            GamePhaseChanger gamePhaseChanger,
             @Lobby GamePhase lobbyPhase,
             @Setup boolean setup
     ) {
@@ -40,6 +43,7 @@ public class GameHandlerImpl implements GameHandler {
         this.listenerRegistrar = listenerRegistrar;
         this.commandRegistrar = commandRegistrar;
         this.game = game;
+        this.gamePhaseChanger = gamePhaseChanger;
         this.lobbyPhase = lobbyPhase;
         this.setup = setup;
     }
@@ -53,7 +57,7 @@ public class GameHandlerImpl implements GameHandler {
 
         mapManager.load();
 
-        game.changeGamePhase(lobbyPhase);
+        gamePhaseChanger.changeGamePhase(lobbyPhase);
         game.startGame();
     }
 

@@ -1,6 +1,7 @@
-package de.tmxx.survivalgames.listener.ingame;
+package de.tmxx.survivalgames.listener.feature;
 
 import com.google.inject.Inject;
+import de.tmxx.survivalgames.module.config.MainConfig;
 import de.tmxx.survivalgames.module.game.phase.DeathMatch;
 import de.tmxx.survivalgames.module.game.phase.InGame;
 import de.tmxx.survivalgames.user.User;
@@ -8,6 +9,7 @@ import de.tmxx.survivalgames.user.UserRegistry;
 import de.tmxx.survivalgames.user.UserState;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -23,14 +25,17 @@ import org.bukkit.event.player.PlayerInteractEvent;
 @DeathMatch
 public class CompassListener implements Listener {
     private final UserRegistry registry;
+    private final boolean compassEnabled;
 
     @Inject
-    public CompassListener(UserRegistry registry) {
+    CompassListener(UserRegistry registry, @MainConfig FileConfiguration config) {
         this.registry = registry;
+        compassEnabled = config.getBoolean("compass-target-finder", true);
     }
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
+        if (!compassEnabled) return;
         if (!event.getAction().isRightClick()) return;
 
         User user = registry.getUser(event.getPlayer());
@@ -44,7 +49,8 @@ public class CompassListener implements Listener {
             user.sendMessage("compass.no-target-found");
         } else {
             user.getPlayer().setCompassTarget(targetLocation);
-            user.sendMessage("compass.new-target", user.getPlayer().getLocation().distance(targetLocation));
+            int distance = (int) user.getPlayer().getLocation().distance(targetLocation);
+            user.sendMessage("compass.new-target", distance);
         }
     }
 

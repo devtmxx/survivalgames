@@ -11,4 +11,5 @@ public interface UserPreparer {
     void prepareUserForLobby(User user);
     void prepareUserForGame(User user);
     void prepareUserForSpectator(User user);
+    void prepareUserForEnding(User user);
 }
