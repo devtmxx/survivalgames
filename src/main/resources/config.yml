@@ -132,6 +132,9 @@ allowed-entities:
 # Whether the world should spawn lightning strikes at a players death location
 lightning-on-kill: true
 
+# Whether the 1.9+ attack cooldown should be disabled
+no-attack-cooldown: true
+
 # The chest configuration section. This affects how chests are filled in game.
 chest:
   # The amount of slots of a chest should have. This amount should always be divisible by 9.

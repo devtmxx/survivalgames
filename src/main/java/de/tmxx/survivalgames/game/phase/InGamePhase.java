@@ -15,6 +15,8 @@ import de.tmxx.survivalgames.user.UserRegistry;
 import de.tmxx.survivalgames.user.UserState;
 import org.bukkit.Location;
 import org.bukkit.Sound;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.configuration.file.FileConfiguration;
 
 /**
@@ -28,6 +30,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 public class InGamePhase implements GamePhase {
     private static final int DEFAULT_COUNTDOWN_SECONDS = 1200; // 20 minutes
     private static final int DEFAULT_REFILL_TIME = 600; // 10 minutes
+    private static final int INSANE_ATTACK_SPEED = 100;
 
     private final Game game;
     private final MapManager mapManager;
@@ -66,6 +69,16 @@ public class InGamePhase implements GamePhase {
     public void start() {
         game.resetTimer();
         listenerRegistrar.registerPhaseSpecific(InGame.class);
+
+        if (config.getBoolean("no-attack-cooldown", true)) {
+            registry.getUsers(UserState.PLAYING).forEach(user -> {
+                AttributeInstance attackSpeed = user.getPlayer().getAttribute(Attribute.ATTACK_SPEED);
+                if (attackSpeed == null) return;
+
+                // used to simulate pre 1.9 cooldown
+                attackSpeed.setBaseValue(INSANE_ATTACK_SPEED);
+            });
+        }
 
         broadcaster.broadcast("timers.in-game.chat.start");
         broadcaster.broadcastSound(Sound.BLOCK_NOTE_BLOCK_PLING, 1F, 2F);

@@ -21,7 +21,7 @@ public class PlayerMoveListener implements Listener {
         // starting countdown
         Location from = event.getFrom();
         Location to = event.getTo();
-        if (from.getBlockX() != to.getBlockX() || from.getBlockY() != to.getBlockY()) {
+        if (from.getBlockX() != to.getBlockX() || from.getBlockZ() != to.getBlockZ()) {
             event.getPlayer().teleport(event.getFrom());
         }
     }
