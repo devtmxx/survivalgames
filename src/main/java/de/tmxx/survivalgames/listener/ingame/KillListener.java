@@ -90,7 +90,7 @@ public class KillListener implements Listener {
 
         // announce the amount of players left over
         int playersLeft = registry.getUsers(UserState.PLAYING).size();
-        broadcaster.broadcast("kill.players-left." + (playersLeft == 1 ? "single" : "multiple"), playersLeft);
+        if (playersLeft != 1) broadcaster.broadcast("kill.players-left", playersLeft);
 
         // check if the game has ended
         game.checkEnd();

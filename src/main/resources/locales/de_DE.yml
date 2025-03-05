@@ -115,9 +115,7 @@ vote:
 kill:
   other: '%prefix% <red>{0} <white>ist gestorben.'
   by-player: '%prefix% <red>{0} <white>wurde von <green>{1} <white>getötet.'
-  players-left:
-    single: '%prefix% Es ist noch <yellow>{0} Spieler <white>übrig.'
-    multiple: '%prefix% Es sind noch <yellow>{0} Spieler <white>übrig.'
+  players-left: '%prefix% Es sind noch <yellow>{0} Spieler <white>übrig.'
 
 compass:
   no-target-found: '%prefix% Es konnte kein Spieler in deiner Nähe gefunden werden.'
