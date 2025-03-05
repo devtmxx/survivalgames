@@ -111,6 +111,7 @@ end:
 vote:
   already-voted: '%prefix% You have already <red>voted<white>.'
   voted: '%prefix% You have voted for <green>{0}<white>.'
+  unable: '%prefix% <red>Map-Voting <white>has already ended.'
   done: '%prefix% <red>Map-Voting <white>has ended. <yellow>{0} <white>by <green>{1}<white> won.'
 
 kill:

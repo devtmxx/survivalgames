@@ -2,6 +2,7 @@ package de.tmxx.survivalgames.inventory;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import de.tmxx.survivalgames.game.Game;
 import de.tmxx.survivalgames.map.Map;
 import de.tmxx.survivalgames.map.MapManager;
 import de.tmxx.survivalgames.user.User;
@@ -52,6 +53,11 @@ public class VoteInventory implements InventoryGUI, Listener {
 
         Map map = slots.get(event.getRawSlot());
         if (map == null) return;
+
+        if (mapManager.hasVotingEnded()) {
+            user.sendMessage("vote.unable");
+            return;
+        }
 
         user.vote(map);
         event.getWhoClicked().closeInventory();

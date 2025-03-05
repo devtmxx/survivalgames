@@ -12,6 +12,7 @@ import de.tmxx.survivalgames.module.config.MinPlayers;
 import de.tmxx.survivalgames.module.game.phase.Lobby;
 import de.tmxx.survivalgames.module.game.phase.Starting;
 import de.tmxx.survivalgames.user.UserBroadcaster;
+import de.tmxx.survivalgames.user.UserPreparer;
 import de.tmxx.survivalgames.user.UserRegistry;
 import de.tmxx.survivalgames.user.UserState;
 import org.bukkit.*;
@@ -27,6 +28,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 @Singleton
 public class LobbyPhase implements GamePhase {
     private static final int DEFAULT_COUNTDOWN_SECONDS = 60;
+    public static final int VOTING_END_SECONDS = 10;
 
     private final Game game;
     private final UserRegistry registry;
@@ -88,8 +90,11 @@ public class LobbyPhase implements GamePhase {
             // end the map voting 10 seconds before the game starts. this will give the world enough time to load but
             // may cause a small lag when the timer reaches 10 seconds left. we accept the small lag in order to save
             // server resources overall.
-            if (timeLeft <= 10 && !mapManager.hasVotingEnded()) {
+            if (timeLeft <= VOTING_END_SECONDS && !mapManager.hasVotingEnded()) {
                 mapManager.endVoting();
+
+                // remove the voting item from inventories
+                registry.getOnlineUsers().forEach(user -> user.getPlayer().getInventory().setItem(UserPreparer.VOTE_ITEM_SLOT, null));
             }
 
             if (shouldBroadcastTimeLeft(timeLeft)) {

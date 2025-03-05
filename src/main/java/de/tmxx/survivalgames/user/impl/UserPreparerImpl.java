@@ -1,6 +1,8 @@
 package de.tmxx.survivalgames.user.impl;
 
 import com.google.inject.Inject;
+import de.tmxx.survivalgames.game.Game;
+import de.tmxx.survivalgames.game.phase.LobbyPhase;
 import de.tmxx.survivalgames.item.ClickableItem;
 import de.tmxx.survivalgames.module.game.interactable.Teleport;
 import de.tmxx.survivalgames.module.game.interactable.Vote;
@@ -17,13 +19,13 @@ import org.bukkit.entity.Player;
  * @version 1.0
  */
 public class UserPreparerImpl implements UserPreparer {
-    private static final int FIRST_HOTBAR_SLOT = 0;
-
+    private final Game game;
     private final ClickableItem voteItem;
     private final ClickableItem teleportItem;
 
     @Inject
-    UserPreparerImpl(@Vote ClickableItem voteItem, @Teleport ClickableItem teleportItem) {
+    UserPreparerImpl(Game game, @Vote ClickableItem voteItem, @Teleport ClickableItem teleportItem) {
+        this.game = game;
         this.voteItem = voteItem;
         this.teleportItem = teleportItem;
     }
@@ -34,7 +36,9 @@ public class UserPreparerImpl implements UserPreparer {
         resetPlayer(player);
 
         player.setGameMode(GameMode.ADVENTURE);
-        player.getInventory().setItem(FIRST_HOTBAR_SLOT, voteItem.build(player.locale()));
+
+        if (game.secondsLeft() <= LobbyPhase.VOTING_END_SECONDS) return;
+        player.getInventory().setItem(VOTE_ITEM_SLOT, voteItem.build(player.locale()));
     }
 
     @Override
@@ -52,7 +56,7 @@ public class UserPreparerImpl implements UserPreparer {
         player.setGameMode(GameMode.ADVENTURE);
         player.setAllowFlight(true);
         player.setFlying(true);
-        player.getInventory().setItem(FIRST_HOTBAR_SLOT, teleportItem.build(player.locale()));
+        player.getInventory().setItem(TELEPORTER_ITEM_SLOT, teleportItem.build(player.locale()));
     }
 
     @Override
