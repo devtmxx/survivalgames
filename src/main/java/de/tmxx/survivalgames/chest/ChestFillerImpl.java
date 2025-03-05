@@ -86,7 +86,7 @@ public class ChestFillerImpl implements ChestFiller {
         if (stack == null) return tiers.get(defaultTier);
 
         Material material = stack.getType();
-        int tier = mainConfig.getInt("tiers.%s".formatted(material.name()));
+        int tier = mainConfig.getInt("tiers.%s".formatted(material.name()), defaultTier);
         return tiers.get(tier);
     }
 
