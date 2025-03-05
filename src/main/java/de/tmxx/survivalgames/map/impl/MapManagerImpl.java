@@ -60,6 +60,8 @@ public class MapManagerImpl implements MapManager {
         if (files == null) return;
 
         for (File file : files) {
+            if (!file.getName().endsWith(".yml")) continue;
+
             Map map = factory.create(file);
             maps.put(map.getId(), map);
 

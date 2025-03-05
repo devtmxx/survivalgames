@@ -1,18 +1,16 @@
 package de.tmxx.survivalgames.map.impl;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import com.google.inject.assistedinject.Assisted;
 import de.tmxx.survivalgames.config.SpawnPosition;
 import de.tmxx.survivalgames.map.Map;
+import de.tmxx.survivalgames.map.MapLoader;
 import de.tmxx.survivalgames.module.config.MaxPlayers;
-import de.tmxx.survivalgames.module.game.WorldsContainer;
 import de.tmxx.survivalgames.module.game.PluginLogger;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.io.FileUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.WorldCreator;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.Nullable;
@@ -30,11 +28,12 @@ import java.util.logging.Logger;
  * @author timmauersberger
  * @version 1.0
  */
+@Singleton
 public class MapImpl implements Map {
     private final Logger logger;
     private final File configFile;
-    private final File worldsContainer;
     private final int maxPlayers;
+    private final MapLoader loader;
     @Getter private final String id;
 
     // persistent values
@@ -52,13 +51,13 @@ public class MapImpl implements Map {
     @Inject
     MapImpl(
             @PluginLogger Logger logger,
-            @WorldsContainer File worldsContainer,
             @MaxPlayers int maxPlayers,
-            @Assisted File configFile) {
+            @Assisted File configFile,
+            MapLoader loader) {
         this.logger = logger;
         this.configFile = configFile;
-        this.worldsContainer = worldsContainer;
         this.maxPlayers = maxPlayers;
+        this.loader = loader;
 
         id = configFile.getName().substring(0, configFile.getName().lastIndexOf("."));
 
@@ -82,10 +81,7 @@ public class MapImpl implements Map {
             return;
         }
 
-        if (Bukkit.getWorld(world) != null) return;
-
-        copyWorld();
-        Bukkit.createWorld(WorldCreator.name(world));
+        loader.load(world);
     }
 
     public boolean isUsable() {
@@ -152,22 +148,5 @@ public class MapImpl implements Map {
 
     public int getVotes() {
         return votes.size();
-    }
-
-    private void copyWorld() {
-        File worldDirectory = new File(Bukkit.getWorldContainer(), world);
-        if (worldDirectory.exists()) return;
-
-        File source = new File(worldsContainer, world);
-        if (!source.exists()) {
-            logger.warning("Cannot find source for world " + world);
-            return;
-        }
-
-        try {
-            FileUtils.copyDirectory(source, worldDirectory);
-        } catch (IOException e) {
-            logger.log(Level.SEVERE, "Error while copying directory", e);
-        }
     }
 }

@@ -72,6 +72,7 @@ public class GameModule extends AbstractModule {
                 .implement(Map.class, MapImpl.class)
                 .build(MapFactory.class));
 
+        bind(MapLoader.class);
         bind(MapManager.class).to(MapManagerImpl.class);
         bind(UserBroadcaster.class).to(UserBroadcasterImpl.class);
         bind(UserRegistry.class).to(UserRegistryImpl.class);
@@ -113,13 +114,6 @@ public class GameModule extends AbstractModule {
     @MapsDirectory
     File provideMapsDirectory() {
         return new File(plugin.getDataFolder(), "maps");
-    }
-
-    @Provides
-    @WorldsContainer
-    @Singleton
-    File provideWorldsContainer() {
-        return new File(plugin.getConfig().getString("worlds-container", "worlds"));
     }
 
     @Provides
