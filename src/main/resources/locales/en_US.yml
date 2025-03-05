@@ -29,6 +29,13 @@ command:
     deathmatch: '%prefix% Set the <green>spectator spawn <white>for the <red>death match<white>.'
   done:
     restart: '%prefix% Done setting up the game. Restarting in <yellow>10 seconds<white>...'
+  loadworld:
+    help: '%prefix% Use <yellow>/loadworld <name><white>.'
+    success: '%prefix% You will be teleported to world <yellow>{0}<white>.'
+  saveworld:
+    help: '%prefix% Use <yellow>/saveworld <name><white>.'
+    not-found: '%prefix% The world <yellow>{0} <white>does not exist.'
+    success: '%prefix% The world <yellow>{0} <white>has been saved.'
   adddeathmatchspawn:
     success: '%prefix% You added a <green>death match spawn <white>.'
   common:

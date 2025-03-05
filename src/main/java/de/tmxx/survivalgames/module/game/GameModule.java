@@ -73,6 +73,7 @@ public class GameModule extends AbstractModule {
                 .build(MapFactory.class));
 
         bind(MapLoader.class);
+        bind(MapSaver.class);
         bind(MapManager.class).to(MapManagerImpl.class);
         bind(UserBroadcaster.class).to(UserBroadcasterImpl.class);
         bind(UserRegistry.class).to(UserRegistryImpl.class);

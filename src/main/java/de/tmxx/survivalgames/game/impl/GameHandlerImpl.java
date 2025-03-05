@@ -9,12 +9,19 @@ import de.tmxx.survivalgames.game.GamePhaseChanger;
 import de.tmxx.survivalgames.game.phase.GamePhase;
 import de.tmxx.survivalgames.listener.ListenerRegistrar;
 import de.tmxx.survivalgames.map.MapManager;
+import de.tmxx.survivalgames.module.config.MainConfig;
 import de.tmxx.survivalgames.module.config.Setup;
+import de.tmxx.survivalgames.module.game.PluginLogger;
 import de.tmxx.survivalgames.module.game.phase.Lobby;
 import de.tmxx.survivalgames.stats.StatsService;
 import de.tmxx.survivalgames.stats.database.Database;
 import de.tmxx.survivalgames.user.User;
 import de.tmxx.survivalgames.user.UserRegistry;
+import org.bukkit.Bukkit;
+import org.bukkit.WorldCreator;
+import org.bukkit.configuration.file.FileConfiguration;
+
+import java.util.logging.Logger;
 
 /**
  * Project: survivalgames
@@ -35,6 +42,8 @@ public class GameHandlerImpl implements GameHandler {
     private final Database database;
     private final StatsService statsService;
     private final UserRegistry userRegistry;
+    private final FileConfiguration config;
+    private final Logger logger;
 
     @Inject
     GameHandlerImpl(
@@ -47,8 +56,10 @@ public class GameHandlerImpl implements GameHandler {
             @Setup boolean setup,
             Database database,
             StatsService statsService,
-            UserRegistry userRegistry
-    ) {
+            UserRegistry userRegistry,
+            @MainConfig FileConfiguration config,
+            @PluginLogger Logger logger
+            ) {
         this.mapManager = mapManager;
         this.listenerRegistrar = listenerRegistrar;
         this.commandRegistrar = commandRegistrar;
@@ -59,6 +70,8 @@ public class GameHandlerImpl implements GameHandler {
         this.database = database;
         this.statsService = statsService;
         this.userRegistry = userRegistry;
+        this.config = config;
+        this.logger = logger;
     }
 
     @Override
@@ -72,6 +85,7 @@ public class GameHandlerImpl implements GameHandler {
         statsService.prepare();
 
         mapManager.load();
+        loadDeathmatchWorld();
 
         gamePhaseChanger.changeGamePhase(lobbyPhase);
         game.startGame();
@@ -81,5 +95,16 @@ public class GameHandlerImpl implements GameHandler {
     public void shutdown() {
         userRegistry.getOnlineUsers().forEach(User::saveStats);
         game.stopGame();
+    }
+
+    private void loadDeathmatchWorld() {
+        String worldName = config.getString("deathmatch-spectator.world");
+        if (worldName == null) {
+            logger.warning("No deathmatch world specified. The game will abort upon reaching deathmatch.");
+            return;
+        }
+
+        Bukkit.createWorld(WorldCreator.name(worldName));
+        logger.info("Deathmatch world loaded");
     }
 }

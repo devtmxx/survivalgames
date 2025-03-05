@@ -29,6 +29,13 @@ command:
     deathmatch: '%prefix% Du hast den <green>Zuschauer-Spawn <white>für das <red>Deathmatch <white>gesetzt.'
   done:
     restart: '%prefix% Der Setup-Prozess wurde beendet. Der Server startet neu in <yellow>10 Sekunden<white>...'
+  loadworld:
+    help: '%prefix% Nutze <yellow>/loadworld <Name><white>.'
+    success: '%prefix% Du wirst in die Welt <yellow>{0} <white>teleportiert.'
+  saveworld:
+    help: '%prefix% Nutze <yellow>/saveworld <Name><white>.'
+    not-found: '%prefix% Die Welt <yellow>{0} <white>existiert nicht.'
+    success: '%prefix% Die Welt <yellow>{0} <white>wurde gespeichert.'
   common:
     map-not-found: '%prefix% <red>Es existiert keine Map mit der ID {0}.'
     wrong-world: '%prefix% <red>Positionen einer Map sollten in derselben Welt liegen.'

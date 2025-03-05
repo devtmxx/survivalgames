@@ -1,7 +1,6 @@
 package de.tmxx.survivalgames.map.impl;
 
 import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import com.google.inject.assistedinject.Assisted;
 import de.tmxx.survivalgames.config.SpawnPosition;
 import de.tmxx.survivalgames.map.Map;
@@ -28,7 +27,6 @@ import java.util.logging.Logger;
  * @author timmauersberger
  * @version 1.0
  */
-@Singleton
 public class MapImpl implements Map {
     private final Logger logger;
     private final File configFile;
@@ -81,7 +79,7 @@ public class MapImpl implements Map {
             return;
         }
 
-        loader.load(world);
+        loader.load(world, true);
     }
 
     public boolean isUsable() {

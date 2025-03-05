@@ -31,17 +31,21 @@ public class MapLoader {
         this.mapsDirectory = mapsDirectory;
     }
 
-    public World load(String name) {
+    public World load(String name, boolean overwrite) {
         World world = Bukkit.getWorld(name);
         if (world != null) return world;
 
-        copyAndOverwriteWorld(name);
+        copyWorld(name, overwrite);
         return WorldCreator.name(name).createWorld();
     }
 
-    private void copyAndOverwriteWorld(String name) {
+    private void copyWorld(String name, boolean overwrite) {
         File worldDirectory = new File(Bukkit.getWorldContainer(), name);
+        if (worldDirectory.exists() && !overwrite) return;
+
         if (worldDirectory.exists() && !deleteExistingWorld(name)) {
+            if (!overwrite) return;
+
             logger.warning("Could neither delete nor move the old world. Now using a map where has already been played on.");
             return;
         }
