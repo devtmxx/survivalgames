@@ -1,6 +1,162 @@
 tiers:
   0:
-    - material: 'STONE'
+    - material: 'WOODEN_SWORD'
       min: 1
       max: 1
+      weight: 5
+    - material: 'LEATHER_HELMET'
+      min: 1
+      max: 1
+      weight: 5
+    - material: 'LEATHER_CHESTPLATE'
+      min: 1
+      max: 1
+      weight: 5
+    - material: 'LEATHER_LEGGINGS'
+      min: 1
+      max: 1
+      weight: 5
+    - material: 'LEATHER_BOOTS'
+      min: 1
+      max: 1
+      weight: 5
+    - material: 'PORKCHOP'
+      min: 1
+      max: 3
+      weight: 5
+    - material: 'COD'
+      min: 1
+      max: 3
+      weight: 5
+    - material: 'APPLE'
+      min: 1
+      max: 3
+      weight: 5
+    - material: 'ARROW'
+      min: 1
+      max: 5
+      weight: 5
+    - material: 'GOLDEN_HELMET'
+      min: 1
+      max: 1
+      weight: 4
+    - material: 'GOLDEN_CHESTPLATE'
+      min: 1
+      max: 1
+      weight: 4
+    - material: 'GOLDEN_LEGGINGS'
+      min: 1
+      max: 1
+      weight: 4
+    - material: 'GOLDEN_BOOTS'
+      min: 1
+      max: 1
+      weight: 4
+    - material: 'COOKED_PORKCHOP'
+      min: 1
+      max: 3
+      weight: 4
+    - material: 'BOWL'
+      min: 1
+      max: 4
+      weight: 4
+    - material: 'COAL'
+      min: 1
+      max: 4
+      weight: 4
+    - material: 'DIAMOND'
+      min: 1
+      max: 2
+      weight: 4
+    - material: 'IRON_INGOT'
+      min: 1
+      max: 4
+      weight: 4
+    - material: 'COOKED_CHICKEN'
+      min: 1
+      max: 2
+      weight: 4
+    - material: 'ENDER_PEARL'
+      min: 1
+      max: 2
+      weight: 4
+    - material: 'MUSHROOM_STEW'
+      min: 1
+      max: 1
+      weight: 4
+    - material: 'GOLDEN_SWORD'
+      min: 1
+      max: 1
+      weight: 3
+    - material: 'MELON'
+      min: 1
+      max: 4
+      weight: 3
+    - material: 'IRON_HELMET'
+      min: 1
+      max: 1
+      weight: 3
+    - material: 'IRON_CHESTPLATE'
+      min: 1
+      max: 1
+      weight: 3
+    - material: 'IRON_LEGGINGS'
+      min: 1
+      max: 1
+      weight: 3
+    - material: 'IRON_BOOTS'
+      min: 1
+      max: 1
+      weight: 3
+    - material: 'CHAINMAIL_HELMET'
+      min: 1
+      max: 1
+      weight: 3
+    - material: 'CHAINMAIL_CHESTPLATE'
+      min: 1
+      max: 1
+      weight: 3
+    - material: 'CHAINMAIL_LEGGINGS'
+      min: 1
+      max: 1
+      weight: 3
+    - material: 'CHAINMAIL_BOOTS'
+      min: 1
+      max: 1
+      weight: 3
+    - material: 'ENCHANTED_GOLDEN_APPLE'
+      min: 1
+      max: 2
+      weight: 3
+    - material: 'FLINT_AND_STEEL'
+      min: 1
+      max: 1
+      weight: 3
+    - material: 'IRON_SWORD'
+      min: 1
+      max: 1
+      weight: 2
+    - material: 'DIAMOND_SWORD'
+      min: 1
+      max: 1
+      weight: 1
+    - material: 'DIAMOND_HELMET'
+      min: 1
+      max: 1
+      weight: 1
+    - material: 'DIAMOND_CHESTPLATE'
+      min: 1
+      max: 1
+      weight: 1
+    - material: 'DIAMOND_LEGGINGS'
+      min: 1
+      max: 1
+      weight: 1
+    - material: 'DIAMOND_BOOTS'
+      min: 1
+      max: 1
+      weight: 1
+    - material: 'CAKE'
+      min: 1
+      max: 2
       weight: 1
