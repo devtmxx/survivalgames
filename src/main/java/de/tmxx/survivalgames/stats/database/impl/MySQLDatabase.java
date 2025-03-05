@@ -1,6 +1,7 @@
 package de.tmxx.survivalgames.stats.database.impl;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import de.tmxx.survivalgames.module.game.PluginLogger;
 import de.tmxx.survivalgames.stats.database.Database;
 import de.tmxx.survivalgames.stats.database.Result;
@@ -28,9 +29,11 @@ import java.util.logging.Logger;
  * @author timmauersberger
  * @version 1.0
  */
+@Singleton
 public class MySQLDatabase implements Database {
     private static final String DRIVER_CLASS = "com.mysql.cj.jdbc.Driver";
     private static final String CONNECTION_URL = "jdbc:mysql://%s:%d/%s";
+    private static final String TABLE_PREFIX_VARIABLE = "%table_prefix%";
 
     private BasicDataSource dataSource;
     private final Set<Connection> connections = new CopyOnWriteArraySet<>();
@@ -42,6 +45,11 @@ public class MySQLDatabase implements Database {
     MySQLDatabase(@PluginLogger Logger logger, DatabaseCredentials credentials) {
         this.logger = logger;
         this.credentials = credentials;
+    }
+
+    @Override
+    public String replaceTablePrefix(String input) {
+        return input.replaceAll(TABLE_PREFIX_VARIABLE, credentials.tablePrefix());
     }
 
     /**
@@ -110,7 +118,7 @@ public class MySQLDatabase implements Database {
     public long update(Connection connection, String sql, Object... args) {
         long generatedKey = DEFAULT_UPDATE_LONG;
 
-        try (PreparedStatement statement = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement statement = connection.prepareStatement(replaceTablePrefix(sql), PreparedStatement.RETURN_GENERATED_KEYS)) {
             for (int i = 0; i < args.length; i++) {
                 statement.setObject(i + 1, args[i]);
             }
@@ -149,7 +157,7 @@ public class MySQLDatabase implements Database {
      */
     @Override
     public @NotNull Result query(Connection connection, String sql, Object... args) {
-        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (PreparedStatement statement = connection.prepareStatement(replaceTablePrefix(sql))) {
             for (int i = 0; i < args.length; i++) {
                 statement.setObject(i + 1, args[i]);
             }

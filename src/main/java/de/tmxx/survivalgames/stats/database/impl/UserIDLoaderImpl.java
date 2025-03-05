@@ -77,7 +77,7 @@ public class UserIDLoaderImpl implements UserIDLoader {
     }
 
     private int loadUserIdFromDatabase(Connection connection, UUID uniqueId, String name) {
-        Result result = database.query(connection, "SELECT `id`, `name` FROM `users` WHERE `unique_id` = ?", uniqueId.toString());
+        Result result = database.query(connection, "SELECT `id`, `name` FROM `%table_prefix%users` WHERE `unique_id` = ?", uniqueId.toString());
         if (result.getRows().isEmpty()) return -1;
 
         Row row = result.getRows().getFirst();
@@ -91,7 +91,7 @@ public class UserIDLoaderImpl implements UserIDLoader {
     }
 
     private int loadUserIdFromDatabase(String name) {
-        Result result = database.query("SELECT `id` FROM `users` WHERE `name` = ?", name);
+        Result result = database.query("SELECT `id` FROM `%table_prefix%users` WHERE `name` = ?", name);
         if (result.getRows().isEmpty()) return -1;
 
         Row row = result.getRows().getFirst();
@@ -99,13 +99,13 @@ public class UserIDLoaderImpl implements UserIDLoader {
     }
 
     private void updateUserName(Connection connection, int id, String name) {
-        database.update(connection, "UPDATE `users` SET `name` = ? WHERE `id` = ?;", name, id);
+        database.update(connection, "UPDATE `%table_prefix%users` SET `name` = ? WHERE `id` = ?;", name, id);
     }
 
     private int createUser(Connection connection, UUID uniqueId, String name) {
         return (int) database.update(
                 connection,
-                "INSERT INTO `users` (`unique_id`, `name`) VALUES (?, ?);",
+                "INSERT INTO `%table_prefix%users` (`unique_id`, `name`) VALUES (?, ?);",
                 uniqueId.toString(),
                 name
         );

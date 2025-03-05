@@ -42,7 +42,7 @@ command:
   start:
     only-lobby: '%prefix% Das Spiel kann <red>nur <white>in der Lobby-Phase starten.'
   stats:
-    info: '%prefix% Statisiken von <yellow>{0}<reset>:<newline>Kills: <green>{1}<newline>Tode: <green>{2}<newline>K/D: <green>{3}<newline>Gewonnene Spiele: <green>{4}<newline>Gespielte Spiele: <green>{5}<newline>Gewinnwahrscheinlichkeit: <green>{6}'
+    info: '%prefix% Statisiken von <yellow>{0}<reset>:<newline>Kills: <green>{1}<newline><reset>Tode: <green>{2}<newline><reset>K/D: <green>{3}<newline><reset>Gewonnene Spiele: <green>{4}<newline><reset>Gespielte Spiele: <green>{5}<newline><reset>Gewinnwahrscheinlichkeit: <green>{6}%'
     not-found: '%prefix% Der Spieler <red>{0} <white>konnte nicht gefunden werden.'
 
 join: '<gray>> <yellow>{0} <white>ist beigetreten <gray>(<gold>{1}<white>/<gold>{2}<gray>)'

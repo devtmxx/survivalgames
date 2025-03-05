@@ -1,5 +1,6 @@
 package de.tmxx.survivalgames.stats.database;
 
+import de.tmxx.survivalgames.stats.database.util.DatabaseCredentials;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.Connection;
@@ -18,6 +19,8 @@ import java.sql.Connection;
 public interface Database {
     // the default value returned for database updates
     long DEFAULT_UPDATE_LONG = -1;
+
+    String replaceTablePrefix(String input);
 
     /**
      * Connects to the underlying database.

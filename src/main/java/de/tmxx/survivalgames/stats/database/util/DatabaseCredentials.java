@@ -10,9 +10,9 @@ import org.jetbrains.annotations.Nullable;
  * @author timmauersberger
  * @version 1.0
  */
-public record DatabaseCredentials(String host, int port, String database, String username, String password) {
+public record DatabaseCredentials(String host, int port, String database, String username, String password, String tablePrefix) {
     public static DatabaseCredentials standard() {
-        return new DatabaseCredentials("localhost", 3306, "survivalgames", "survivalgames", "password");
+        return new DatabaseCredentials("localhost", 3306, "survivalgames", "survivalgames", "password", "survivalgames_");
     }
 
     public static DatabaseCredentials fromConfig(@Nullable ConfigurationSection section) {
@@ -24,7 +24,8 @@ public record DatabaseCredentials(String host, int port, String database, String
                 section.getInt("port", standard.port()),
                 section.getString("database", standard.database()),
                 section.getString("user", standard.username()),
-                section.getString("password", standard.password())
+                section.getString("password", standard.password()),
+                section.getString("table-prefix", standard.tablePrefix())
         );
     }
 }

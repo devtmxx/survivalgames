@@ -8,6 +8,8 @@ import de.tmxx.survivalgames.stats.StatsService;
 import de.tmxx.survivalgames.user.User;
 import de.tmxx.survivalgames.user.UserRegistry;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.text.NumberFormat;
 
@@ -22,11 +24,13 @@ import static de.tmxx.survivalgames.command.util.CommandSnippets.*;
  */
 @de.tmxx.survivalgames.command.Game
 public class StatsCommand implements Command {
+    private final JavaPlugin plugin;
     private final UserRegistry registry;
     private final StatsService statsService;
 
     @Inject
-    StatsCommand(UserRegistry registry, StatsService statsService) {
+    StatsCommand(JavaPlugin plugin, UserRegistry registry, StatsService statsService) {
+        this.plugin = plugin;
         this.registry = registry;
         this.statsService = statsService;
     }
@@ -44,14 +48,16 @@ public class StatsCommand implements Command {
         if (args.length == 0) {
             user.retrieveStats(stats -> showStats(user, user.getName(), stats));
         } else {
-            String name = args[0];
-            Stats stats = statsService.loadStats(name);
-            if (stats == null) {
-                user.sendMessage("command.stats.not-found", name);
-                return;
-            }
+            Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+                String name = args[0];
+                Stats stats = statsService.loadStats(name);
+                if (stats == null) {
+                    user.sendMessage("command.stats.not-found", name);
+                    return;
+                }
 
-            showStats(user, name, stats);
+                showStats(user, name, stats);
+            });
         }
     }
 
@@ -61,13 +67,13 @@ public class StatsCommand implements Command {
         int wins = stats.get(StatsKey.WINS);
         int gamesPlayed = stats.get(StatsKey.GAMES_PLAYED);
         float killDeathRation = calculateRatio(kills, deaths);
-        float winChance = calculateRatio(wins, gamesPlayed);
+        float winChance = calculateRatio(wins, gamesPlayed) * 100;
 
         NumberFormat format = NumberFormat.getInstance();
         format.setMaximumFractionDigits(2);
 
         user.sendMessage(
-                "command.stats",
+                "command.stats.info",
                 playerName,
                 kills,
                 deaths,
