@@ -1,10 +1,12 @@
 package de.tmxx.survivalgames.user.impl;
 
 import com.google.inject.Inject;
+import de.tmxx.survivalgames.module.config.MainConfig;
 import de.tmxx.survivalgames.user.UserBroadcaster;
 import de.tmxx.survivalgames.user.UserRegistry;
 import net.kyori.adventure.title.Title;
 import org.bukkit.Sound;
+import org.bukkit.configuration.file.FileConfiguration;
 
 import java.time.Duration;
 
@@ -17,10 +19,12 @@ import java.time.Duration;
  */
 public class UserBroadcasterImpl implements UserBroadcaster {
     private final UserRegistry registry;
+    private final boolean scoreboardEnabled;
 
     @Inject
-    UserBroadcasterImpl(UserRegistry registry) {
+    UserBroadcasterImpl(UserRegistry registry, @MainConfig FileConfiguration config) {
         this.registry = registry;
+        scoreboardEnabled = config.getBoolean("scoreboard.enabled", true);
     }
 
     public void broadcast(String key, Object... args) {
@@ -50,16 +54,19 @@ public class UserBroadcasterImpl implements UserBroadcaster {
 
     @Override
     public void broadcastScoreboardSetup() {
+        if (!scoreboardEnabled) return;
         registry.getOnlineUsers().forEach(user -> user.getScoreboard().setup());
     }
 
     @Override
     public void broadcastScoreboardUpdate() {
+        if (!scoreboardEnabled) return;
         registry.getOnlineUsers().forEach(user -> user.getScoreboard().update());
     }
 
     @Override
     public void broadcastScoreboardReset() {
+        if (!scoreboardEnabled) return;
         registry.getOnlineUsers().forEach(user -> user.getScoreboard().reset());
     }
 }

@@ -2,13 +2,13 @@ package de.tmxx.survivalgames.listener.general;
 
 import com.google.inject.Inject;
 import de.tmxx.survivalgames.listener.RegisterAlways;
+import de.tmxx.survivalgames.module.config.MainConfig;
 import de.tmxx.survivalgames.scoreboard.GameScoreboard;
 import de.tmxx.survivalgames.scoreboard.ScoreboardFactory;
-import de.tmxx.survivalgames.stats.StatsService;
 import de.tmxx.survivalgames.user.User;
 import de.tmxx.survivalgames.user.UserFactory;
 import de.tmxx.survivalgames.user.UserRegistry;
-import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -28,12 +28,19 @@ public class UserListener implements Listener {
     private final UserRegistry registry;
     private final UserFactory factory;
     private final ScoreboardFactory scoreboardFactory;
+    private final boolean scoreboardEnabled;
 
     @Inject
-    UserListener(UserRegistry registry, UserFactory factory, ScoreboardFactory scoreboardFactory) {
+    UserListener(
+            UserRegistry registry,
+            UserFactory factory,
+            @MainConfig FileConfiguration config,
+            ScoreboardFactory scoreboardFactory
+    ) {
         this.registry = registry;
         this.factory = factory;
         this.scoreboardFactory = scoreboardFactory;
+        scoreboardEnabled = config.getBoolean("scoreboard.enabled", true);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -56,9 +63,11 @@ public class UserListener implements Listener {
         User user = registry.getUser(event.getPlayer());
         if (user == null) return;
 
-        GameScoreboard scoreboard = scoreboardFactory.createScoreboard(user);
-        scoreboard.setup();
-        user.setScoreboard(scoreboard);
+        if (scoreboardEnabled) {
+            GameScoreboard scoreboard = scoreboardFactory.createScoreboard(user);
+            scoreboard.setup();
+            user.setScoreboard(scoreboard);
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
