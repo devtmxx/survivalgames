@@ -47,4 +47,19 @@ public class UserBroadcasterImpl implements UserBroadcaster {
                 ))
         ));
     }
+
+    @Override
+    public void broadcastScoreboardSetup() {
+        registry.getOnlineUsers().forEach(user -> user.getScoreboard().setup());
+    }
+
+    @Override
+    public void broadcastScoreboardUpdate() {
+        registry.getOnlineUsers().forEach(user -> user.getScoreboard().update());
+    }
+
+    @Override
+    public void broadcastScoreboardReset() {
+        registry.getOnlineUsers().forEach(user -> user.getScoreboard().reset());
+    }
 }

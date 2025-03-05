@@ -19,6 +19,8 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.configuration.file.FileConfiguration;
 
+import java.util.List;
+
 /**
  * Project: survivalgames
  * 16.02.25
@@ -69,6 +71,7 @@ public class InGamePhase implements GamePhase {
     public void start() {
         game.resetTimer();
         listenerRegistrar.registerPhaseSpecific(InGame.class);
+        broadcaster.broadcastScoreboardSetup();
 
         if (config.getBoolean("no-attack-cooldown", true)) {
             registry.getUsers(UserState.PLAYING).forEach(user -> {
@@ -88,6 +91,8 @@ public class InGamePhase implements GamePhase {
     public void tick() {
         if (!game.isCounting()) return;
 
+        broadcaster.broadcastScoreboardUpdate();
+
         tryChestRefill();
         tryShortenInGameTime();
         tryBroadcast();
@@ -95,6 +100,7 @@ public class InGamePhase implements GamePhase {
 
     @Override
     public void end() {
+        broadcaster.broadcastScoreboardReset();
         listenerRegistrar.unregisterPhaseSpecific(InGame.class);
     }
 
@@ -111,6 +117,11 @@ public class InGamePhase implements GamePhase {
     @Override
     public void nextPhase() {
         gamePhaseChanger.changeGamePhase(nextPhase);
+    }
+
+    @Override
+    public List<String> scoreboardScores() {
+        return config.getStringList("scoreboard.in-game");
     }
 
     private void tryBroadcast() {

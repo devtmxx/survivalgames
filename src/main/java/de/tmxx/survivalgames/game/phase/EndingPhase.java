@@ -17,6 +17,8 @@ import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
+import java.util.List;
+
 /**
  * Project: survivalgames
  * 16.02.25
@@ -56,6 +58,7 @@ public class EndingPhase implements GamePhase {
     public void start() {
         game.resetTimer();
         listenerRegistrar.registerPhaseSpecific(Ending.class);
+        broadcaster.broadcastScoreboardSetup();
 
         Location spawnLocation = spawnLocation();
         registry.getOnlineUsers().forEach(user -> {
@@ -83,7 +86,9 @@ public class EndingPhase implements GamePhase {
     }
 
     @Override
-    public void end() {}
+    public void end() {
+        broadcaster.broadcastScoreboardReset();
+    }
 
     @Override
     public int countdownSeconds() {
@@ -102,5 +107,10 @@ public class EndingPhase implements GamePhase {
     @Override
     public void nextPhase() {
         Bukkit.shutdown();
+    }
+
+    @Override
+    public List<String> scoreboardScores() {
+        return config.getStringList("scoreboard.ending");
     }
 }

@@ -14,4 +14,7 @@ public interface UserBroadcaster {
     void broadcastActionBar(String key, Object... args);
     void broadcastSound(Sound sound, float volume, float pitch);
     void broadcastTitle(String title, String subtitle, int fadeIn, int stay, int fadeOut);
+    void broadcastScoreboardSetup();
+    void broadcastScoreboardUpdate();
+    void broadcastScoreboardReset();
 }

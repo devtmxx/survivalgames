@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 import de.tmxx.survivalgames.i18n.I18n;
 import de.tmxx.survivalgames.map.Map;
+import de.tmxx.survivalgames.scoreboard.GameScoreboard;
 import de.tmxx.survivalgames.stats.Stats;
 import de.tmxx.survivalgames.stats.StatsService;
 import de.tmxx.survivalgames.user.User;
@@ -41,6 +42,7 @@ public class UserImpl implements User {
 
     @Getter @Setter private UserState state = UserState.PLAYING;
     private boolean hasVoted = false;
+    private GameScoreboard scoreboard = null;
 
     @Getter private Stats stats = null;
     private final Lock lock = new ReentrantLock();
@@ -71,6 +73,16 @@ public class UserImpl implements User {
                 lock.unlock();
             }
         });
+    }
+
+    @Override
+    public void setScoreboard(GameScoreboard scoreboard) {
+        this.scoreboard = scoreboard;
+    }
+
+    @Override
+    public GameScoreboard getScoreboard() {
+        return scoreboard;
     }
 
     @Override
@@ -110,6 +122,12 @@ public class UserImpl implements User {
     public Component translate(String key, Object... args) {
         if (key == null) return Component.empty();
         return i18n.translate(player.locale(), key, args);
+    }
+
+    @Override
+    public String translateRaw(String key, Object... args) {
+        if (key == null) return "";
+        return i18n.translateRaw(player.locale(), key, args);
     }
 
     @Override

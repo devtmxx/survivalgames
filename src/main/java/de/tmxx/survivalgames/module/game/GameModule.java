@@ -38,6 +38,10 @@ import de.tmxx.survivalgames.module.config.Setup;
 import de.tmxx.survivalgames.module.game.interactable.Teleport;
 import de.tmxx.survivalgames.module.game.interactable.Vote;
 import de.tmxx.survivalgames.module.game.phase.*;
+import de.tmxx.survivalgames.scoreboard.GameScoreboard;
+import de.tmxx.survivalgames.scoreboard.ScoreboardFactory;
+import de.tmxx.survivalgames.scoreboard.impl.GameScoreboardImpl;
+import de.tmxx.survivalgames.scoreboard.placeholder.PlaceholderApplier;
 import de.tmxx.survivalgames.user.*;
 import de.tmxx.survivalgames.user.impl.*;
 import lombok.RequiredArgsConstructor;
@@ -86,6 +90,11 @@ public class GameModule extends AbstractModule {
         bindGamePhases();
         bindItems();
         bindInventories();
+
+        bind(PlaceholderApplier.class);
+        install(new FactoryModuleBuilder()
+                .implement(GameScoreboard.class, GameScoreboardImpl.class)
+                .build(ScoreboardFactory.class));
     }
 
     private void bindGamePhases() {

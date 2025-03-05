@@ -2,6 +2,8 @@ package de.tmxx.survivalgames.game.phase;
 
 import org.bukkit.Location;
 
+import java.util.List;
+
 /**
  * Project: survivalgames
  * 11.02.2025
@@ -20,6 +22,7 @@ public interface GamePhase {
     int countdownSeconds();
     Location spawnLocation();
     void nextPhase();
+    List<String> scoreboardScores();
 
     default boolean shouldBroadcastTimeLeft(int timeLeft) {
         if (timeLeft > TEN_MINUTES) return timeLeft % TEN_MINUTES == 0;

@@ -19,6 +19,8 @@ import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 
+import java.util.List;
+
 /**
  * Project: survivalgames
  * 16.02.25
@@ -66,6 +68,7 @@ public class StartingPhase implements GamePhase {
     @Override
     public void start() {
         game.resetTimer();
+        broadcaster.broadcastScoreboardSetup();
         listenerRegistrar.registerPhaseSpecific(Starting.class);
 
         Map map = mapManager.getVotedMap();
@@ -87,6 +90,8 @@ public class StartingPhase implements GamePhase {
     public void tick() {
         if (!game.isCounting()) return;
 
+        broadcaster.broadcastScoreboardUpdate();
+
         int timeLeft = game.secondsLeft();
         if (!shouldBroadcastTimeLeft(timeLeft)) return;
 
@@ -96,6 +101,7 @@ public class StartingPhase implements GamePhase {
 
     @Override
     public void end() {
+        broadcaster.broadcastScoreboardReset();
         listenerRegistrar.unregisterPhaseSpecific(Starting.class);
     }
 
@@ -112,5 +118,10 @@ public class StartingPhase implements GamePhase {
     @Override
     public void nextPhase() {
         gamePhaseChanger.changeGamePhase(nextPhase);
+    }
+
+    @Override
+    public List<String> scoreboardScores() {
+        return config.getStringList("scoreboard.starting");
     }
 }

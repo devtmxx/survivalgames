@@ -176,6 +176,52 @@ tiers:
   IRON: 1
   GOLD: 2
 
+scoreboard:
+  enabled: true
+  lobby:
+    - 'scoreboard.score.empty'
+    - 'scoreboard.score.players.name'
+    - 'scoreboard.score.players.value'
+    - 'scoreboard.score.empty'
+    - 'scoreboard.score.map.name'
+    - 'scoreboard.score.map.value'
+    - 'scoreboard.score.empty'
+  starting:
+    - 'scoreboard.score.empty'
+    - 'scoreboard.score.map.name'
+    - 'scoreboard.score.map.value'
+    - 'scoreboard.score.empty'
+    - 'scoreboard.score.time-left.name'
+    - 'scoreboard.score.time-left.value'
+    - 'scoreboard.score.empty'
+    - 'scoreboard.score.players-left.name'
+    - 'scoreboard.score.players-left.value'
+    - 'scoreboard.score.empty'
+  in-game:
+    - 'scoreboard.score.empty'
+    - 'scoreboard.score.map.name'
+    - 'scoreboard.score.map.value'
+    - 'scoreboard.score.empty'
+    - 'scoreboard.score.time-left.name'
+    - 'scoreboard.score.time-left.value'
+    - 'scoreboard.score.empty'
+    - 'scoreboard.score.players-left.name'
+    - 'scoreboard.score.players-left.value'
+    - 'scoreboard.score.empty'
+  deathmatch:
+    - 'scoreboard.score.empty'
+    - 'scoreboard.score.time-left.name'
+    - 'scoreboard.score.time-left.value'
+    - 'scoreboard.score.empty'
+    - 'scoreboard.score.players-left.name'
+    - 'scoreboard.score.players-left.value'
+    - 'scoreboard.score.empty'
+  ending:
+    - 'scoreboard.score.empty'
+    - 'scoreboard.score.winner.name'
+    - 'scoreboard.score.winner.value'
+    - 'scoreboard.score.empty'
+
 ################################
 ##
 ## The following values were generated in-game.

@@ -160,3 +160,26 @@ stat:
   deaths: 'Tode'
   wins: 'Gewonnene Spiele'
   games-played: 'Gespielte Spiele'
+
+scoreboard:
+  title: '<yellow><bold>SurvivalGames'
+  score:
+    empty: ''
+    players:
+      name: 'Spieler:'
+      value: '<yellow>%online%'
+    map:
+      name: 'Map:'
+      value: '<green>%voted-map%'
+    time-left:
+      name: 'Verbleibende Zeit:'
+      value: '<red>%time-left%'
+    players-left:
+      name: 'Spieler:'
+      value: '<gold>%players-left%'
+    winner:
+      name: 'Gewinner:'
+      value: '<gold><bold>%winner%'
+
+placeholder:
+  no-voted-map: '<yellow>Voting läuft...'

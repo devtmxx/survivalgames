@@ -19,6 +19,8 @@ import org.bukkit.*;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
+import java.util.List;
+
 /**
  * Project: survivalgames
  * 11.02.2025
@@ -76,32 +78,35 @@ public class LobbyPhase implements GamePhase {
 
     @Override
     public void tick() {
-        if (game.isCounting()) {
-            int timeLeft = game.secondsLeft();
-            String key = "timers.lobby.action-bar." + (timeLeft == 1 ? "single" : "multiple");
-            broadcaster.broadcastActionBar(key, timeLeft);
+        broadcaster.broadcastScoreboardUpdate();
 
-            // end the map voting 10 seconds before the game starts. this will give the world enough time to load but
-            // may cause a small lag when the timer reaches 10 seconds left. we accept the small lag in order to save
-            // server resources overall.
-            if (timeLeft <= VOTING_END_SECONDS && !mapManager.hasVotingEnded()) {
-                mapManager.endVoting();
-
-                // remove the voting item from inventories
-                registry.getOnlineUsers().forEach(user -> user.getPlayer().getInventory().setItem(UserPreparer.VOTE_ITEM_SLOT, null));
-            }
-
-            if (shouldBroadcastTimeLeft(timeLeft)) {
-                key = "timers.lobby.chat." + (timeLeft == 1 ? "single" : "multiple");
-                broadcaster.broadcast(key, timeLeft);
-                broadcaster.broadcastSound(Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1F, 1F);
-            }
-
-            if (timeLeft <= 5) {
-                broadcaster.broadcastTitle("timers.lobby.title." + timeLeft, null, 200, 600, 200);
-            }
-        } else {
+        if (!game.isCounting()) {
             broadcaster.broadcastActionBar("timers.lobby.action-bar.waiting");
+            return;
+        }
+
+        int timeLeft = game.secondsLeft();
+        String key = "timers.lobby.action-bar." + (timeLeft == 1 ? "single" : "multiple");
+        broadcaster.broadcastActionBar(key, timeLeft);
+
+        // end the map voting 10 seconds before the game starts. this will give the world enough time to load but
+        // may cause a small lag when the timer reaches 10 seconds left. we accept the small lag in order to save
+        // server resources overall.
+        if (timeLeft <= VOTING_END_SECONDS && !mapManager.hasVotingEnded()) {
+            mapManager.endVoting();
+
+            // remove the voting item from inventories
+            registry.getOnlineUsers().forEach(user -> user.getPlayer().getInventory().setItem(UserPreparer.VOTE_ITEM_SLOT, null));
+        }
+
+        if (shouldBroadcastTimeLeft(timeLeft)) {
+            key = "timers.lobby.chat." + (timeLeft == 1 ? "single" : "multiple");
+            broadcaster.broadcast(key, timeLeft);
+            broadcaster.broadcastSound(Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1F, 1F);
+        }
+
+        if (timeLeft <= 5) {
+            broadcaster.broadcastTitle("timers.lobby.title." + timeLeft, null, 200, 600, 200);
         }
     }
 
@@ -109,6 +114,7 @@ public class LobbyPhase implements GamePhase {
     public void end() {
         broadcaster.broadcastTitle("timers.lobby.title.0", null, 200, 600, 200);
         broadcaster.broadcastSound(Sound.ENTITY_PLAYER_LEVELUP, 1F, 1F);
+        broadcaster.broadcastScoreboardReset();
         listenerRegistrar.unregisterPhaseSpecific(Lobby.class);
     }
 
@@ -129,5 +135,10 @@ public class LobbyPhase implements GamePhase {
     @Override
     public void nextPhase() {
         gamePhaseChanger.changeGamePhase(nextPhase);
+    }
+
+    @Override
+    public List<String> scoreboardScores() {
+        return config.getStringList("scoreboard.lobby");
     }
 }

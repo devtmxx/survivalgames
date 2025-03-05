@@ -62,6 +62,7 @@ public class DeathMatchPhase implements GamePhase {
     public void start() {
         game.resetTimer();
         listenerRegistrar.registerPhaseSpecific(DeathMatch.class);
+        broadcaster.broadcastScoreboardSetup();
 
         teleportPlayers();
         teleportSpectators();
@@ -70,6 +71,8 @@ public class DeathMatchPhase implements GamePhase {
     @Override
     public void tick() {
         if (!game.isCounting()) return;
+
+        broadcaster.broadcastScoreboardUpdate();
 
         int secondsLeft = game.secondsLeft();
         if (!shouldBroadcastTimeLeft(secondsLeft)) return;
@@ -86,6 +89,7 @@ public class DeathMatchPhase implements GamePhase {
 
     @Override
     public void end() {
+        broadcaster.broadcastScoreboardReset();
         listenerRegistrar.unregisterPhaseSpecific(DeathMatch.class);
     }
 
@@ -106,6 +110,11 @@ public class DeathMatchPhase implements GamePhase {
     @Override
     public void nextPhase() {
         gamePhaseChanger.changeGamePhase(nextPhase);
+    }
+
+    @Override
+    public List<String> scoreboardScores() {
+        return config.getStringList("scoreboard.deathmatch");
     }
 
     private void teleportPlayers() {

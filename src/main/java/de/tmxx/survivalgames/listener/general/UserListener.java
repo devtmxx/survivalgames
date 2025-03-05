@@ -2,6 +2,8 @@ package de.tmxx.survivalgames.listener.general;
 
 import com.google.inject.Inject;
 import de.tmxx.survivalgames.listener.RegisterAlways;
+import de.tmxx.survivalgames.scoreboard.GameScoreboard;
+import de.tmxx.survivalgames.scoreboard.ScoreboardFactory;
 import de.tmxx.survivalgames.stats.StatsService;
 import de.tmxx.survivalgames.user.User;
 import de.tmxx.survivalgames.user.UserFactory;
@@ -10,6 +12,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
@@ -24,11 +27,13 @@ import org.bukkit.event.player.PlayerQuitEvent;
 public class UserListener implements Listener {
     private final UserRegistry registry;
     private final UserFactory factory;
+    private final ScoreboardFactory scoreboardFactory;
 
     @Inject
-    UserListener(UserRegistry registry, UserFactory factory) {
+    UserListener(UserRegistry registry, UserFactory factory, ScoreboardFactory scoreboardFactory) {
         this.registry = registry;
         this.factory = factory;
+        this.scoreboardFactory = scoreboardFactory;
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -44,6 +49,16 @@ public class UserListener implements Listener {
         // unregister the user again if the login is disallowed
         User user = registry.getUser(event.getPlayer());
         registry.unregisterUser(user);
+    }
+
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        User user = registry.getUser(event.getPlayer());
+        if (user == null) return;
+
+        GameScoreboard scoreboard = scoreboardFactory.createScoreboard(user);
+        scoreboard.setup();
+        user.setScoreboard(scoreboard);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
