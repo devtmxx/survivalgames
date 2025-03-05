@@ -16,6 +16,7 @@ import de.tmxx.survivalgames.user.UserPreparer;
 import de.tmxx.survivalgames.user.UserRegistry;
 import de.tmxx.survivalgames.user.UserState;
 import org.bukkit.*;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
 /**
@@ -68,13 +69,6 @@ public class LobbyPhase implements GamePhase {
         game.resetTimer();
         listenerRegistrar.registerPhaseSpecific(Lobby.class);
 
-        for (World world : Bukkit.getWorlds()) {
-            world.setTime(7000);
-            world.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
-            world.setStorm(false);
-            world.setThundering(false);
-        }
-
         if (registry.getUsers(UserState.PLAYING).size() < minPlayers) {
             game.stopTimer();
         }
@@ -125,9 +119,10 @@ public class LobbyPhase implements GamePhase {
 
     @Override
     public Location spawnLocation() {
-        SpawnPosition position = config.getSerializable("spawn", SpawnPosition.class);
-        if (position == null) return null;
+        ConfigurationSection section = config.getConfigurationSection("spawn");
+        if (section == null) return null;
 
+        SpawnPosition position = new SpawnPosition(section);
         return position.getCentered();
     }
 

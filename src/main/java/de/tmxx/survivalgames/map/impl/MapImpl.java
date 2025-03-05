@@ -10,6 +10,7 @@ import de.tmxx.survivalgames.module.game.PluginLogger;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Location;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.Nullable;
@@ -67,10 +68,12 @@ public class MapImpl implements Map {
         name = config.getString("name");
         world = config.getString("world");
         author = config.getString("author");
-        spectatorSpawn = config.getSerializable("spectator", SpawnPosition.class);
+
+        ConfigurationSection section = config.getConfigurationSection("spectator");
+        if (section != null) spectatorSpawn = new SpawnPosition(section);
 
         spawnPositions.clear();
-        spawnPositions.addAll(SpawnPosition.fromList(config.getList("spawns")));
+        spawnPositions.addAll(SpawnPosition.fromList(config.getMapList("spawns")));
     }
 
     public void loadWorld() {
@@ -79,7 +82,7 @@ public class MapImpl implements Map {
             return;
         }
 
-        loader.load(world, true);
+        loader.load(world);
     }
 
     public boolean isUsable() {
@@ -110,6 +113,7 @@ public class MapImpl implements Map {
         if (world == null) world = location.getWorld().getName();
         if (!world.equals(location.getWorld().getName())) return false;
 
+        location.getWorld().setSpawnLocation(location);
         spectatorSpawn = new SpawnPosition(location);
         return true;
     }
@@ -126,8 +130,8 @@ public class MapImpl implements Map {
         config.set("name", name);
         config.set("world", world);
         config.set("author", author);
-        config.set("spectator", spectatorSpawn);
-        config.set("spawns", spawnPositions);
+        config.set("spectator", spectatorSpawn.serialize());
+        config.set("spawns", spawnPositions.stream().map(SpawnPosition::serialize));
         try {
             config.save(configFile);
         } catch (IOException e) {

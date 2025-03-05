@@ -27,8 +27,6 @@ public class SurvivalGames extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        registerConfigurationSerializables();
-
         injector = Guice.createInjector(
                 new ConfigModule(this),
                 new GameModule(this),
@@ -42,10 +40,6 @@ public class SurvivalGames extends JavaPlugin {
     @Override
     public void onDisable() {
         gameHandler.shutdown();
-    }
-
-    private void registerConfigurationSerializables() {
-        ConfigurationSerialization.registerClass(SpawnPosition.class);
     }
 
     public static Injector unsafe() {

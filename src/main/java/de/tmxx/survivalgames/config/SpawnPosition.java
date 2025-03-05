@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -27,7 +28,7 @@ import java.util.Map;
  * @version 1.0
  */
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public class SpawnPosition implements ConfigurationSerializable {
+public class SpawnPosition {
     private final String world;
     private final int x;
     private final int y;
@@ -47,6 +48,24 @@ public class SpawnPosition implements ConfigurationSerializable {
         z = location.getBlockZ();
         yaw = location.getYaw();
         pitch = location.getPitch();
+    }
+
+    public SpawnPosition(ConfigurationSection section) {
+        world = section.getString("world");
+        x = section.getInt("x");
+        y = section.getInt("y");
+        z = section.getInt("z");
+        yaw = (float) section.getDouble("yaw");
+        pitch = (float) section.getDouble("pitch");
+    }
+
+    public SpawnPosition(Map<?, ?> data) {
+        world = (String) data.get("world");
+        x = (int) data.get("x");
+        y = (int) data.get("y");
+        z = (int) data.get("z");
+        yaw = (float) (double) data.get("yaw");
+        pitch = (float) (double) data.get("pitch");
     }
 
     /**
@@ -84,10 +103,6 @@ public class SpawnPosition implements ConfigurationSerializable {
         return new Location(world, (double) x + 0.5D, y, (double) z + 0.5D, yaw, pitch);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public @NotNull Map<String, Object> serialize() {
         return Map.of(
                 "world", world,
@@ -99,28 +114,12 @@ public class SpawnPosition implements ConfigurationSerializable {
         );
     }
 
-    /**
-     * See {@link ConfigurationSerializable}.
-     */
-    public static SpawnPosition deserialize(Map<String, Object> args) {
-        return new SpawnPosition(
-                (String) args.get("world"),
-                (int) args.get("x"),
-                (int) args.get("y"),
-                (int) args.get("z"),
-                (float) (double) args.get("yaw"),
-                (float) (double) args.get("pitch")
-        );
-    }
-
-    public static List<SpawnPosition> fromList(List<?> list) {
+    public static List<SpawnPosition> fromList(List<Map<?, ?>> list) {
         List<SpawnPosition> positions = new ArrayList<>();
 
         if (list != null) {
-            for (Object o : list) {
-                if (!(o instanceof SpawnPosition position)) continue;
-
-                positions.add(position);
+            for (Map<?, ?> map : list) {
+                positions.add(new SpawnPosition(map));
             }
         }
 

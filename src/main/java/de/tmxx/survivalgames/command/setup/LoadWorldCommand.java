@@ -46,7 +46,7 @@ public class LoadWorldCommand implements Command {
         }
 
         String worldName = args[0];
-        World world = loader.load(worldName, false);
+        World world = loader.load(worldName);
         user.sendMessage("command.loadworld.success", worldName);
         user.getPlayer().teleport(world.getSpawnLocation());
     }

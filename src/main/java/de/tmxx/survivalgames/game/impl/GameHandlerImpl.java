@@ -8,6 +8,7 @@ import de.tmxx.survivalgames.game.GameHandler;
 import de.tmxx.survivalgames.game.GamePhaseChanger;
 import de.tmxx.survivalgames.game.phase.GamePhase;
 import de.tmxx.survivalgames.listener.ListenerRegistrar;
+import de.tmxx.survivalgames.map.MapLoader;
 import de.tmxx.survivalgames.map.MapManager;
 import de.tmxx.survivalgames.module.config.MainConfig;
 import de.tmxx.survivalgames.module.config.Setup;
@@ -20,6 +21,7 @@ import de.tmxx.survivalgames.user.UserRegistry;
 import org.bukkit.Bukkit;
 import org.bukkit.WorldCreator;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Entity;
 
 import java.util.logging.Logger;
 
@@ -43,6 +45,7 @@ public class GameHandlerImpl implements GameHandler {
     private final StatsService statsService;
     private final UserRegistry userRegistry;
     private final FileConfiguration config;
+    private final MapLoader mapLoader;
     private final Logger logger;
 
     @Inject
@@ -58,6 +61,7 @@ public class GameHandlerImpl implements GameHandler {
             StatsService statsService,
             UserRegistry userRegistry,
             @MainConfig FileConfiguration config,
+            MapLoader mapLoader,
             @PluginLogger Logger logger
             ) {
         this.mapManager = mapManager;
@@ -71,6 +75,7 @@ public class GameHandlerImpl implements GameHandler {
         this.statsService = statsService;
         this.userRegistry = userRegistry;
         this.config = config;
+        this.mapLoader = mapLoader;
         this.logger = logger;
     }
 
@@ -86,6 +91,7 @@ public class GameHandlerImpl implements GameHandler {
 
         mapManager.load();
         loadDeathmatchWorld();
+        removeEntities();
 
         gamePhaseChanger.changeGamePhase(lobbyPhase);
         game.startGame();
@@ -104,7 +110,11 @@ public class GameHandlerImpl implements GameHandler {
             return;
         }
 
-        Bukkit.createWorld(WorldCreator.name(worldName));
+        mapLoader.load(worldName);
         logger.info("Deathmatch world loaded");
+    }
+
+    private void removeEntities() {
+        Bukkit.getWorlds().forEach(world -> world.getEntities().forEach(Entity::remove));
     }
 }

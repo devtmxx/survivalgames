@@ -14,6 +14,7 @@ import de.tmxx.survivalgames.user.UserRegistry;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
 /**
@@ -91,9 +92,10 @@ public class EndingPhase implements GamePhase {
 
     @Override
     public Location spawnLocation() {
-        SpawnPosition position = config.getSerializable("spawn", SpawnPosition.class);
-        if (position == null) return null;
+        ConfigurationSection section = config.getConfigurationSection("spawn");
+        if (section == null) return null;
 
+        SpawnPosition position = new SpawnPosition(section);
         return position.getCentered();
     }
 

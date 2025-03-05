@@ -14,6 +14,7 @@ import de.tmxx.survivalgames.user.UserRegistry;
 import de.tmxx.survivalgames.user.UserState;
 import org.bukkit.Location;
 import org.bukkit.Sound;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.List;
@@ -95,9 +96,10 @@ public class DeathMatchPhase implements GamePhase {
 
     @Override
     public Location spawnLocation() {
-        SpawnPosition position = config.getSerializable("deathmatch-spectator", SpawnPosition.class);
-        if (position == null) return null;
+        ConfigurationSection section = config.getConfigurationSection("deathmatch-spectator");
+        if (section == null) return null;
 
+        SpawnPosition position = new SpawnPosition(section);
         return position.getCentered();
     }
 
@@ -108,7 +110,7 @@ public class DeathMatchPhase implements GamePhase {
 
     private void teleportPlayers() {
         AtomicInteger index = new AtomicInteger(0);
-        List<SpawnPosition> spawns = SpawnPosition.fromList(config.getList("deathmatch-spawns"));
+        List<SpawnPosition> spawns = SpawnPosition.fromList(config.getMapList("deathmatch-spawns"));
         registry.getUsers(UserState.PLAYING).forEach(user -> {
             if (spawns.size() <= index.get()) {
                 // kick the player if there is no spawn found (should not happen)

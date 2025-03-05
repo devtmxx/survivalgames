@@ -7,6 +7,7 @@ import de.tmxx.survivalgames.config.SpawnPosition;
 import de.tmxx.survivalgames.user.User;
 import de.tmxx.survivalgames.user.UserRegistry;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
+import org.bukkit.Location;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jspecify.annotations.Nullable;
 
@@ -50,7 +51,9 @@ public class SetSpawnCommand implements Command {
         User user = getUser(source, registry);
         if (user == null) return;
 
-        plugin.getConfig().set("spawn", new SpawnPosition(user.getPlayer().getLocation()));
+        Location location = user.getPlayer().getLocation();
+        location.getWorld().setSpawnLocation(location);
+        plugin.getConfig().set("spawn", new SpawnPosition(location).serialize());
         plugin.saveConfig();
         user.sendMessage("command.setspawn.success");
     }

@@ -86,9 +86,9 @@ public class AddSpawnCommand implements Command {
     }
 
     private void addDeathmatchSpawn(User user) {
-        List<SpawnPosition> spawns = SpawnPosition.fromList(plugin.getConfig().getList("deathmatch-spawns"));
+        List<SpawnPosition> spawns = SpawnPosition.fromList(plugin.getConfig().getMapList("deathmatch-spawns"));
         spawns.add(new SpawnPosition(user.getPlayer().getLocation()));
-        plugin.getConfig().set("deathmatch-spawns", spawns);
+        plugin.getConfig().set("deathmatch-spawns", spawns.stream().map(SpawnPosition::serialize));
         plugin.saveConfig();
         user.sendMessage("command.addspawn.deathmatch");
     }
