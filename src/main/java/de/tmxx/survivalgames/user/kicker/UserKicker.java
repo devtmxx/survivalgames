@@ -1,4 +1,4 @@
-package de.tmxx.survivalgames.user;
+package de.tmxx.survivalgames.user.kicker;
 
 /**
  * Project: survivalgames

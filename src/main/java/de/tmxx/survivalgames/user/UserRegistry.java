@@ -2,7 +2,6 @@ package de.tmxx.survivalgames.user;
 
 import org.bukkit.entity.Player;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 

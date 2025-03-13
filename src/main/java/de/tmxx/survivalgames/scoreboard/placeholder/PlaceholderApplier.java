@@ -5,7 +5,6 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import de.tmxx.survivalgames.SurvivalGames;
 import de.tmxx.survivalgames.module.game.PluginLogger;
-import de.tmxx.survivalgames.user.User;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 

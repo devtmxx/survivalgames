@@ -2,7 +2,6 @@ package de.tmxx.survivalgames.inventory;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import de.tmxx.survivalgames.game.Game;
 import de.tmxx.survivalgames.map.Map;
 import de.tmxx.survivalgames.map.MapManager;
 import de.tmxx.survivalgames.user.User;

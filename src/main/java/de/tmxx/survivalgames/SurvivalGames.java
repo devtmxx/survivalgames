@@ -2,13 +2,11 @@ package de.tmxx.survivalgames;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import de.tmxx.survivalgames.config.SpawnPosition;
 import de.tmxx.survivalgames.game.GameHandler;
 import de.tmxx.survivalgames.module.config.ConfigModule;
 import de.tmxx.survivalgames.module.game.GameModule;
 import de.tmxx.survivalgames.module.stats.StatsModule;
 import lombok.Getter;
-import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**

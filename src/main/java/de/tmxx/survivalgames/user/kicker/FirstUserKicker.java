@@ -1,8 +1,7 @@
-package de.tmxx.survivalgames.user.impl;
+package de.tmxx.survivalgames.user.kicker;
 
 import com.google.inject.Inject;
 import de.tmxx.survivalgames.user.User;
-import de.tmxx.survivalgames.user.UserKicker;
 import de.tmxx.survivalgames.user.UserRegistry;
 
 /**
@@ -12,11 +11,11 @@ import de.tmxx.survivalgames.user.UserRegistry;
  * @author timmauersberger
  * @version 1.0
  */
-public class LastUserKicker implements UserKicker {
+public class FirstUserKicker implements UserKicker {
     private final UserRegistry registry;
 
     @Inject
-    LastUserKicker(UserRegistry registry) {
+    FirstUserKicker(UserRegistry registry) {
         this.registry = registry;
     }
 
@@ -24,8 +23,8 @@ public class LastUserKicker implements UserKicker {
     public boolean kick() {
         User toKick = registry.getOnlineUsers().stream()
                 .filter(user -> !user.getPlayer().hasPermission("survivalgames.priority"))
-                .toList()
-                .getLast();
+                .findFirst()
+                .orElse(null);
 
         if (toKick == null) return false;
 

@@ -1,6 +1,5 @@
 package de.tmxx.survivalgames.stats.database;
 
-import de.tmxx.survivalgames.stats.database.util.DatabaseCredentials;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.Connection;

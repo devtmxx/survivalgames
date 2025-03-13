@@ -19,7 +19,6 @@ import de.tmxx.survivalgames.stats.database.Database;
 import de.tmxx.survivalgames.user.User;
 import de.tmxx.survivalgames.user.UserRegistry;
 import org.bukkit.Bukkit;
-import org.bukkit.WorldCreator;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 

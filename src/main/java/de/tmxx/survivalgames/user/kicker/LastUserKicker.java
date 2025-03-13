@@ -1,11 +1,8 @@
-package de.tmxx.survivalgames.user.impl;
+package de.tmxx.survivalgames.user.kicker;
 
 import com.google.inject.Inject;
 import de.tmxx.survivalgames.user.User;
-import de.tmxx.survivalgames.user.UserKicker;
 import de.tmxx.survivalgames.user.UserRegistry;
-
-import java.util.List;
 
 /**
  * Project: survivalgames
@@ -14,23 +11,23 @@ import java.util.List;
  * @author timmauersberger
  * @version 1.0
  */
-public class RandomUserKicker implements UserKicker {
+public class LastUserKicker implements UserKicker {
     private final UserRegistry registry;
 
     @Inject
-    RandomUserKicker(UserRegistry registry) {
+    LastUserKicker(UserRegistry registry) {
         this.registry = registry;
     }
 
     @Override
     public boolean kick() {
-        List<User> list = registry.getOnlineUsers().stream()
+        User toKick = registry.getOnlineUsers().stream()
                 .filter(user -> !user.getPlayer().hasPermission("survivalgames.priority"))
-                .toList();
+                .toList()
+                .getLast();
 
-        if (list.isEmpty()) return false;
+        if (toKick == null) return false;
 
-        User toKick = list.get((int) Math.floor(Math.random() * list.size()));
         toKick.getPlayer().kick(toKick.translate("kick.priority"));
         return true;
     }

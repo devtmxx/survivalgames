@@ -5,7 +5,7 @@ import de.tmxx.survivalgames.i18n.I18n;
 import de.tmxx.survivalgames.module.config.MaxPlayers;
 import de.tmxx.survivalgames.module.game.phase.Lobby;
 import de.tmxx.survivalgames.user.User;
-import de.tmxx.survivalgames.user.UserKicker;
+import de.tmxx.survivalgames.user.kicker.UserKicker;
 import de.tmxx.survivalgames.user.UserRegistry;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

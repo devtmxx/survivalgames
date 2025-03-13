@@ -1,6 +1,5 @@
 package de.tmxx.survivalgames.user;
 
-import de.tmxx.survivalgames.user.impl.UserImpl;
 import org.bukkit.entity.Player;
 
 /**
